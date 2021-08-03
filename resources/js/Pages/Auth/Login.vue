@@ -20,8 +20,8 @@
 
 			<div class="form-group">
 				<div class="custom-control custom-checkbox">
-					<breeze-checkbox id="remember_me" name="remember" v-model:checked="form.remember" />
-
+					<div>{{form.remember}}</div>
+					<breeze-checkbox id="remember_me" v-model:checked="form.remember" />
 					<label class="custom-control-label" for="remember_me">
 						Remember Me
 					</label>
@@ -69,6 +69,7 @@
 
         data() {
             return {
+                aron: [],
                 form: this.$inertia.form({
                     email: '',
                     password: '',

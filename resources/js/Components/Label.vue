@@ -1,12 +1,12 @@
 <template>
-    <label :class="classes">
-        <span v-if="value">{{ value }}</span>
-        <span v-else><slot></slot></span>
+    <label>
+        <template v-if="value">{{ value }}</template>
+        <template v-else><slot></slot></template>
     </label>
 </template>
 
 <script>
     export default {
-        props: ['value', 'classes']
+        props: ['value']
     }
 </script>

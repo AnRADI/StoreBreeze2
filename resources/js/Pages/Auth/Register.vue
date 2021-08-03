@@ -6,7 +6,7 @@
 		<form @submit.prevent="submit">
 			<div class="form-group">
 				<breeze-label for="name" value="Name" />
-				<breeze-input id="name" type="text" v-model="form.name" required autofocus autocomplete="name" />
+				<breeze-input id="name" type="text" v-model="form.name" autofocus required autocomplete="name" />
 			</div>
 
 			<div class="form-group">
@@ -81,6 +81,8 @@
         },
         methods: {
             submit() {
+                // console.log(this.form)
+                // return
                 this.form.post(this.route('register'), {
                     onFinish: () => this.form.reset('password', 'password_confirmation'),
                 })

@@ -2,30 +2,79 @@
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\Shop\CategoryController;
+use App\Http\Controllers\Shop\CategoriesController;
+use App\Http\Controllers\Shop\ProductController;
+use App\Http\Controllers\Shop\CartController;
 use Inertia\Inertia;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+// -------- Welcome ----------
+
+Route::get('/', [WelcomeController::class, 'welcome'])
+	//->middleware('guest')
+	->name('welcome');
+
+Route::post('/submit/welcome', [WelcomeController::class, 'submitWelcome'])
+	//->middleware('guest')
+	->name('submit.welcome');
+
+
+// -------- Dashboard ----------
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+
+	return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+
+// -------- Auth ----------
+
 require __DIR__.'/auth.php';
+
+
+// -------- Test ----------
+
+Route::get('/zero', function () {
+	return Inertia::render('Zero');
+});
+
+
+// -------- Cart ----------
+
+Route::get('/cart', [CartController::class, 'cart'])
+	->middleware('guest')
+	->name('cart');
+
+
+Route::post('/add/{product}/cart', [CartController::class, 'addProductCart'])
+	->middleware('guest')
+	->name('add.product.cart');
+
+
+Route::delete('/remove/{product}/cart', [CartController::class, 'removeProductCart'])
+	->middleware('guest')
+	->name('remove.product.cart');
+
+
+
+// -------- Categories ----------
+
+Route::get('/categories', [CategoriesController::class, 'categories'])
+	->middleware('guest')
+	->name('categories');
+
+
+// -------- Category ----------
+
+Route::get('/{category}', [CategoryController::class, 'category'])
+	->middleware('guest')
+	->name('category');
+
+
+// -------- Product ----------
+
+Route::get('/{category}/{product}', [ProductController::class, 'product'])
+	->middleware('guest')
+	->name('category.product');

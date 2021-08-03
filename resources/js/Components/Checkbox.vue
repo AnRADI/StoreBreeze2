@@ -1,33 +1,33 @@
 <template>
-  <input type="checkbox" :value="value" v-model="proxyChecked"
-         class="custom-control-input">
+	<input type="checkbox" :value="value" v-model="proxyChecked"
+		   class="custom-control-input">
 </template>
 
 <script>
-  export default {
-    emits: ['update:checked'],
+    export default {
+        emits: ['update:checked'],
 
-    props: {
-      checked: {
-        type: [Array, Boolean],
-        default: false,
-      },
-      value: {
-        default: null,
-      },
-    },
-
-    computed: {
-      proxyChecked: {
-        get() {
-          return this.checked;
+        props: {
+            checked: {
+                type: [Array, Boolean],
+                default: false,
+            },
+            value: {
+                default: null,
+            },
         },
 
-        set(val) {
-          this.$emit("update:checked", val);
+        computed: {
+            proxyChecked: {
+                get() {
+                    return this.checked;
+                },
+
+                set(val) {
+                    this.$emit("update:checked", val);
+                },
+            },
         },
-      },
-    },
-  }
+    }
 </script>
 

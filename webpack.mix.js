@@ -27,4 +27,3 @@ mix.js('resources/js/app.js', 'public/js').vue()
 if (production) {
     mix.version();
 }
-

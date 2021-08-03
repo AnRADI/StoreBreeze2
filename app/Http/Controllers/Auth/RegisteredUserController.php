@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 
+
 class RegisteredUserController extends Controller
 {
     /**
@@ -21,6 +22,15 @@ class RegisteredUserController extends Controller
      */
     public function create()
     {
+//		$user = User::create([
+//			'name' => 'tom',
+//			'email' => 'tcxd@yandex.ua',
+//			'password' => Hash::make('40987241452'),
+//		]);
+//
+//    	dd($user);
+
+
         return Inertia::render('Auth/Register');
     }
 
@@ -45,6 +55,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
 
         event(new Registered($user));
 
