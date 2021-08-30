@@ -33,19 +33,20 @@
 </template>
 
 <script>
-	import { mapState, mapMutations } from  'vuex'
+	import { mapMutations } from  'vuex'
 
     export default {
 
 		props: {
 		    product: Object,
+			cartCollectionS: [Object, Array]
 		},
 
-		computed: {
-            ...mapState([
-                'cartCollectionS',
-            ]),
-		},
+		// computed: {
+        //     ...mapState([
+        //         'cartCollectionS',
+        //     ]),
+		// },
 
 		methods: {
 		    ...mapMutations([

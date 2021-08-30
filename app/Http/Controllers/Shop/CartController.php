@@ -22,7 +22,6 @@ class CartController extends Controller
 	{
 		$cartCollection = Cart::get();
 
-
 		return $cartCollection;
 	}
 

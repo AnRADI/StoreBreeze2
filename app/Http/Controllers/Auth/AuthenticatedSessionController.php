@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Cart;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -49,9 +50,13 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request)
     {
+		$cartCollection = Cart::get();
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
+
+		session()->put('cartCollection', $cartCollection);
 
         $request->session()->regenerateToken();
 

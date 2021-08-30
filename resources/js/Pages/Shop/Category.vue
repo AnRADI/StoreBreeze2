@@ -11,7 +11,7 @@
 				<p> {{ category.description }} </p>
 
 				<div class="row">
-					<product-card v-for="product in category.products" :key="product.id" :product="product"></product-card>
+					<product-card v-for="product in category.products" :key="product.id" :product="product" :cart-collection-s="cartCollectionS" />
 				</div>
 			</div>
 		</div>
@@ -33,7 +33,7 @@
 
         props: {
             category: Object,
-			cartCollection: Object,
+			cartCollection: [Object, Array],
             canLogin: Boolean,
             canRegister: Boolean,
         },
@@ -54,13 +54,9 @@
         watch: {
 
             cartCollection: {
-
                 handler(value) {
 
-                    if(Object.keys(value) != 0 && Object.keys(this.cartCollectionS) == 0) {
-
-                        this.cartCollectionM(value);
-                    }
+					this.cartCollectionM(value);
                 },
                 immediate: true
             }

@@ -22,15 +22,14 @@ class WelcomeController extends Controller
 
 	// ---------- / -----------
 
-	public function welcome() {
+	public function welcome(Request $request) {
 
     	$products = $this->product
 			->getProductsCategory();
 
 
     	$cartCollection = Cart::get();
-
-
+		//$pr = Product::create(['category_id' => 3, 'name' => 'zok', 'code' => 10022, 'description' => 'ona iri', 'price' => 1033, 'cart_collection' => []]);
 
 		return Inertia::render('Welcome', [
 			'canLogin' => Route::has('login'),

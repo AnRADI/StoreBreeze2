@@ -1,25 +1,47 @@
 <template>
-	<breeze-authenticated-layout>
-		<template #header>
-			<h2 class="h4 font-weight-bold">
-				Dashboard
-			</h2>
-		</template>
+	<main-layout :can-login="canLogin" :can-register="canRegister">
 
-		<div class="card my-4 shadow-sm">
-			<div class="card-body">
-				You're logged in!
-			</div>
+		<head>
+			<title> Dashboard </title>
+		</head>
+
+		<div class="container pt-5">
+			<form @submit.prevent="logOutForm.post(route('logout'))">
+				<button class="log-out-button" type="submit">Log Out</button>
+			</form>
 		</div>
-	</breeze-authenticated-layout>
+
+	</main-layout>
 </template>
 
 <script>
-    import BreezeAuthenticatedLayout from '@/Layouts/Authenticated'
+    import MainLayout from "@/Layouts/MainLayout";
 
     export default {
+
         components: {
-            BreezeAuthenticatedLayout,
+            MainLayout
+        },
+
+		data() {
+          	return {
+
+          	    logOutForm: this.$inertia.form(),
+			}
+		},
+
+        props: {
+            canLogin: Boolean,
+            canRegister: Boolean,
         },
     }
 </script>
+
+<style>
+	.log-out-button {
+		border: 0;
+		background: transparent;
+		padding: 0;
+		color: black;
+	}
+</style>
