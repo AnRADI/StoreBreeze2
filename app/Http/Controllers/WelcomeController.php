@@ -31,12 +31,13 @@ class WelcomeController extends Controller
     	$cartCollection = Cart::get();
 		//$pr = Product::create(['category_id' => 3, 'name' => 'zok', 'code' => 10022, 'description' => 'ona iri', 'price' => 1033, 'cart_collection' => []]);
 
+
 		return Inertia::render('Welcome', [
 			'canLogin' => Route::has('login'),
 			'canRegister' => Route::has('register'),
 			'cartCollection' => $cartCollection,
 			'products' => $products,
-			'top' => session()->get('top')
+			'top' => session()->get('top'),
 		]);
 	}
 

@@ -16,7 +16,6 @@ class DashboardController extends Controller
 	public function dashboard(Request $request) {
 
 
-
 		return Inertia::render('Dashboard', [
 			'canLogin' => Route::has('login'),
 			'canRegister' => Route::has('register'),

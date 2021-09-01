@@ -57,11 +57,13 @@ class RegisteredUserController extends Controller
 			'cart_collection' => []
         ]);
 
+        $user->assignRole('user');
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(RouteServiceProvider::HOME);
+
+        return redirect()->route('welcome');
     }
 }

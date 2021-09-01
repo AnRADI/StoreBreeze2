@@ -1,9 +1,9 @@
 <template>
-<!--	<main-layout :can-login="canLogin" :can-register="canRegister">-->
+	<main-layout :can-login="canLogin" :can-register="canRegister">
 
-<!--		<head>-->
-<!--			<title> Dashboard </title>-->
-<!--		</head>-->
+		<head>
+			<title> Dashboard </title>
+		</head>
 
 		<div class="container pt-5">
 			<form @submit.prevent="logOutForm.post(route('logout'))">
@@ -11,7 +11,7 @@
 			</form>
 		</div>
 
-<!--	</main-layout>-->
+	</main-layout>
 </template>
 
 <script>

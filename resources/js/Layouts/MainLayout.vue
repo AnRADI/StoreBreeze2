@@ -21,9 +21,9 @@
 							<cart></cart>
 						</li>
 						<li v-if="$page.props.auth.user">
-							<inertia-link :href="route('dashboard')" class="ml-4 text-muted">
-								Dashboard
-							</inertia-link>
+							<form @submit.prevent="logOutForm.post(route('logout'))" class="ml-4">
+								<button class="log-out-button text-muted" type="submit">Log Out</button>
+							</form>
 						</li>
 						<template v-else>
 							<li>
@@ -61,6 +61,13 @@
             canRegister: Boolean,
 		},
 
+        data() {
+            return {
+
+                logOutForm: this.$inertia.form(),
+            }
+        },
+
 		methods: {
 
             ...mapMutations([
@@ -72,5 +79,11 @@
 </script>
 
 <style>
+
+	.log-out-button {
+		border: 0;
+		background: transparent;
+		padding: 0;
+	}
 
 </style>

@@ -22,10 +22,11 @@ Route::post('/submit/welcome', [WelcomeController::class, 'submitWelcome'])
 
 // -------- Dashboard ----------
 
-Route::get('/dashboard', [DashboardController::class, 'dashboard'])
-	->middleware(['auth', 'verified'])
-	->name('dashboard');
+Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
 
+	Route::get('/dashboard', [DashboardController::class, 'dashboard'])
+		->name('dashboard');
+});
 
 // -------- Auth ----------
 

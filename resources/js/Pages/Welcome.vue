@@ -49,7 +49,7 @@
             canRegister: Boolean,
 			products: Array,
 			cartCollection: [Object, Array],
-			top: Number
+			top: Number,
         },
 
         methods: {
@@ -57,9 +57,7 @@
 
                 'cartCollectionM'
             ]),
-            mm(){
-                console.log(1555);
-            },
+
         },
 
         computed: {
