@@ -114,7 +114,8 @@
             }
         },
 
-		watch: {
+
+        watch: {
 
             cartS() {
 

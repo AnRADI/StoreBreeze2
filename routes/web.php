@@ -7,7 +7,7 @@ use App\Http\Controllers\Shop\CategoryController;
 use App\Http\Controllers\Shop\CategoriesController;
 use App\Http\Controllers\Shop\ProductController;
 use App\Http\Controllers\Shop\CartController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Admin\DashboardController;
 use Inertia\Inertia;
 
 

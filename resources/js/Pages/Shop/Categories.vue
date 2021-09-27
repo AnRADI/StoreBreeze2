@@ -5,6 +5,7 @@
 			<title> Категории </title>
 		</head>
 
+
 		<div class="container">
 			<div class="starter-template">
 				<div v-for="category in categories" :key="category.id" class="panel">

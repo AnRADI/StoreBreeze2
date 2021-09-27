@@ -4,7 +4,6 @@
 		<head>
 			<title> Главная </title>
 		</head>
-
 		<form class="cart-form">
 			<button class="cart-button-minus" type="button">-</button>
 			<input @input="mm" type="number" v-model.number="form.top" min="1" max="9000">
@@ -27,6 +26,7 @@
     import ProductCard from '@/Components/ProductCard'
     import MainLayout from "@/Layouts/MainLayout";
     import {mapMutations, mapState} from "vuex";
+    import Script from "@/Components/Script";
 
     export default {
 
@@ -34,15 +34,15 @@
             return {
 				form: this.$inertia.form({
 					top: 1
-				})
+				}),
 			}
 		},
 
         components: {
             MainLayout,
             ProductCard,
+			Script
 		},
-
 
         props: {
             canLogin: Boolean,
@@ -57,7 +57,6 @@
 
                 'cartCollectionM'
             ]),
-
         },
 
         computed: {
@@ -85,6 +84,7 @@
 </script>
 
 <style lang="scss">
+
 
 	.cart-form {
 		display: inline-block;

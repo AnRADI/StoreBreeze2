@@ -13,7 +13,10 @@ const mix = require('laravel-mix');
 let production = mix.inProduction();
 
 mix.js('resources/js/app.js', 'public/js').vue()
-    .sass('resources/sass/app.scss', 'public/css')
+    .copy('resources/images', 'public/images')
+    .sass('resources/sass/app.scss', 'public/css').options({
+        processCssUrls: false
+    })
     .webpackConfig(require('./webpack.config'))
     .sourceMaps(!production, 'source-map')
     .disableNotifications()
@@ -25,5 +28,5 @@ mix.js('resources/js/app.js', 'public/js').vue()
     });
 
 if (production) {
-    mix.version();
+    mix.version(['public/images', 'public/Admin/**/*.{js,css,png,jpg,gif,svg}']);
 }
