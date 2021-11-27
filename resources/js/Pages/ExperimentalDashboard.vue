@@ -1,5 +1,5 @@
 <template>
-	<main-layout :can-login="canLogin" :can-register="canRegister">
+	<shop-layout :can-login="canLogin" :can-register="canRegister">
 
 		<head>
 			<title> Dashboard </title>
@@ -11,16 +11,17 @@
 			</form>
 		</div>
 
-	</main-layout>
+	</shop-layout>
 </template>
 
 <script>
-    import MainLayout from "@/Layouts/MainLayout";
+
+    import ShopLayout from "@/Layouts/ShopLayout";
 
     export default {
 
         components: {
-            MainLayout
+            ShopLayout,
         },
 
 		data() {

@@ -11,7 +11,8 @@ class Category extends Model
     use HasFactory;
 
     protected $guarded = [
-
+		'_method',
+		'_token',
 	];
 
 
@@ -19,27 +20,28 @@ class Category extends Model
 
     public function products() {
 
-    	return $this->hasMany(Product::class);
+    	return $this->belongsToMany(Product::class);
 	}
 
 
 	// =========== METHODS =============
 
 
-	// ---------- Category -----------
+	// ---------- Shop/Category Controller -----------
 
-	public function getCategoryProducts($categorySlug)
+	public function firstCategoryProductsC($categorySlug)
 	{
 		$categoryColumns = [
 			'id',
 			'name',
+			'slug',
 			'description'
 		];
 
 		$category = $this
 			->select($categoryColumns)
 			->where('slug', $categorySlug)
-			->with('products:id,category_id,name,code,price')
+			->with('products:id,name,image,code,price')
 			->first();
 
 
@@ -47,9 +49,7 @@ class Category extends Model
 	}
 
 
-	// ---------- Categories -----------
-
-	public function getCategories()
+	public function getCategoriesCs()
 	{
 		$columns = [
 			'id',
@@ -63,6 +63,33 @@ class Category extends Model
 			->get();
 
 		return $categories;
+	}
+
+
+	// ---------- Admin/Product Controller -----------
+
+	public function getCategoriesDA() {
+
+    	$columns = [
+    		'id',
+			'name',
+		];
+
+    	$categories = $this
+			->select($columns)
+			->get();
+
+    	return $categories;
+	}
+
+
+	public function arrayIdDSA() {
+
+		$allCategoriesId = $this
+			->pluck('id')
+			->toArray();
+
+		return $allCategoriesId;
 	}
 
 }

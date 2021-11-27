@@ -25,9 +25,9 @@
 							<tbody>
 								<tr v-for="product in cartCollectionS" :key="product.code">
 									<td>
-										<inertia-link @click.stop="hideCartModal" :href="route('category.product', [product.category.slug, product.code])">
+										<inertia-link @click.stop="hideCartModal" :href="route('category.product', [categorySlug, product.code])">
 
-											<img height="56px" src="http://laravel-diplom-1.rdavydov.ru/storage/products/iphone_x.jpg">
+											<img style="height: 56px" :src="product.image">
 											{{ product.name }}
 
 										</inertia-link>
@@ -92,17 +92,15 @@
 
 <script>
 
-    import { mapState, mapMutations } from 'vuex'
-
 	export default {
 
-        computed: {
+        data() {
+            return {
+                categorySlug: '',
+			}
+		},
 
-            ...mapState([
-                'cartS',
-				'addProductCartS',
-				'cartCollectionS'
-			]),
+        computed: {
 
             cartId() {
                 return $('#cartId');
@@ -130,10 +128,6 @@
 
 
         methods: {
-
-            ...mapMutations([
-                'cartCollectionM'
-			]),
 
             async cart() {
 

@@ -2,8 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
+use Cart;
 
 
 class HandleInertiaRequests extends Middleware
@@ -37,10 +40,25 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request)
     {
+
         return array_merge(parent::share($request), [
+
             'auth' => [
-                'user' => $request->user(),
-            ]
+                'user' => fn() => $request->user(),
+            ],
+
+			'flash' => [
+				'message' => fn() => session()->get('success'),
+			],
+
+			'cartCollection' => fn() => Cart::get(),
+
+			'permissions' => fn() => $request->user()->getAllPermissions(),
+
+			'translations' => fn() =>
+				translations(
+					resource_path('lang/'. app()->getLocale() .'.json')
+				),
         ]);
     }
 }

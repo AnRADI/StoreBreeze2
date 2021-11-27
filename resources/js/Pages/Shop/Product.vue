@@ -1,5 +1,5 @@
 <template>
-	<main-layout :can-login="canLogin" :can-register="canRegister">
+	<shop-layout :can-login="canLogin" :can-register="canRegister">
 
 		<head>
 			<title> Продукт </title>
@@ -10,11 +10,15 @@
 				<h1>{{ product.name }}</h1>
 				<p>Цена: <b>{{ product.price }}.</b></p>
 				<h4>
-					<inertia-link :href="route('category', product.category.slug)">
-						{{ product.category.name }}
+					<inertia-link :href="route('category', categorySlug)">
+						{{ categoryName }}
 					</inertia-link>
 				</h4>
-				<img src="http://internet-shop.tmweb.ru/storage/products/iphone_x.jpg">
+				<div class="row">
+					<div class="col-md-8">
+						<img class="img-fluid" :src="product.image">
+					</div>
+				</div>
 				<p>{{ product.description }}</p>
 				<form v-if="cartCollectionS[product.code]" @submit.prevent="cartM">
 					<button type="submit" class="btn btn-primary" role="button">Уже в корзинe</button>
@@ -25,54 +29,25 @@
 			</div>
 		</div>
 
-	</main-layout>
+	</shop-layout>
 </template>
 
 <script>
-    import MainLayout from "@/Layouts/MainLayout";
-    import {mapMutations, mapState} from 'vuex';
+
+    import ShopLayout from "@/Layouts/ShopLayout";
 
     export default {
 
         components: {
-            MainLayout
+            ShopLayout,
         },
 
         props: {
             product: Object,
             canLogin: Boolean,
             canRegister: Boolean,
-			cartCollection: Object,
-        },
-
-        computed: {
-            ...mapState([
-                'cartCollectionS',
-            ]),
-        },
-
-        methods: {
-            ...mapMutations([
-                'cartM',
-                'addProductCartM',
-				'cartCollectionM'
-			])
-		},
-
-        watch: {
-
-            cartCollection: {
-
-                handler(value) {
-
-                    if(Object.keys(value) != 0 && Object.keys(this.cartCollectionS) == 0) {
-
-                        this.cartCollectionM(value);
-                    }
-                },
-                immediate: true
-            }
-
+			categoryName: String,
+			categorySlug: String,
         }
 
     }

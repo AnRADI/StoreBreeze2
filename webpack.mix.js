@@ -28,5 +28,6 @@ mix.js('resources/js/app.js', 'public/js').vue()
     });
 
 if (production) {
-    mix.version(['public/images', 'public/Admin/**/*.{js,css,png,jpg,gif,svg}']);
+    mix.version(['public/images', 'public/storage']);
+    //mix.version(['public/images', 'public/Admin/**/*.{js,css,png,jpg,gif,svg}']);
 }

@@ -18,6 +18,8 @@ class CartController extends Controller
 	}
 
 
+	// ---------- /cart -----------
+
 	public function cart()
 	{
 		$cartCollection = Cart::get();
@@ -29,7 +31,7 @@ class CartController extends Controller
 	public function addProductCart($productCode, Request $request)
 	{
 		$product = $this->product
-			->getProductCategoryCar($productCode);
+			->firstProductCategoriesAPC($productCode);
 
 
 		if(empty($product)) abort(404);

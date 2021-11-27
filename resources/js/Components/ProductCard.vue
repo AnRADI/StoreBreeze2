@@ -1,16 +1,16 @@
 <template>
-	<div class="col-sm-6 col-md-4">
+	<div class="zop col-sm-6 col-md-4">
 		<div class="thumbnail">
-			<img class="img-fluid" src="http://internet-shop.tmweb.ru/storage/products/iphone_x.jpg" alt="iPhone X 64GB">
+			<img class="img-fluid" :src="mix(product.image)" alt="iPhone X 64GB">
 			<div class="caption">
 				<h3>
-					<inertia-link :href="route('category.product', [product.category.slug, product.code])">
+					<inertia-link :href="route('category.product', [categorySlug, product.code])">
 						{{ product.name }}
 					</inertia-link>
 				</h3>
-				<h4 v-if="product.category.name">
-					<inertia-link :href="route('category', product.category.slug)">
-						{{ product.category.name }}
+				<h4 v-if="product.categories[0].name">
+					<inertia-link :href="route('category', product.categories[0].slug)">
+						{{ product.categories[0].name }}
 					</inertia-link>
 				</h4>
 				<div style="margin-bottom: 5px">
@@ -20,8 +20,7 @@
 					<form v-if="cartCollectionS[product.code]" @submit.prevent="cartM">
 						<button type="submit" class="btn btn-primary" role="button">В корзинe</button>
 					</form>
-
-					<form v-else @submit.prevent="addProductCartM({productCode: product.code})">
+					<form v-else @submit.prevent="addProductCartM({ productCode: product.code })">
 <!--						<input type="number" name="quantity" value="1" min="1" max="9000">-->
 						<button type="submit" class="btn btn-success" role="button">В корзинy</button>
 					</form>
@@ -33,26 +32,16 @@
 </template>
 
 <script>
-	import { mapMutations } from  'vuex'
+
 
     export default {
 
 		props: {
 		    product: Object,
-			cartCollectionS: [Object, Array]
+			categorySlug: String,
 		},
 
-		// computed: {
-        //     ...mapState([
-        //         'cartCollectionS',
-        //     ]),
-		// },
-
 		methods: {
-		    ...mapMutations([
-		        'cartM',
-		        'addProductCartM',
-			]),
 
             // getCartForm(event) {
             //     return new FormData(event.currentTarget);

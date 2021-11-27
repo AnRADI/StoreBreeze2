@@ -18,46 +18,45 @@ class Product extends Model
 
 	// ========== RELATIONSHIPS ============
 
-    public function category()
+    public function categories()
 	{
-    	return $this->belongsTo(Category::class);
+    	return $this->belongsToMany(Category::class);
 	}
 
 
 	// =========== METHODS =============
 
 
-	// ---------- Welcome -----------
+	// ---------- Shop/Welcome Controller -----------
 
-	public function getProductsCategory() {
+	public function getProductsCategoriesW() {
 
 		$columns = [
 			'id',
-			'category_id',
 			'name',
 			'price',
+			'image',
 			'code',
 		];
 
 		$products = $this
 			->select($columns)
-			->with('category:id,name,slug')
+			->with('categories:id,name,slug')
 			->get();
-
 
 		return $products;
 	}
 
 
-	// ---------- Product -----------
+	// ---------- Shop/Product Controller -----------
 
-	public function getProductCategoryPro($productCode) {
+	public function firstProductCategoriesCP($productCode) {
 
 		$columns = [
 			'id',
-			'category_id',
 			'code',
 			'name',
+			'image',
 			'price',
 			'description'
 		];
@@ -66,7 +65,7 @@ class Product extends Model
 		$product = $this
 			->select($columns)
 			->where('code', $productCode)
-			->with('category:id,name,slug')
+			->with('categories:id,name,slug')
 			->first();
 
 
@@ -74,25 +73,44 @@ class Product extends Model
 	}
 
 
-	// ---------- Cart -----------
+	// ---------- Shop/Cart Controller-----------
 
-	public function getProductCategoryCar($productCode) {
+	public function firstProductCategoriesAPC($productCode) {
 
 		$columns = [
 			'id',
-			'category_id',
 			'name',
 			'price',
+			'image',
 			'code'
 		];
 
 		$product = $this
 			->select($columns)
 			->where('code', $productCode)
-			->with('category:id,slug')
+			->with('categories:id,slug')
 			->first();
 
 		return $product;
 	}
 
+
+	// ---------- Admin/Product Controller-----------
+
+	public function getProductsDps() {
+
+    	$products = $this
+			->get();
+
+    	return $products;
+	}
+
+	public function valueCodeDSA() {
+
+    	$fieldCode = $this
+			->orderBy('code', 'desc')
+			->value('code');
+
+    	return $fieldCode;
+	}
 }

@@ -26,21 +26,33 @@ class CategoryController extends Controller
 	public function category($categorySlug) {
 
 		$category = $this->category
-			->getCategoryProducts($categorySlug);
+			->firstCategoryProductsC($categorySlug);
 
 		if(empty($category)) abort(404);
 
-		$category->products->loadMissing('category:id,slug');
-
-
-		$cartCollection = Cart::get();
+		$category->products->loadMissing('categories:id,slug');
 
 
 		return Inertia::render('Shop/Category', [
 			'canLogin' => Route::has('login'),
 			'canRegister' => Route::has('register'),
 			'category' => $category,
-			'cartCollection' => $cartCollection
+		]);
+	}
+
+
+	// ---------- /categories -----------
+
+	public function categories() {
+
+		$categories = $this->category
+			->getCategoriesCs();
+
+
+		return Inertia::render('Shop/Categories', [
+			'canLogin' => Route::has('login'),
+			'canRegister' => Route::has('register'),
+			'categories' => $categories
 		]);
 	}
 }

@@ -5,21 +5,7 @@
 			<title> Dashboard </title>
 		</head>
 
-		<p>
-			<a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-				Ссылка с атрибутом href
-			</a>
-			<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-				Кнопка с атрибутом data-target
-			</button>
-		</p>
-		<div class="collapse" id="collapseExample">
-			<div class="card card-body">
-				Некоторый заполнитель для компонента сворачивания. Эта панель по умолчанию скрыта, но открывается, когда пользователь активирует соответствующий триггер.
-			</div>
-		</div>
-
-		<div class="content-wrapper">
+		<div class="dashboard content-wrapper">
 			<!-- Content Header (Page header) -->
 			<div class="content-header">
 				<div class="container-fluid">
@@ -120,15 +106,7 @@
             AdminLayout
         },
 
-		mounted() {
-
-			this.activeLink();
-
-        },
-
         props: {
-            canLogin: Boolean,
-            canRegister: Boolean,
             categoriesCount: Number,
         },
 
@@ -139,41 +117,18 @@
 			}
 		},
 
-		methods: {
-
-            activeLink() {
-
-                let url = window.location.protocol + '//' + window.location.host + window.location.pathname;
-                let link = '';
-
-                let items = document.querySelectorAll('.nav-link');
-
-
-                items.forEach(item => {
-
-                    link = item.href;
-
-                    if(link == url) {
-
-                        item.classList.add('active');
-                    }
-                });
-			},
-		}
-
-
     }
 </script>
 
-<style>
+<style type="scss">
 	/*html, body, body > div, body > div > div {*/
 	/*	height: 100% !important;*/
 	/*}*/
+	.dashboard {
 
-	.log-out-button {
-		border: 0;
-		background: transparent;
-		padding: 0;
-		color: black;
+		.log-out-button {
+			color: black;
+		}
 	}
+
 </style>

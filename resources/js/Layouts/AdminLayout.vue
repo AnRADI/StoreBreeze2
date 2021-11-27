@@ -6,8 +6,7 @@
 
 			<!-- Google Font: Source Sans Pro -->
 			<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-			<!-- Font Awesome -->
-			<link rel="stylesheet" :href="mix('Admin/plugins/fontawesome-free/css/all.min.css')">
+
 			<!-- Ionicons -->
 <!--			<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">-->
 <!--			&lt;!&ndash; Tempusdominus Bootstrap 4 &ndash;&gt;-->
@@ -16,9 +15,6 @@
 <!--			<link rel="stylesheet" :href="mix('Admin/plugins/icheck-bootstrap/icheck-bootstrap.min.css')">-->
 <!--			&lt;!&ndash; JQVMap &ndash;&gt;-->
 <!--			<link rel="stylesheet" :href="mix('Admin/plugins/jqvmap/jqvmap.min.css')">-->
-			<!-- Theme style -->
-			<link rel="stylesheet" :href="mix('Admin/dist/css/adminlte.min.css')">
-
 <!--			&lt;!&ndash; overlayScrollbars &ndash;&gt;-->
 <!--			<link rel="stylesheet" :href="mix('Admin/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')">-->
 <!--			&lt;!&ndash; Daterange picker &ndash;&gt;-->
@@ -26,10 +22,12 @@
 <!--			&lt;!&ndash; summernote &ndash;&gt;-->
 <!--			<link rel="stylesheet" :href="mix('Admin/plugins/summernote/summernote-bs4.min.css')">-->
 
+			<!-- Font Awesome -->
+			<Script src="https://kit.fontawesome.com/cb2ba445f2.js" crossorigin="anonymous"></Script>
 		</head>
 
 
-		<div class="hold-transition sidebar-mini layout-fixed">
+		<div class="admin-layout hold-transition sidebar-mini layout-fixed">
 			<div class="wrapper">
 
 <!--				&lt;!&ndash; Preloader &ndash;&gt;-->
@@ -41,7 +39,7 @@
 				<aside class="main-sidebar sidebar-dark-primary elevation-4">
 					<!-- Brand Logo -->
 					<a href="index3.html" class="brand-link">
-						<img src="/Admin/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+						<img :src="mix('/images/AdminSidebar/AdminLTELogo.png')" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
 						<span class="brand-text font-weight-light">Админ-панель</span>
 					</a>
 
@@ -50,7 +48,7 @@
 						<!-- Sidebar user panel (optional) -->
 						<div class="user-panel mt-3 pb-3 mb-3 d-flex">
 							<div class="image">
-								<img src="/Admin/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+								<img :src="mix('/images/AdminSidebar/user2-160x160.jpg')" class="img-circle elevation-2" alt="User Image">
 							</div>
 							<div class="info">
 								<a href="#" class="d-block">{{ $page.props.auth.user.name }}</a>
@@ -95,22 +93,30 @@
 									<a href="#" class="nav-link">
 										<i class="nav-icon fas fa-align-left"></i>
 										<p>
-											Категории
+											Продукты
 											<i class="right fas fa-angle-left"></i>
 										</p>
 									</a>
 									<ul class="nav nav-treeview">
 										<li class="nav-item">
-											<a href="./index.html" class="nav-link">
-												<p>Все категории</p>
-											</a>
+											<inertia-link :href="route('dashboard.products')" class="nav-link">
+												<p>Все продукты</p>
+											</inertia-link>
 										</li>
 										<li class="nav-item">
-											<a href="./index.html" class="nav-link">
-												<p>Добавить категорию</p>
-											</a>
+											<inertia-link :href="route('dashboard.add-product')" class="nav-link">
+												<p>Добавить продукт</p>
+											</inertia-link>
 										</li>
 									</ul>
+								</li>
+								<li class="nav-item">
+									<form @submit.prevent="form.post(route('logout'))">
+										<button class="nav-link log-out-button" type="submit">
+											<i class="nav-icon fas fa-align-left"></i>
+											Log Out
+										</button>
+									</form>
 								</li>
 							</ul>
 						</nav>
@@ -155,39 +161,97 @@
 			<!-- AdminLTE App -->
 <!--			<Script :src="mix('Admin/dist/js/adminlte.js')"></Script>-->
 
-
 		</div>
 	</div>
 </template>
 
-<script>
-    import Script from "@/Components/Script";
 
-    require('./adminlte');
-    //require('bootstrap');
+<script>
+
+    import Script from "@/Components/Script";
+    require('admin-lte');
+    require('~/admin-lte/plugins/select2/js/select2.full.min.js');
+
     export default {
-        
+
         components: {
             Script
 		},
-        mounted(){
-            $('[data-widget="treeview"]').Treeview('init');
+
+        mounted() {
+
+            this.initTreeview();
+            this.activeLink();
+        },
+
+		data() {
+            return {
+
+                form: this.$inertia.form(),
+            }
+		},
+
+        methods: {
+
+            initTreeview() {
+
+                $('[data-widget="treeview"]').Treeview('init');
+			},
+
+            activeLink() {
+
+                let url = window.location.protocol + '//' + window.location.host + window.location.pathname;
+                let link = '';
+
+                let items = document.querySelectorAll('.nav-link');
+
+
+                items.forEach(item => {
+
+                    link = item.href;
+
+                    if(link == url) {
+
+                        item.classList.add('active');
+
+                        if(item.parentElement.parentElement.parentElement.tagName == 'LI') {
+
+                            item.parentElement.parentElement.parentElement.classList.add('menu-is-opening', 'menu-open');
+                        }
+                    }
+                });
+            },
         }
     }
 </script>
 
+
+
 <style lang="scss">
+	@import "~admin-lte/build/scss/adminlte";
+	@import "~admin-lte/plugins/select2/css/select2.min.css";
+	@import "~admin-lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css";
 
+	.admin-layout {
 
+		.sidebar-mini, .content-wrapper {
+			height: 100vh !important;
+		}
 
-	.sidebar-mini, .content-wrapper {
-		height: 100vh !important;
+		.log-out-button {
+			color: #c2c7d0;
+			text-align: left;
+		}
+
+		.log-out-button:hover {
+			background-color: rgba(255, 255, 255, 0.1);
+			color: #fff !important;
+		}
+
+		.nav-link i {
+			color: #c2c7d0;
+		}
 	}
 
-	.log-out-button {
-		border: 0;
-		background: transparent;
-		padding: 0;
-	}
 
 </style>

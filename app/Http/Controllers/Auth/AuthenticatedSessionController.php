@@ -43,9 +43,9 @@ class AuthenticatedSessionController extends Controller
 			->user()
 			->hasRole('admin')
 		)
-        	return redirect()->intended(RouteServiceProvider::HOME);
+        	return redirect()->route(RouteServiceProvider::ADMIN_HOME);
 		else
-			return redirect()->route('welcome');
+			return redirect()->route(RouteServiceProvider::SHOP_HOME);
     }
 
     /**
@@ -57,15 +57,16 @@ class AuthenticatedSessionController extends Controller
     public function destroy(Request $request)
     {
 		$cartCollection = Cart::get();
+		$locale = session('locale');
 
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
-
-		session()->put('cartCollection', $cartCollection);
-
         $request->session()->regenerateToken();
 
-        return redirect('/');
+		session()->put('cartCollection', $cartCollection);
+        session()->put('locale', $locale);
+
+        return redirect()->route(RouteServiceProvider::SHOP_HOME);
     }
 }

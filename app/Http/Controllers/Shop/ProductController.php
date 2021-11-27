@@ -25,22 +25,33 @@ class ProductController extends Controller
 	public function product($categorySlug, $productCode)
 	{
 		$product = $this->product
-			->getProductCategoryPro($productCode);
+			->firstProductCategoriesCP($productCode);
 
 
-		if(
-			empty($product && ($categorySlug === $product->category->slug))
-		) abort(404);
+		$isCategoryProduct = false;
+		$categoryName = '';
+
+		foreach($product->categories as $category) {
+
+			if($product && ($categorySlug === $category->slug)) {
+
+				$isCategoryProduct = true;
+				$categoryName = $category->name;
+
+				break;
+			};
+		}
 
 
-		$cartCollection = Cart::get();
+		if(empty($isCategoryProduct)) abort(404);
 
 
 		return Inertia::render('Shop/Product', [
 			'canLogin' => Route::has('login'),
 			'canRegister' => Route::has('register'),
 			'product' => $product,
-			'cartCollection' => $cartCollection
+			'categorySlug' => $categorySlug,
+			'categoryName' => $categoryName
 		]);
 	}
 }

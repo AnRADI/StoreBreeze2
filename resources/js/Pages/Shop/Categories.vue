@@ -1,5 +1,5 @@
 <template>
-	<main-layout :can-login="canLogin" :can-register="canRegister">
+	<shop-layout :can-login="canLogin" :can-register="canRegister">
 
 		<head>
 			<title> Категории </title>
@@ -20,18 +20,17 @@
 			</div>
 		</div>
 
-	</main-layout>
+	</shop-layout>
 </template>
 
 <script>
 
-    import MainLayout from "@/Layouts/MainLayout";
-    import {mapState} from "vuex";
+    import ShopLayout from "@/Layouts/ShopLayout";
 
     export default {
 
         components: {
-            MainLayout
+            ShopLayout,
 		},
 
         props: {
@@ -39,12 +38,6 @@
 			canLogin: Boolean,
 			canRegister: Boolean,
 		},
-
-		computed: {
-            ...mapState([
-                'cartCollectionS'
-            ]),
-		}
 
     }
 </script>
