@@ -47,6 +47,7 @@ class WelcomeController extends Controller
 
 		session(['locale' => $locale]);
 
+
 		return back();
 	}
 
