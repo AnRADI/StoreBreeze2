@@ -78,6 +78,8 @@ import { store } from './store';
                 else {
 
                     realPath = mixManifest[path];
+
+                    if(!realPath) realPath = path;
                 }
 
                 return realPath;

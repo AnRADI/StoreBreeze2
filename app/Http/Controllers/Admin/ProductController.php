@@ -68,11 +68,13 @@ class ProductController extends Controller
 		$imageName = $request->image->getClientOriginalName();
 
 		//if(!file_exists(storage_path('app/public/uploads/' . $imageName))) {
-
 		$request->image->storeAs('uploads', $imageName, 'public');
 		//}
 
-		$form['image'] = '/storage/uploads/' . $imageName;
+
+		$hashFile = substr(md5_file($request->image->getRealPath()), -20);
+
+		$form['image'] = '/storage/uploads/' . $imageName . '?id=' . $hashFile;
 
 
 		$fieldCode = $this->product

@@ -12,22 +12,24 @@ const mix = require('laravel-mix');
  */
 let production = mix.inProduction();
 
-mix.js('resources/js/app.js', 'public/js').vue()
-    .copy('resources/images', 'public/images')
-    .sass('resources/sass/app.scss', 'public/css').options({
+mix.setPublicPath('public_html/');
+
+mix.js('resources/js/app.js', 'public_html/js').vue()
+    .copy('resources/images', 'public_html/images')
+    .sass('resources/sass/app.scss', 'public_html/css').options({
         processCssUrls: false
     })
     .webpackConfig(require('./webpack.config'))
     .sourceMaps(!production, 'source-map')
     .disableNotifications()
     .browserSync({
-        proxy: 'store-breeze2',
-        host: 'store-breeze2',
+        proxy: 'praktiww.beget.tech.local',
+        host: 'praktiww.beget.tech.local',
         notify: false,
         open: 'external'
     });
 
 if (production) {
-    mix.version(['public/images', 'public/storage']);
+    mix.version(['public_html/images']);
     //mix.version(['public/images', 'public/Admin/**/*.{js,css,png,jpg,gif,svg}']);
 }

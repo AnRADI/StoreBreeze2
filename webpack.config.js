@@ -9,6 +9,7 @@ module.exports = {
             '~': path.resolve('node_modules'),
             'resources/lang': path.resolve('resources/lang'),
         },
+
         // fallback: {
         //     fs: false,
         //     crypto: false

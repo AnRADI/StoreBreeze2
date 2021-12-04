@@ -28,6 +28,7 @@ class WelcomeController extends Controller
 
     	$products = $this->product
 			->getProductsCategoriesW();
+
 //    	dump(__('Product added :miko zima', ['miko' => 'aaa']));
 
 		//$pr = Product::create(['category_id' => 3, 'name' => 'zok', 'code' => 10022, 'description' => 'ona iri', 'price' => 1033, 'cart_collection' => []]);

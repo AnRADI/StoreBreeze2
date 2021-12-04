@@ -225,6 +225,10 @@
 		border-bottom: none;
 	}
 
+	.align-icons {
+		justify-content: center;
+	}
+
 	.cart-form {
 		display: inline-block;
 		position: relative;
@@ -253,19 +257,19 @@
 		-webkit-appearance: none;
 	}
 
+	.cart-button-plus, .cart-button-minus {
+		display: flex !important;
+		justify-content: center;
+		align-items: center;
+		width: 20px;
+		padding: 0;
+	}
+
 	.cart-button-minus {
 		position: absolute;
 		top: 1px;
 		left: 1px;
 		bottom: 1px;
-		width: 20px;
-		padding: 0;
-		display: block;
-		text-align: center;
-		border: none;
-		border-right: 1px solid #ddd;
-		font-size: 16px;
-		font-weight: 600;
 	}
 
 	.cart-button-plus {
@@ -273,13 +277,5 @@
 		top: 1px;
 		right: 1px;
 		bottom: 1px;
-		width: 20px;
-		padding: 0;
-		display: block;
-		text-align: center;
-		border: none;
-		border-left: 1px solid #ddd;
-		font-size: 16px;
-		font-weight: 600;
 	}
 </style>

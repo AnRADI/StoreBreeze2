@@ -282,8 +282,6 @@
 			border: 1px dashed green;
 			cursor: pointer;
 			height: 365px;
-			height: -moz-available;          /* WebKit игнор. */
-			height: -webkit-fill-available;  /* Mozilla игнор. */
 		}
 
 		img.image-preview {

@@ -20,7 +20,6 @@
 
 			<div class="form-group">
 				<div class="custom-control custom-checkbox">
-					<div>{{form.remember}}</div>
 					<breeze-checkbox id="remember_me" v-model:checked="form.remember" />
 					<label class="custom-control-label" for="remember_me">
 						Remember Me
