@@ -1,5 +1,5 @@
 <template>
-	<shop-layout :can-login="canLogin" :can-register="canRegister">
+	<shop-layout>
 
 		<head>
 			<title> Главная </title>
@@ -21,6 +21,7 @@
 				/>
 			</div>
 		</div>
+
 	</shop-layout>
 </template>
 
@@ -28,6 +29,8 @@
     import ProductCard from '@/Components/ProductCard'
     import Script from "@/Components/Script";
     import ShopLayout from "@/Layouts/ShopLayout";
+
+
 
     export default {
 
@@ -37,6 +40,7 @@
             Script
         },
 
+
         data() {
             return {
 				// form: this.$inertia.form({
@@ -45,11 +49,12 @@
 			}
 		},
 
+
+
         props: {
-            canLogin: Boolean,
-            canRegister: Boolean,
             products: Array,
             //top: Number,
+
         },
     }
 </script>
@@ -63,6 +68,7 @@
 			position: relative;
 			width: 100px;
 		}
+
 		.cart-form input[type="number"],
 		.cart-form input[type="number"]:hover,
 		.cart-form input[type="number"]:focus {

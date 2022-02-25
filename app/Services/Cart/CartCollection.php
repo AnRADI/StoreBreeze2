@@ -15,18 +15,18 @@ class CartCollection
 		if(empty($cartCollection)) $cartCollection = [];
 
 
-		if(Auth::check()) {
-
-			$user = Auth::user();
-
-			if(empty($user->cart_collection)) {
-
-				$user->update(['cart_collection' => $cartCollection]);
-			}
-			else {
-				$cartCollection = $user->cart_collection;
-			}
-		}
+//		if(Auth::check()) {
+//
+//			$user = Auth::user();
+//
+//			if(empty($user->cart_collection)) {
+//
+//				$user->update(['cart_collection' => $cartCollection]);
+//			}
+//			else {
+//				$cartCollection = $user->cart_collection;
+//			}
+//		}
 
 
 		return $cartCollection;
@@ -53,11 +53,11 @@ class CartCollection
 		}
 
 
-		if(Auth::check()) {
-
-			Auth::user()
-				->update(['cart_collection' => $cartCollection]);
-		}
+//		if(Auth::check()) {
+//
+//			Auth::user()
+//				->update(['cart_collection' => $cartCollection]);
+//		}
 
 
 		session()->put('cartCollection', $cartCollection);

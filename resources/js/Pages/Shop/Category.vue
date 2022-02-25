@@ -1,5 +1,5 @@
 <template>
-	<shop-layout :can-login="canLogin" :can-register="canRegister">
+	<shop-layout>
 
 		<head>
 			<title> Категория </title>
@@ -37,9 +37,13 @@
 
         props: {
             category: Object,
-            canLogin: Boolean,
-            canRegister: Boolean,
         },
 
     }
 </script>
+
+<!--<style lang="scss" src="resources/sass/_reset.scss"></style>-->
+
+<style lang="scss">
+
+</style>

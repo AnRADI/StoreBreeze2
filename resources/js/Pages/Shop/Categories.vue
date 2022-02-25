@@ -1,5 +1,5 @@
 <template>
-	<shop-layout :can-login="canLogin" :can-register="canRegister">
+	<shop-layout>
 
 		<head>
 			<title> Категории </title>
@@ -9,7 +9,7 @@
 		<div class="container">
 			<div class="starter-template">
 				<div v-for="category in categories" :key="category.id" class="panel">
-					<inertia-link :href="route('category', category.slug)">
+					<inertia-link :href="route('category_slug', category.slug)">
 						<img src="http://internet-shop.tmweb.ru/storage/categories/mobile.jpg">
 						<h2>{{ category.name }}</h2>
 					</inertia-link>
@@ -27,6 +27,7 @@
 
     import ShopLayout from "@/Layouts/ShopLayout";
 
+
     export default {
 
         components: {
@@ -35,13 +36,14 @@
 
         props: {
 		    categories: Array,
-			canLogin: Boolean,
-			canRegister: Boolean,
 		},
 
     }
 </script>
 
-<style>
+
+<!--<style lang="scss" src="resources/sass/_reset.scss"></style>-->
+
+<style lang="scss">
 
 </style>

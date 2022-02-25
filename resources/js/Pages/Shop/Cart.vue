@@ -1,6 +1,10 @@
 <template>
 	<div class="modal fade" id="cartId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
+
+			<input id="cart" class="d-none" @click="cart">
+			<input id="addToCart" class="d-none" @click="addToCart(addToCartS.categorySlug, addToCartS.productCode, addToCartS.cartForm)">
+
 			<div v-if="isCartData" class="modal-content">
 				<div class="modal-header">
 					<h1>Корзина</h1>
@@ -25,7 +29,7 @@
 							<tbody>
 								<tr v-for="product in cartCollectionS" :key="product.code">
 									<td>
-										<inertia-link @click.stop="hideCartModal" :href="route('category.product', [categorySlug, product.code])">
+										<inertia-link @click.stop="hideCartModal" :href="route('category_slug.product_code', [product.categories[0].slug, product.code])">
 
 											<img style="height: 56px" :src="product.image">
 											{{ product.name }}
@@ -46,15 +50,16 @@
 <!--												</button>-->
 <!--											</form>-->
 											<form class="cart-form">
-												<button @click.stop="addProductCart(product.code, {quantity: --product.quantity})" class="btn btn-danger cart-button-minus" type="button">
+
+												<button @click="addToCart(product.categories[0].slug, product.code, {quantity: --product.quantity})" class="btn btn-danger cart-button-minus" type="button">
 													<span class="glyphicon glyphicon-minus" aria-hidden="true">-</span>
 												</button>
 
-												<input type="number"
-													   @input="addProductCart(product.code, {quantity: product.quantity})"
-													   v-model.number="product.quantity">
+<!--												<input type="number"-->
+<!--													   @input="addProductCart(product.code, {quantity: product.quantity})"-->
+<!--													   v-model.number="product.quantity">-->
 
-												<button @click.stop="addProductCart(product.code, {quantity: ++product.quantity})" class="btn btn-success cart-button-plus" type="button">
+												<button @click="addToCart(product.categories[0].slug, product.code, {quantity: ++product.quantity})" class="btn btn-success cart-button-plus" type="button">
 													<span class="glyphicon glyphicon-plus" aria-hidden="true">+</span>
 												</button>
 											</form>
@@ -112,34 +117,23 @@
             }
         },
 
-
-        watch: {
-
-            cartS() {
-
-                this.cart();
-			},
-
-            addProductCartS(params) {
-
-                this.addProductCart(params.productCode);
-            },
-		},
-
-
         methods: {
 
             async cart() {
 
-				let cartResponse = await axios.get(route('cart'));
-
-				this.cartCollectionM(cartResponse.data);
-
+				await axios.get(route('cart'));
 
                 this.cartId.modal('show');
             },
 
-            async addProductCart(productCode, cartForm = { quantity: 1 }) {
+
+            async addToCart(categorySlug, productCode, cartForm = { quantity: 1 }) {
+
+                if(cartForm instanceof FormData)
+                	cartForm.append('_method', 'patch');
+                else
+                    cartForm._method = 'patch';
+
 
                 if(cartForm.quantity != '') {
 
@@ -149,7 +143,7 @@
 					}
 
                     let cartResponse =
-                        await axios.post(route('add.product.cart', productCode), cartForm);
+                        await axios.post(route('cart.category_slug.product_code', [categorySlug, productCode]), cartForm);
 
 
                     this.cartCollectionM(cartResponse.data);

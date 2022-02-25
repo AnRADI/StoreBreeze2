@@ -26,9 +26,6 @@ class Category extends Model
 
 	// =========== METHODS =============
 
-
-	// ---------- Shop/Category Controller -----------
-
 	public function firstCategoryProductsC($categorySlug)
 	{
 		$categoryColumns = [
@@ -49,7 +46,7 @@ class Category extends Model
 	}
 
 
-	public function getCategoriesCs()
+	public function getCategoriesC()
 	{
 		$columns = [
 			'id',
@@ -65,8 +62,6 @@ class Category extends Model
 		return $categories;
 	}
 
-
-	// ---------- Admin/Product Controller -----------
 
 	public function getCategoriesDA() {
 

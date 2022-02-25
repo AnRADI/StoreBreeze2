@@ -22,7 +22,7 @@ class GuestOrUser
     {
 
 		$guards = empty($guards) ? [null] : $guards;
-
+		
         foreach ($guards as $guard) {
 
             if (Auth::guard($guard)->user()->hasRole('admin')) {

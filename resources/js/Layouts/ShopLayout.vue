@@ -1,39 +1,45 @@
 <template>
 	<div>
-		<div class="shop-layout container pt-4">
-			<div v-if="canLogin" class="d-flex justify-content-end">
+		<div v-if="currentRouteName != 'login'" class="shop-layout container pt-4">
+			<div class="d-flex justify-content-end">
 				<ul class="d-flex" style="list-style: none">
 					<li>
 						<inertia-link :href="route('welcome')" class="ml-4 text-muted">
 							Главная
 						</inertia-link>
 					</li>
+
 					<li>
 						<inertia-link :href="route('categories')" class="ml-4 text-muted">
 							Категории
 						</inertia-link>
 					</li>
-					<li class="dropdown">
-<!--						<form @submit.prevent="languageForm.post(route('language.locale', 'ru'))" class="ml-4 text-muted">-->
-<!--							<button :href="route('language.locale', 'ru')" class="submit-cart text-muted" type="submit">Переключить язык</button>-->
-<!--						</form>-->
+<!--					<li class="dropdown">-->
+
 <!--						<a class="dropdown-toggle ml-4 text-muted" href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
 <!--							Переключить язык-->
 <!--						</a>-->
-						<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-							<inertia-link :href="route('language.locale', 'en')" class="dropdown-item text-muted" href="#">en</inertia-link>
-							<inertia-link :href="route('language.locale', 'es')" class="dropdown-item text-muted" href="#">es</inertia-link>
-							<inertia-link :href="route('language.locale', 'ru')" class="dropdown-item text-muted" href="#">ru</inertia-link>
-						</div>
-					</li>
+<!--						<div @click.prevent="language" class="dropdown-menu" aria-labelledby="dropdownMenuLink">-->
+<!--							<a class="dropdown-item text-muted" href="#">en</a>-->
+<!--							<a class="dropdown-item text-muted" href="#">ru</a>-->
+<!--						</div>-->
+<!--&lt;!&ndash;						<form @submit.prevent="languageForm.patch(route('language.languageLocale', 'ru'))">&ndash;&gt;-->
+<!--&lt;!&ndash;							<input ref="languageLocale" type="submit">&ndash;&gt;-->
+<!--&lt;!&ndash;						</form>&ndash;&gt;-->
+<!--					</li>-->
+<!--					<li>{{ __('Product added') }}</li>-->
+
 					<li>
-						<a href="#" @click.prevent="cartM" class="ml-4 text-muted">Корзина</a>
+						<a href="#" @click.prevent="cart" class="ml-4 text-muted">Корзина</a>
 						<cart></cart>
 					</li>
 					<li v-if="can('logout')"> <!-- user -->
-						<form @submit.prevent="logOutForm.post(route('logout'))" class="ml-4">
-							<button class="submit-log-out text-muted" type="submit">Log Out</button>
-						</form>
+						<a @click.prevent="logOutForm.post(route('logout'))" href="#" class="ml-4 text-muted">
+							Log Out
+						</a>
+<!--						<form @submit.prevent="logOutForm.post(route('logout'))" class="ml-4">-->
+<!--							<button class="submit-log-out text-muted" type="submit">Log Out</button>-->
+<!--						</form>-->
 					</li>
 					<template v-if="can('login and register')"> <!-- guest -->
 						<li>
@@ -42,15 +48,15 @@
 							</inertia-link>
 						</li>
 						<li>
-							<inertia-link v-if="canRegister" :href="route('register')" class="ml-4 text-muted">
+							<inertia-link :href="route('register')" class="ml-4 text-muted">
 								Register
 							</inertia-link>
 						</li>
+
 					</template>
 				</ul>
 			</div>
 		</div>
-
 		<slot></slot>
 	</div>
 </template>
@@ -67,9 +73,10 @@
             Cart
 		},
 
+
         props: {
-            canLogin: Boolean,
-            canRegister: Boolean,
+            currentRouteName: String,
+            cartCollection: [Object, Array]
 		},
 
         data() {
@@ -78,6 +85,7 @@
                 languageForm: this.$inertia.form(),
             }
         },
+
 
         mounted() {
 
@@ -88,13 +96,22 @@
 
             getCart() {
 
-                let cartCollection = this.$page.props.cartCollection;
+                if(Object.keys(this.cartCollection).length == 0 || Object.keys(this.cartCollectionS).length == 0) {
 
-                if(Object.keys(cartCollection).length != 0 && Object.keys(this.cartCollectionS).length == 0) {
-
-                    this.cartCollectionM(cartCollection);
+                    this.cartCollectionM(this.cartCollection);
                 }
-			}
+			},
+
+			cart() {
+
+                document.getElementById('cart').click();
+			},
+
+			language(e) {
+
+                this.languageForm.patch(route('language.language_locale', e.target.innerText));
+			},
+
 		}
 
     }
@@ -104,6 +121,7 @@
 <style lang="scss">
 
 	@import '~bootstrap/scss/bootstrap';
+
 
 	.shop-layout {
 

@@ -6,7 +6,9 @@ use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class Admin
 {
@@ -34,7 +36,17 @@ class Admin
 			}
             if ($authGuardUser->hasRole('guest')) {
 
-                return redirect()->route('login');
+				if ($request->inertia()) {
+
+					$request->session()->flash('message419', 'Сессия истекла');
+
+					if (App::environment('local'))
+						return Inertia::location('http://praktiww.beget.tech.local:3000/login');
+					else
+						return Inertia::location('http://praktiww.beget.tech.local/login');
+				}
+				else
+					return redirect()->route('login');
             }
         }
 

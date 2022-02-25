@@ -7,6 +7,7 @@ module.exports = {
         alias: {
             '@': path.resolve('resources/js'),
             '~': path.resolve('node_modules'),
+            'public_html': path.resolve('public_html'),
             'resources/lang': path.resolve('resources/lang'),
         },
 

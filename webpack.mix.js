@@ -26,7 +26,7 @@ mix.js('resources/js/app.js', 'public_html/js').vue()
         proxy: 'praktiww.beget.tech.local',
         host: 'praktiww.beget.tech.local',
         notify: false,
-        open: 'external'
+        open: 'external',
     });
 
 if (production) {

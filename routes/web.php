@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Shop\WelcomeController;
 use App\Http\Controllers\Shop\CategoryController;
+use App\Http\Controllers\Shop\CategoriesController;
 use App\Http\Controllers\Shop\ProductController;
 use App\Http\Controllers\Shop\CartController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -13,7 +14,7 @@ use Inertia\Inertia;
 
 
 
-Route::middleware(['admin'])->group(function () { //'auth', 'verified',
+Route::middleware(['admin'])->group(function () {
 
 
 	// -------- /dashboard ----------
@@ -79,24 +80,22 @@ Route::middleware(['guest_or_user'])->group(function () {
 
 	// -------- /welcome ----------
 
-	Route::get('/', [WelcomeController::class, 'welcome'])
+	Route::get('/', [WelcomeController::class, 'index'])
 		->name('welcome');
 
-	Route::post('/submit/welcome', [WelcomeController::class, 'submitWelcome'])
-		->name('submit.welcome');
 
-	Route::get('/language/{locale}', [WelcomeController::class, 'languageLocale'])
-		->name('language.locale');
+//	Route::patch('/language/{language_locale}', [WelcomeController::class, 'language'])
+//		->name('language.language_locale');
 
 
 	// --------/cart ----------
 
-	Route::get('/cart', [CartController::class, 'cart'])
+	Route::get('/cart', [CartController::class, 'index'])
 		->name('cart');
 
 
-	Route::post('/add/{category}/cart', [CartController::class, 'addProductCart'])
-		->name('add.product.cart');
+	Route::patch('/cart/{category_slug}/{product_code}', [CartController::class, 'update'])
+		->name('cart.category_slug.product_code');
 
 
 	Route::delete('/remove/{product}/cart', [CartController::class, 'removeProductCart'])
@@ -105,20 +104,20 @@ Route::middleware(['guest_or_user'])->group(function () {
 
 	// -------- /categories ----------
 
-	Route::get('/categories', [CategoryController::class, 'categories'])
+	Route::get('/categories', [CategoriesController::class, 'index'])
 		->name('categories');
 
 
-	// -------- /{category} ----------
+	// -------- /{category_slug} ----------
 
-	Route::get('/{category}', [CategoryController::class, 'category'])
-		->name('category');
+	Route::get('/{category_slug}', [CategoryController::class, 'index'])
+		->name('category_slug');
 
 
-	// -------- /{category}/{product} ----------
+	// -------- /{category_slug}/{product_code} ----------
 
-	Route::get('/{category}/{product}', [ProductController::class, 'product'])
-		->name('category.product');
+	Route::get('/{category_slug}/{product_code}', [ProductController::class, 'index'])
+		->name('category_slug.product_code');
 });
 
 

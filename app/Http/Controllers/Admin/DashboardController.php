@@ -18,6 +18,8 @@ class DashboardController extends Controller
 
 		$categoriesCount = Category::get()->count();
 
+
+
 		return Inertia::render('Admin/Dashboard', [
 			'canLogin' => Route::has('login'),
 			'canRegister' => Route::has('register'),

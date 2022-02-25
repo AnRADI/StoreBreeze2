@@ -8,9 +8,8 @@ export const store = createStore({
 
             // Cart
 
-            cartS: false,
-            addProductCartS: {},
-            cartCollectionS: {}
+            cartCollectionS: {},
+            addToCartS: {}
         }
     },
 
@@ -18,19 +17,14 @@ export const store = createStore({
 
         // Cart
 
-        cartM(state) {
-
-            state.cartS = !state.cartS;
-        },
-
-        addProductCartM(state, params) {
-
-            state.addProductCartS = params;
-        },
-
         cartCollectionM(state, value) {
 
             state.cartCollectionS = value;
+        },
+
+        addToCartM(state, value) {
+
+            state.addToCartS = value;
         }
     }
 });

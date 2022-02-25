@@ -28,6 +28,7 @@ import { store } from './store';
     // ------- Mixin --------
 
     let mixManifest = (await axios.get('/mix-manifest.json')).data;
+    //let mixManifest = require('public/mix-manifest.json');
 
     // let ff = (await axios.get('resources/lang/ru.json')).data;
 
@@ -35,7 +36,7 @@ import { store } from './store';
     const mixin = {
 
         computed: {
-            ...mapState(Object.getOwnPropertyNames(store._state.data)),
+            ...mapState(Object.keys(store._state.data)),
 
             // ttt() {
             //     return require(this.$page.props.resource_path + '/lang/ru.json');
@@ -45,8 +46,9 @@ import { store } from './store';
             }
         },
 
+
         methods: {
-            ...mapMutations(Object.getOwnPropertyNames(store._mutations)),
+            ...mapMutations(Object.keys(store._mutations)),
 
             can(permission) {
 
@@ -118,6 +120,7 @@ import { store } from './store';
     const el = document.getElementById('app');
 
     createApp({
+
 
         render: () =>
             h(InertiaApp, {

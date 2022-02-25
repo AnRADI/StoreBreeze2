@@ -49,9 +49,12 @@ class HandleInertiaRequests extends Middleware
 
 			'flash' => [
 				'message' => fn() => session()->get('success'),
+				'message419' => fn() => session()->get('message419'),
 			],
 
 			'cartCollection' => fn() => Cart::get(),
+
+			'currentRouteName' => fn() => \Route::currentRouteName(),
 
 			'permissions' => fn() => $request->user()->getAllPermissions(),
 

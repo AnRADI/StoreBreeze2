@@ -5,7 +5,7 @@
 			<meta name="viewport" content="width=device-width, initial-scale=1">
 
 			<!-- Google Font: Source Sans Pro -->
-			<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!--			<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">-->
 
 			<!-- Ionicons -->
 <!--			<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">-->
@@ -23,7 +23,7 @@
 <!--			<link rel="stylesheet" :href="mix('Admin/plugins/summernote/summernote-bs4.min.css')">-->
 
 			<!-- Font Awesome -->
-			<Script src="https://kit.fontawesome.com/cb2ba445f2.js" crossorigin="anonymous"></Script>
+<!--			<Script src="https://kit.fontawesome.com/cb2ba445f2.js" crossorigin="anonymous"></Script>-->
 		</head>
 
 
@@ -111,12 +111,16 @@
 									</ul>
 								</li>
 								<li class="nav-item">
-									<form @submit.prevent="form.post(route('logout'))">
-										<button class="nav-link log-out-button" type="submit">
-											<i class="nav-icon fas fa-align-left"></i>
-											Log Out
-										</button>
-									</form>
+									<a @click.prevent="form.post(route('logout'))" href="#" class="nav-link">
+										<i class="nav-icon fas fa-align-left"></i>
+										Log Out
+									</a>
+<!--									<form @submit.prevent="form.post(route('logout'))">-->
+<!--										<button class="nav-link log-out-button" type="submit">-->
+<!--											<i class="nav-icon fas fa-align-left"></i>-->
+<!--											Log Out-->
+<!--										</button>-->
+<!--									</form>-->
 								</li>
 							</ul>
 						</nav>
@@ -168,14 +172,17 @@
 
 <script>
 
-    import Script from "@/Components/Script";
+    // import Script from "@/Components/Script";
+
     require('admin-lte');
+    require('@/Plugins/fontawesome.js');
     require('~/admin-lte/plugins/select2/js/select2.full.min.js');
+
 
     export default {
 
         components: {
-            Script
+
 		},
 
         mounted() {
@@ -228,9 +235,11 @@
 
 
 <style lang="scss">
+
+	@import "resources/sass/Plugins/select2-bootstrap4";
+	@import "resources/sass/Plugins/select2";
 	@import "~admin-lte/build/scss/adminlte";
-	@import "~admin-lte/plugins/select2/css/select2.min.css";
-	@import "~admin-lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css";
+
 
 	.admin-layout {
 

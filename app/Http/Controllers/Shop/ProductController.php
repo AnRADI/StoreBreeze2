@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Shop;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,38 +21,19 @@ class ProductController extends Controller
 	}
 
 
-	// ---------- /{category}/{product} -----------
+	// ---------- /{category_slug}/{product_slug} -----------
 
-	public function product($categorySlug, $productCode)
+	public function index($categorySlug, $productCode)
 	{
 		$product = $this->product
-			->firstProductCategoriesCP($productCode);
+			->firstProductCategoriesCP($categorySlug, $productCode);
 
 
-		$isCategoryProduct = false;
-		$categoryName = '';
-
-		foreach($product->categories as $category) {
-
-			if($product && ($categorySlug === $category->slug)) {
-
-				$isCategoryProduct = true;
-				$categoryName = $category->name;
-
-				break;
-			};
-		}
-
-
-		if(empty($isCategoryProduct)) abort(404);
+		if(empty($product && $product->categories->count() != 0)) abort(404);
 
 
 		return Inertia::render('Shop/Product', [
-			'canLogin' => Route::has('login'),
-			'canRegister' => Route::has('register'),
 			'product' => $product,
-			'categorySlug' => $categorySlug,
-			'categoryName' => $categoryName
 		]);
 	}
 }

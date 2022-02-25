@@ -24,14 +24,14 @@ class Product extends Model
 	}
 
 
+
+
 	// =========== METHODS =============
 
 
-	// ---------- Shop/Welcome Controller -----------
-
 	public function getProductsCategoriesW() {
 
-		$columns = [
+		$columnsProducts = [
 			'id',
 			'name',
 			'price',
@@ -39,20 +39,36 @@ class Product extends Model
 			'code',
 		];
 
+
+//		$categories = Category::whereIn('name', ['Мобильные телефоны', 'Портативная техника'])->get();
+//
+//
+//		$categories->each(function ($category) {
+//			$category->load(['products' => function($query) {
+//				$query->take(3);
+//			}]);
+//		});
+//		dd($categories);
+
+
 		$products = $this
-			->select($columns)
+			->select($columnsProducts)
 			->with('categories:id,name,slug')
+			->take(10)
 			->get();
+
+		$products->each(function ($product) {
+			$product->setRelation('categories', $product->categories->take(1));
+		});
+
 
 		return $products;
 	}
 
 
-	// ---------- Shop/Product Controller -----------
+	public function firstProductCategoriesCP($categorySlug, $productCode) {
 
-	public function firstProductCategoriesCP($productCode) {
-
-		$columns = [
+		$columnsProduct = [
 			'id',
 			'code',
 			'name',
@@ -61,11 +77,20 @@ class Product extends Model
 			'description'
 		];
 
+		$columnsCategories = [
+			'id',
+			'name',
+			'slug',
+		];
 
 		$product = $this
-			->select($columns)
+			->select($columnsProduct)
 			->where('code', $productCode)
-			->with('categories:id,name,slug')
+			->with(['categories' => function($query) use($categorySlug, $columnsCategories) {
+				$query
+					->select($columnsCategories)
+					->where('slug', $categorySlug);
+			}])
 			->first();
 
 
@@ -73,11 +98,9 @@ class Product extends Model
 	}
 
 
-	// ---------- Shop/Cart Controller-----------
+	public function firstProductCategoriesCTP($categorySlug, $productCode) {
 
-	public function firstProductCategoriesAPC($productCode) {
-
-		$columns = [
+		$columnsProduct = [
 			'id',
 			'name',
 			'price',
@@ -85,17 +108,27 @@ class Product extends Model
 			'code'
 		];
 
+		$columnsCategories = [
+			'id',
+			'name',
+			'slug',
+		];
+
+
 		$product = $this
-			->select($columns)
+			->select($columnsProduct)
 			->where('code', $productCode)
-			->with('categories:id,slug')
+			->with(['categories' => function($query) use($categorySlug, $columnsCategories) {
+				$query
+					->select($columnsCategories)
+					->where('slug', $categorySlug);
+			}])
 			->first();
+
 
 		return $product;
 	}
 
-
-	// ---------- Admin/Product Controller-----------
 
 	public function getProductsDps() {
 

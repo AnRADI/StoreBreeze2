@@ -128,6 +128,7 @@
 
 		props: {
             categories: Array,
+            flash: Object,
 		},
 
 		data() {
@@ -272,6 +273,7 @@
 </script>
 
 <style lang="scss">
+
 
 	.add-product {
 

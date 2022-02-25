@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Exceptions\TestException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -20,8 +22,8 @@ class AuthenticatedSessionController extends Controller
      */
     public function create()
     {
+
         return Inertia::render('Auth/Login', [
-            'canResetPassword' => Route::has('password.request'),
             'status' => session('status'),
         ]);
     }
@@ -39,11 +41,16 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+
 		if($request
 			->user()
 			->hasRole('admin')
 		)
-        	return redirect()->route(RouteServiceProvider::ADMIN_HOME);
+			if (App::environment('local'))
+				return Inertia::location('http://praktiww.beget.tech.local:3000/dashboard');
+			else
+				return Inertia::location('http://praktiww.beget.tech.local/dashboard');
+
 		else
 			return redirect()->route(RouteServiceProvider::SHOP_HOME);
     }
@@ -56,17 +63,23 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request)
     {
+    	// get session data
 		$cartCollection = Cart::get();
 		$locale = session('locale');
 
+		// logout and remove all session data
         Auth::guard('web')->logout();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
+        // put session data
 		session()->put('cartCollection', $cartCollection);
         session()->put('locale', $locale);
+        // ----------------
 
-        return redirect()->route(RouteServiceProvider::SHOP_HOME);
+		if (App::environment('local'))
+			return Inertia::location('http://praktiww.beget.tech.local:3000');
+		else
+			return Inertia::location('http://praktiww.beget.tech.local');
     }
 }

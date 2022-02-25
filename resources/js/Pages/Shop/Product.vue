@@ -1,5 +1,5 @@
 <template>
-	<shop-layout :can-login="canLogin" :can-register="canRegister">
+	<shop-layout>
 
 		<head>
 			<title> Продукт </title>
@@ -10,8 +10,8 @@
 				<h1>{{ product.name }}</h1>
 				<p>Цена: <b>{{ product.price }}.</b></p>
 				<h4>
-					<inertia-link :href="route('category', categorySlug)">
-						{{ categoryName }}
+					<inertia-link :href="route('category_slug', product.categories[0].slug)">
+						{{ product.categories[0].name }}
 					</inertia-link>
 				</h4>
 				<div class="row">
@@ -20,10 +20,10 @@
 					</div>
 				</div>
 				<p>{{ product.description }}</p>
-				<form v-if="cartCollectionS[product.code]" @submit.prevent="cartM">
+				<form v-if="cartCollectionS[product.code]" @submit.prevent="cart">
 					<button type="submit" class="btn btn-primary" role="button">Уже в корзинe</button>
 				</form>
-				<form v-else @submit.prevent="addProductCartM({ productCode: product.code })">
+				<form v-else @submit.prevent="addToCart(product.categories[0].slug, product.code)">
 					<button type="submit" class="btn btn-success">Добавить в корзину</button>
 				</form>
 			</div>
@@ -44,11 +44,26 @@
 
         props: {
             product: Object,
-            canLogin: Boolean,
-            canRegister: Boolean,
-			categoryName: String,
-			categorySlug: String,
-        }
+        },
+
+		methods: {
+
+            cart() {
+
+                document.getElementById('cart').click();
+            },
+
+            addToCart(categorySlug, productCode, cartForm = { quantity: 1 }) {
+
+                this.addToCartM({
+                    categorySlug: categorySlug,
+                    productCode: productCode,
+                    cartForm: cartForm
+                });
+
+                document.getElementById('addToCart').click();
+            }
+		}
 
     }
 </script>
