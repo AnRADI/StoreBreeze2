@@ -12,35 +12,30 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-		'cart_collection'
-    ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
+	protected $guarded = [
+		'_method',
+		'_token',
+	];
+
+
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
+
     protected $casts = [
         'email_verified_at' => 'datetime',
 		'cart_collection' => 'array'
     ];
+
+
+	// ========== RELATIONSHIPS ============
+
+	public function orders()
+	{
+		return $this->belongsToMany(Order::class)
+			->withTimestamps();
+	}
 }

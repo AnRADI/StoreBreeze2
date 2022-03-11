@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Exceptions\TestException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
@@ -61,11 +60,14 @@ class AuthenticatedSessionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Request $request)
+    public function logout(Request $request)
     {
-    	// get session data
+
+		// get data before logout
 		$cartCollection = Cart::get();
-		$locale = session('locale');
+		$isAdmin = $request
+			->user()
+			->hasRole('admin');
 
 		// logout and remove all session data
         Auth::guard('web')->logout();
@@ -74,12 +76,16 @@ class AuthenticatedSessionController extends Controller
 
         // put session data
 		session()->put('cartCollection', $cartCollection);
-        session()->put('locale', $locale);
         // ----------------
 
-		if (App::environment('local'))
-			return Inertia::location('http://praktiww.beget.tech.local:3000');
+
+		if($isAdmin)
+			if (App::environment('local'))
+				return Inertia::location('http://praktiww.beget.tech.local:3000');
+			else
+				return Inertia::location('http://praktiww.beget.tech.local');
+
 		else
-			return Inertia::location('http://praktiww.beget.tech.local');
+			return redirect()->route(RouteServiceProvider::SHOP_HOME);
     }
 }

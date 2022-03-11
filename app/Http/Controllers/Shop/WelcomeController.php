@@ -3,16 +3,13 @@
 namespace App\Http\Controllers\Shop;
 
 
-use App\Models\Category;
+
 use App\Models\Product;
-
-use Illuminate\Support\Facades\App;
-
-
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\Controller;
+
 
 
 
@@ -28,11 +25,51 @@ class WelcomeController extends Controller
 
 	// ---------- / -----------
 
-	public function index(Request $request) {
+	public function index() {
 
-    	$products = $this->product
-			->getProductsCategoriesW();
 
+		$products = Cache::rememberForever(request()->path(), fn() =>
+			$this->product
+				->getProductsCategoriesW()
+		);
+
+//		$user = \Auth::user();
+//		$cartCollection = session()->get('cartCollection');
+
+//		$order = Order::create();
+//		$user->orders()->attach($order);
+
+//		$insertCartCollection = $cartCollection->map(function ($product) {
+//
+//			$product->order_id = 1;
+//			$product->product_id = $product->id;
+//
+//			return $product->only(['order_id', 'product_id', 'quantity']);
+//
+//		})->toArray();
+
+//		\DB::table('order_product')->insert($insertCartCollection);
+
+
+
+
+
+//		if(Cache::has($routeName)) {
+//
+//			$products = Cache::get($routeName);
+//		}
+//		else {
+//			$products = $this->product
+//				->getProductsCategoriesW();
+//
+//			Cache::put($routeName, $products);
+//		}
+
+//		$product = $this->product->create(['name' => 'zeros', 'description' => 'ggggg', 'image' => 'fffds', 'price' => 2222, 'code' => 33333 ]);
+//
+//		$product->categories()->attach([2, 3]);
+//		$product->load('categories:id,name,slug');
+//		dump($product->categories);
 //		$columns = [
 //			'id',
 //			'name',
@@ -57,8 +94,6 @@ class WelcomeController extends Controller
 
 		return Inertia::render('Shop/Welcome', [
 			'products' => $products,
-
-			//'top' => session()->get('top'),
 		]);
 	}
 
@@ -66,7 +101,7 @@ class WelcomeController extends Controller
 
 		if(empty(in_array($languageLocale, ['en', 'es', 'ru']))) abort(404);
 
-		session(['locale' => $languageLocale]);
+		Cache::put('locale', $languageLocale);
 
 
 		return back();

@@ -11,6 +11,7 @@
 <!--			<button class="cart-button-plus" type="button">+</button>-->
 <!--		</form>-->
 		<div class="welcome container">
+
 			<h1>Все товары</h1>
 			<div class="row">
 				<product-card
@@ -53,6 +54,7 @@
 
         props: {
             products: Array,
+			//auth: Object
             //top: Number,
 
         },

@@ -6,6 +6,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Cart;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 
 
 class CartController extends Controller
@@ -30,8 +31,11 @@ class CartController extends Controller
 
 	public function update($categorySlug, $productCode, Request $request)
 	{
-		$product = $this->product
-			->firstProductCategoriesCTP($categorySlug, $productCode);
+
+		$product = Cache::rememberForever($request->path(), fn() =>
+			$this->product
+				->firstProductCategoriesCTP($categorySlug, $productCode)
+		);
 
 
 		if(empty($product)) abort(404);

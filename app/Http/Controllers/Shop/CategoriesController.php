@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Models\Category;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Controller;
@@ -23,9 +24,10 @@ class CategoriesController extends Controller
 
 	public function index() {
 
-		$categories = $this->category
-			->getCategoriesC();
-
+		$categories = Cache::rememberForever(request()->path(), fn() =>
+			$this->category
+				->getCategoriesC()
+		);
 
 
 		return Inertia::render('Shop/Categories', [

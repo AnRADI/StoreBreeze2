@@ -1,7 +1,8 @@
 <?php
 
+
 namespace App\Services\Cart;
-use Auth;
+use CollectionEloquent;
 
 
 class CartCollection
@@ -12,21 +13,8 @@ class CartCollection
 		$cartCollection = session()->get('cartCollection');
 
 
-		if(empty($cartCollection)) $cartCollection = [];
+		if(empty($cartCollection)) $cartCollection = new CollectionEloquent;
 
-
-//		if(Auth::check()) {
-//
-//			$user = Auth::user();
-//
-//			if(empty($user->cart_collection)) {
-//
-//				$user->update(['cart_collection' => $cartCollection]);
-//			}
-//			else {
-//				$cartCollection = $user->cart_collection;
-//			}
-//		}
 
 
 		return $cartCollection;
@@ -38,7 +26,7 @@ class CartCollection
 		$cartCollection = session()->get('cartCollection');
 
 
-		if(empty($cartCollection)) $cartCollection = [];
+		if(empty($cartCollection)) $cartCollection = new CollectionEloquent;
 
 
 		if(empty($cartCollection[$product->code])) {
@@ -51,13 +39,6 @@ class CartCollection
 
 			$cartCollection[$product->code]->quantity = $request->quantity;
 		}
-
-
-//		if(Auth::check()) {
-//
-//			Auth::user()
-//				->update(['cart_collection' => $cartCollection]);
-//		}
 
 
 		session()->put('cartCollection', $cartCollection);

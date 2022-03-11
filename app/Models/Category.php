@@ -10,6 +10,7 @@ class Category extends Model
 {
     use HasFactory;
 
+
     protected $guarded = [
 		'_method',
 		'_token',
@@ -77,14 +78,5 @@ class Category extends Model
     	return $categories;
 	}
 
-
-	public function arrayIdDSA() {
-
-		$allCategoriesId = $this
-			->pluck('id')
-			->toArray();
-
-		return $allCategoriesId;
-	}
 
 }

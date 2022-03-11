@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Product;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -18,12 +19,12 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-    	Permission::create(['name' => 'login and register']);
-		Permission::create(['name' => 'logout']);
-
 		$guestRole = Role::create(['name' => 'guest']);
 		$userRole = Role::create(['name' => 'user']);
 		$adminRole = Role::create(['name' => 'admin']);
+
+		Permission::create(['name' => 'login and register']);
+		Permission::create(['name' => 'logout']);
 
 		$guestRole->givePermissionTo('login and register');
 		$userRole->givePermissionTo('logout');

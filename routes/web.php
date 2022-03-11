@@ -23,13 +23,18 @@ Route::middleware(['admin'])->group(function () {
 		->name('dashboard');
 
 
-	// -------- /dashboard/add-product ----------
+	// -------- /dashboard/products ----------
 
-	Route::get('/dashboard/add-product', [AdminProductController::class, 'addProduct'])
+	Route::get('/dashboard/add-product/create', [AdminProductController::class, 'addProduct'])
 		->name('dashboard.add-product');
 
-	Route::delete('/dashboard/submit/add-product', [AdminProductController::class, 'submitAddProduct'])
+	Route::delete('/dashboard/add-product', [AdminProductController::class, 'submitAddProduct'])
 		->name('dashboard.submit.add-product');
+
+
+
+//	Route::resource('/dashboard/products', AdminProductController::class)
+//		->only(['index', 'create', 'store']);
 
 
 	// -------- /dashboard/products ----------
@@ -68,7 +73,7 @@ Route::middleware(['user_or_admin'])->group(function () {
 
 	// -------- /logout ----------
 
-	Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+	Route::post('/logout', [AuthenticatedSessionController::class, 'logout'])
 		->name('logout');
 	//require __DIR__.'/auth.php';
 

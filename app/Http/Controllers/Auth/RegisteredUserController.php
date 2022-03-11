@@ -54,7 +54,6 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-			'cart_collection' => []
         ]);
 
         $user->assignRole('user');
@@ -64,6 +63,6 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
 
-        return redirect()->route('welcome');
+        return redirect()->route(RouteServiceProvider::SHOP_HOME);
     }
 }

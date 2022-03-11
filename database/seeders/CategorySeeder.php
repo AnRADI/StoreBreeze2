@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Product;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -38,6 +39,7 @@ class CategorySeeder extends Seeder
 			$data[$i]['slug'] =
 				Str::slug($data[$i]['name']);
 		}
+
 
 
 		\DB::table('categories')->insert($data);

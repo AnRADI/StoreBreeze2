@@ -4,23 +4,7 @@
 			<meta charset="utf-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1">
 
-			<!-- Google Font: Source Sans Pro -->
-<!--			<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">-->
 
-			<!-- Ionicons -->
-<!--			<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">-->
-<!--			&lt;!&ndash; Tempusdominus Bootstrap 4 &ndash;&gt;-->
-<!--			<link rel="stylesheet" :href="mix('Admin/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')">-->
-<!--			&lt;!&ndash; iCheck &ndash;&gt;-->
-<!--			<link rel="stylesheet" :href="mix('Admin/plugins/icheck-bootstrap/icheck-bootstrap.min.css')">-->
-<!--			&lt;!&ndash; JQVMap &ndash;&gt;-->
-<!--			<link rel="stylesheet" :href="mix('Admin/plugins/jqvmap/jqvmap.min.css')">-->
-<!--			&lt;!&ndash; overlayScrollbars &ndash;&gt;-->
-<!--			<link rel="stylesheet" :href="mix('Admin/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')">-->
-<!--			&lt;!&ndash; Daterange picker &ndash;&gt;-->
-<!--			<link rel="stylesheet" :href="mix('Admin/plugins/daterangepicker/daterangepicker.css')">-->
-<!--			&lt;!&ndash; summernote &ndash;&gt;-->
-<!--			<link rel="stylesheet" :href="mix('Admin/plugins/summernote/summernote-bs4.min.css')">-->
 
 			<!-- Font Awesome -->
 <!--			<Script src="https://kit.fontawesome.com/cb2ba445f2.js" crossorigin="anonymous"></Script>-->

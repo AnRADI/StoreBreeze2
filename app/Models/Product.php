@@ -10,10 +10,12 @@ class Product extends Model
 {
     use HasFactory;
 
+
 	protected $guarded = [
 		'_method',
 		'_token',
 	];
+
 
 
 	// ========== RELATIONSHIPS ============
@@ -54,7 +56,7 @@ class Product extends Model
 		$products = $this
 			->select($columnsProducts)
 			->with('categories:id,name,slug')
-			->take(10)
+			->take(12)
 			->get();
 
 		$products->each(function ($product) {
@@ -136,14 +138,5 @@ class Product extends Model
 			->get();
 
     	return $products;
-	}
-
-	public function valueCodeDSA() {
-
-    	$fieldCode = $this
-			->orderBy('code', 'desc')
-			->value('code');
-
-    	return $fieldCode;
 	}
 }

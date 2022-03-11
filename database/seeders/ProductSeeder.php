@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Product;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -92,6 +93,8 @@ class ProductSeeder extends Seeder
 			$data[$i]['code'] = $code++;
 //			$data[$i]['image'] = 'http://internet-shop.tmweb.ru/storage/products/iphone_x.jpg';
 		}
+
+
 
 		\DB::table('products')->insert($data);
 

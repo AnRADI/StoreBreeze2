@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\Admin\ProductRequest;
 use App\Models\Product;
 use App\Models\Category;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Validator;
+
 
 class ProductController extends Controller
 {
@@ -26,7 +27,6 @@ class ProductController extends Controller
 	public function addProduct() {
 
 
-
     	$categories = $this->category
 			->getCategoriesDA();
 
@@ -37,70 +37,21 @@ class ProductController extends Controller
 	}
 
 
-	public function submitAddProduct(Request $request) {
+	public function submitAddProduct(ProductRequest $request) {
 
-//		$form = $request
-//			->validate([
-//				'name' => ['required', 'unique:products', 'regex:/^[a-zA-Zа-яёА-ЯЁ0-9-_.:()%&,+ \/]+$/u', 'max:255'],
-//				'description' => ['nullable', 'max:65535'],
-//				//'category_id' => ['required', 'integer', 'numeric', 'between:1,3'],
-//				'categories_id' => ['required', 'array'],
-//				'price' => ['nullable', 'numeric', 'min:1', 'max:1000000000'],
-//			]);
-
-		$form = $request->all();
+		$form = $request->validated();
 
 
-		Validator::make($form, [
-			'name' => ['required', 'unique:products', 'regex:/^[a-zA-Zа-яёА-ЯЁ0-9-_.:()%&,+ \/]+$/u', 'max:255'],
-			'description' => ['nullable', 'max:65535'],
-			//'category_id' => ['required', 'integer', 'numeric', 'between:1,3'],
-			'image' => ['required', 'image', 'max:2048'],
-			'categories_id' => ['required', 'array'],
-			'price' => ['nullable', 'numeric', 'min:1', 'max:1000000000'],
-		], [
-			'image.required' => 'Изображение нужно обязательно.',
-			'name.regex' => __('Allowed letters of the Russian and English alphabets, numbers, special characters (-_.:()%&,+ /)')
-
-		])->validate();
-
-
-		$imageName = $request->image->getClientOriginalName();
-
-		//if(!file_exists(storage_path('app/public/uploads/' . $imageName))) {
-		$request->image->storeAs('uploads', $imageName, 'public');
-		//}
-
-
-		$hashFile = substr(md5_file($request->image->getRealPath()), -20);
-
-		$form['image'] = '/storage/uploads/' . $imageName . '?id=' . $hashFile;
-
-
-		$fieldCode = $this->product
-			->valueCodeDSA();
-
-		$allCategoriesId = $this->category
-			->arrayIdDSA();
-
+		$request->validationCategories($form['categories_id']);
 
 		$categories_id = $form['categories_id'];
 		unset($form['categories_id']);
 
-		foreach ($categories_id as $category_id) {
 
-			if(empty(in_array($category_id, $allCategoriesId))) {
-				return back()->withErrors(['categories_id' => __("There is no such category or categories.")]);
-//				return response()
-//					->json(['errors' => [
-//						'categories_id' => "Такой категории или категорий не существует."]
-//					], 422);
-			}
-		}
+		$request->saveImage($form['image']);
 
 
-    	//$form['image'] = 'http://internet-shop.tmweb.ru/storage/products/iphone_x.jpg';
-    	$form['code'] = ++$fieldCode;
+		$request->newCodeProduct($form);
 
 
     	$product = $this->product
@@ -109,8 +60,14 @@ class ProductController extends Controller
     	$product->categories()->attach($categories_id);
 
 
+		Cache::forget('/');
+
+		foreach ($product->categories as $category) {
+			Cache::forget($category->slug);
+		}
+
+
     	return back()->with('success', __("Product added"));
-//		return "Продукт добавлен";
 	}
 
 

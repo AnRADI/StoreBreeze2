@@ -8,7 +8,6 @@
 							Главная
 						</inertia-link>
 					</li>
-
 					<li>
 						<inertia-link :href="route('categories')" class="ml-4 text-muted">
 							Категории
@@ -52,7 +51,6 @@
 								Register
 							</inertia-link>
 						</li>
-
 					</template>
 				</ul>
 			</div>
@@ -76,7 +74,8 @@
 
         props: {
             currentRouteName: String,
-            cartCollection: [Object, Array]
+            cartCollection: [Array, Object],
+
 		},
 
         data() {
