@@ -22,43 +22,68 @@ class ProductController extends Controller
 	}
 
 
-	// ---------- /dashboard/add-product -----------
+	// ---------- /dashboard/products -----------
 
-	public function addProduct() {
 
+	public function index() {
+
+		$products = $this->product
+			->getProductsCategoriesDP();
+
+		return Inertia::render('Admin/Products/Index', [
+			'products' => $products,
+		]);
+	}
+
+
+	public function create() {
 
     	$categories = $this->category
-			->getCategoriesDA();
+			->getCategoriesDPC();
 
 
-		return Inertia::render('Admin/AddProduct', [
+		return Inertia::render('Admin/Products/Create', [
 			'categories' => $categories,
 		]);
 	}
 
 
-	public function submitAddProduct(ProductRequest $request) {
+	public function store(ProductRequest $request) {
 
 		$form = $request->validated();
 
 
-		$request->validationCategories($form['categories_id']);
+		// ------ Validation categories -------
 
-		$categories_id = $form['categories_id'];
-		unset($form['categories_id']);
+		$isValidCategories =
+			$request->validationCategories($form['categories_id']);
+
+		if($isValidCategories) {
+			unset($form['categories_id']);
+		}
+		else
+			return back()->withErrors(['categories_id' => __("There is no such category or categories.")]);
 
 
-		$request->saveImage($form['image']);
+		// ------ Upload image -------
+
+		$form['image'] = $request->saveImage();
 
 
-		$request->newCodeProduct($form);
+		// ------ Add code product -------
 
+		$form['code'] = $request->newCodeProduct();
+
+
+		// ------ Create product -------
 
     	$product = $this->product
 			->create($form);
 
-    	$product->categories()->attach($categories_id);
+    	$product->categories()->attach($request->categories_id);
 
+
+		// ------ Cache -------
 
 		Cache::forget('/');
 
@@ -71,16 +96,71 @@ class ProductController extends Controller
 	}
 
 
-	// ---------- /dashboard/products -----------
+	public function edit($productCode) {
 
-	public function products() {
+		$categories = $this->category
+			->getCategoriesDPCE();
 
-    	$products = $this->product
-			->getProductsDps();
+		$product = $this->product
+			->firstProductDPCE($productCode);
+
+		$product->categories_id = $product->categories()
+			->pluck('id')
+			->map(fn($item) => strval($item));
 
 
-		return Inertia::render('Admin/Products', [
-			'products' => $products,
+		return Inertia::render('Admin/Products/Edit', [
+			'categories' => $categories,
+			'product' => $product
 		]);
+	}
+
+
+	public function update($productCode, ProductRequest $request) {
+
+		$form = $request->validated();
+
+
+		// ------ Validation categories -------
+
+		$isValidCategories =
+			$request->validationCategories($form['categories_id']);
+
+		if($isValidCategories) {
+			unset($form['categories_id']);
+		}
+		else
+			return back()->withErrors(['categories_id' => __("There is no such category or categories.")]);
+
+
+		// ------ Upload image -------
+
+		if(isset($form['image'])) {
+			$form['image'] = $request->saveImage();
+		}
+
+
+		// ------ Update product -------
+
+		$product = $this->product
+			->where('code', $productCode)
+			->first();
+
+		$product->update($form);
+
+		$product->categories()->detach();
+		$product->categories()->attach($request->categories_id);
+
+
+		// ------ Cache -------
+
+		Cache::forget('/');
+
+		foreach ($product->categories as $category) {
+			Cache::forget($category->slug);
+		}
+
+
+		return redirect()->route('dashboard.products')->with('success', 'product updated');
 	}
 }

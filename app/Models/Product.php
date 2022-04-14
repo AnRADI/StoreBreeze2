@@ -59,6 +59,7 @@ class Product extends Model
 			->take(12)
 			->get();
 
+
 		$products->each(function ($product) {
 			$product->setRelation('categories', $product->categories->take(1));
 		});
@@ -132,11 +133,43 @@ class Product extends Model
 	}
 
 
-	public function getProductsDps() {
+	public function getProductsCategoriesDP() {
+
+		$columnsProduct = [
+			'id',
+			'name',
+			'price',
+			'image',
+			'code'
+		];
 
     	$products = $this
-			->get();
+			->select($columnsProduct)
+			->orderBy('updated_at', 'desc')
+			->with('categories:id,name')
+			->paginate(4);
 
     	return $products;
+	}
+
+
+	public function firstProductDPCE($productCode) {
+
+		$columnsProduct = [
+			'id',
+			'name',
+			'code',
+			'description',
+			'price',
+			'image',
+		];
+
+		$product = $this
+			->select($columnsProduct)
+			->where('code', $productCode)
+			->first();
+
+
+		return $product;
 	}
 }

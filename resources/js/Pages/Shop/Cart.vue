@@ -2,9 +2,6 @@
 	<div class="modal fade" id="cartId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
 
-			<input id="cart" class="d-none" @click="cart">
-			<input id="addToCart" class="d-none" @click="addToCart(addToCartS.categorySlug, addToCartS.productCode, addToCartS.cartForm)">
-
 			<div v-if="isCartData" class="modal-content">
 				<div class="modal-header">
 					<h1>Корзина</h1>
@@ -117,6 +114,19 @@
             }
         },
 
+		watch: {
+
+            cartS() {
+
+                this.cart();
+            },
+
+            addToCartS(params) {
+
+                this.addToCart(params.categorySlug, params.productCode, params.cartForm)
+			}
+		},
+
         methods: {
 
             async cart() {
@@ -143,7 +153,7 @@
 					}
 
                     let cartResponse =
-                        await axios.post(route('cart.category_slug.product_code', [categorySlug, productCode]), cartForm);
+                        await axios.post(route('cart.category_slug.product_code.update', [categorySlug, productCode]), cartForm);
 
 
                     this.cartCollectionM(cartResponse.data);

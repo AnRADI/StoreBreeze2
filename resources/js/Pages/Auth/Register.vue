@@ -36,7 +36,7 @@
 
 			<div class="mb-0">
 				<div class="d-flex justify-content-end align-items-baseline">
-					<inertia-link :href="route('login')" class="text-muted mr-3 text-decoration-none">
+					<inertia-link :href="route('login.create')" class="text-muted mr-3 text-decoration-none">
 						Already registered?
 					</inertia-link>
 
@@ -83,7 +83,7 @@
             submit() {
                 // console.log(this.form)
                 // return
-                this.form.post(this.route('register'), {
+                this.form.post(this.route('register.store'), {
                     onFinish: () => this.form.reset('password', 'password_confirmation'),
                 })
             }

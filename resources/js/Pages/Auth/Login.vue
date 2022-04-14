@@ -109,7 +109,7 @@
                         ... data,
                         remember: this.form.remember ? 'on' : ''
                     }))
-                    .post(this.route('login'), {
+                    .post(this.route('login.store'), {
                         onFinish: () => this.form.reset('password'),
                     })
             }

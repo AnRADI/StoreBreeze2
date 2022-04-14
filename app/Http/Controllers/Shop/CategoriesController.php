@@ -31,8 +31,8 @@ class CategoriesController extends Controller
 
 
 		return Inertia::render('Shop/Categories', [
-			'canLogin' => Route::has('login'),
-			'canRegister' => Route::has('register'),
+			'canLogin' => Route::has('login.create'),
+			'canRegister' => Route::has('register.create'),
 			'categories' => $categories,
 		]);
 	}

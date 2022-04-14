@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -91,6 +92,8 @@ class ProductSeeder extends Seeder
 		for($i = 0; $i < $count; $i++)
 		{
 			$data[$i]['code'] = $code++;
+			$data[$i]['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
+			$data[$i]['updated_at'] = $data[$i]['created_at'];
 //			$data[$i]['image'] = 'http://internet-shop.tmweb.ru/storage/products/iphone_x.jpg';
 		}
 

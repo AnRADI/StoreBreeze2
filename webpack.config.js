@@ -1,5 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
+const OpenBrowserPlugin = require('webpack-open-browser-plugin');
+let project_name = require("path").basename(__dirname);
+
 
 module.exports = {
 
@@ -10,17 +13,15 @@ module.exports = {
             'public_html': path.resolve('public_html'),
             'resources/lang': path.resolve('resources/lang'),
         },
-
-        // fallback: {
-        //     fs: false,
-        //     crypto: false
-        // },
     },
 
     plugins: [
         new webpack.DefinePlugin({
             __VUE_OPTIONS_API__: true,
             __VUE_PROD_DEVTOOLS__: false,
+        }),
+        new OpenBrowserPlugin({
+            url: process.env.APP_URL
         })
     ]
 

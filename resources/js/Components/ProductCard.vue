@@ -1,7 +1,7 @@
 <template>
-	<div class="zop col-sm-6 col-md-4">
+	<div class="col-sm-6 col-md-4">
 		<div class="thumbnail">
-			<img class="img-fluid" :src="mix(product.image)">
+			<img class="img-fluid" :src="product.image">
 			<div class="caption">
 				<h3>
 					<inertia-link :href="route('category_slug.product_code', [categorySlug, product.code])">
@@ -34,31 +34,20 @@
 
 <script>
 
+    import {cartMixin} from "@/mixins";
 
     export default {
+
+        mixins: [cartMixin],
 
 		props: {
 		    product: Object,
 			categorySlug: String,
 		},
 
+
+
 		methods: {
-
-            cart() {
-
-                document.getElementById('cart').click();
-            },
-
-			addToCart(categorySlug, productCode, cartForm = { quantity: 1 }) {
-
-                this.addToCartM({
-					categorySlug: categorySlug,
-                    productCode: productCode,
-					cartForm: cartForm
-                });
-
-                document.getElementById('addToCart').click();
-			}
             // getCartForm(event) {
             //     return new FormData(event.currentTarget);
             // }

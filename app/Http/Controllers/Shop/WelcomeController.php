@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Shop;
 
 
-
 use App\Models\Product;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
@@ -27,18 +26,19 @@ class WelcomeController extends Controller
 
 	public function index() {
 
-
 		$products = Cache::rememberForever(request()->path(), fn() =>
 			$this->product
 				->getProductsCategoriesW()
 		);
 
-//		$user = \Auth::user();
-//		$cartCollection = session()->get('cartCollection');
 
+
+
+//		$cartCollection = session()->get('cartCollection');
+//
 //		$order = Order::create();
 //		$user->orders()->attach($order);
-
+//
 //		$insertCartCollection = $cartCollection->map(function ($product) {
 //
 //			$product->order_id = 1;
@@ -47,23 +47,13 @@ class WelcomeController extends Controller
 //			return $product->only(['order_id', 'product_id', 'quantity']);
 //
 //		})->toArray();
-
+//
 //		\DB::table('order_product')->insert($insertCartCollection);
 
 
 
 
 
-//		if(Cache::has($routeName)) {
-//
-//			$products = Cache::get($routeName);
-//		}
-//		else {
-//			$products = $this->product
-//				->getProductsCategoriesW();
-//
-//			Cache::put($routeName, $products);
-//		}
 
 //		$product = $this->product->create(['name' => 'zeros', 'description' => 'ggggg', 'image' => 'fffds', 'price' => 2222, 'code' => 33333 ]);
 //
@@ -91,21 +81,20 @@ class WelcomeController extends Controller
 //    	dump(__('Product added :miko zima', ['miko' => 'aaa']));
 
 		//$pr = Product::create(['category_id' => 3, 'name' => 'zok', 'code' => 10022, 'description' => 'ona iri', 'price' => 1033, 'cart_collection' => []]);
-
 		return Inertia::render('Shop/Welcome', [
 			'products' => $products,
 		]);
 	}
 
-	public function language($languageLocale) {
-
-		if(empty(in_array($languageLocale, ['en', 'es', 'ru']))) abort(404);
-
-		Cache::put('locale', $languageLocale);
-
-
-		return back();
-	}
+//	public function language($languageLocale) {
+//
+//		if(empty(in_array($languageLocale, ['en', 'es', 'ru']))) abort(404);
+//
+//		Cache::put('locale', $languageLocale);
+//
+//
+//		return back();
+//	}
 
 
 }

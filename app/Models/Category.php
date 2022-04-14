@@ -64,7 +64,7 @@ class Category extends Model
 	}
 
 
-	public function getCategoriesDA() {
+	public function getCategoriesDPC() {
 
     	$columns = [
     		'id',
@@ -76,6 +76,21 @@ class Category extends Model
 			->get();
 
     	return $categories;
+	}
+
+
+	public function getCategoriesDPCE() {
+
+		$columns = [
+			'id',
+			'name',
+		];
+
+		$categories = $this
+			->select($columns)
+			->get();
+
+		return $categories;
 	}
 
 

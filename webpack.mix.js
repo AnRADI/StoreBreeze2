@@ -1,3 +1,4 @@
+
 const mix = require('laravel-mix');
 
 /*
@@ -23,13 +24,14 @@ mix.js('resources/js/app.js', 'public_html/js').vue()
     .sourceMaps(!production, 'source-map')
     .disableNotifications()
     .browserSync({
-        proxy: 'praktiww.beget.tech.local',
-        host: 'praktiww.beget.tech.local',
+        proxy: process.env.APP_URL,
         notify: false,
-        open: 'external',
+        open: false
     });
+
 
 if (production) {
     mix.version(['public_html/images']);
     //mix.version(['public/images', 'public/Admin/**/*.{js,css,png,jpg,gif,svg}']);
 }
+

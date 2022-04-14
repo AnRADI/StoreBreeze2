@@ -41,14 +41,8 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
 
-		if($request
-			->user()
-			->hasRole('admin')
-		)
-			if (App::environment('local'))
-				return Inertia::location('http://praktiww.beget.tech.local:3000/dashboard');
-			else
-				return Inertia::location('http://praktiww.beget.tech.local/dashboard');
+		if($request->user()->hasRole('admin'))
+			return Inertia::location(route(RouteServiceProvider::ADMIN_HOME));
 
 		else
 			return redirect()->route(RouteServiceProvider::SHOP_HOME);
@@ -80,10 +74,7 @@ class AuthenticatedSessionController extends Controller
 
 
 		if($isAdmin)
-			if (App::environment('local'))
-				return Inertia::location('http://praktiww.beget.tech.local:3000');
-			else
-				return Inertia::location('http://praktiww.beget.tech.local');
+			return Inertia::location(route(RouteServiceProvider::SHOP_HOME));
 
 		else
 			return redirect()->route(RouteServiceProvider::SHOP_HOME);

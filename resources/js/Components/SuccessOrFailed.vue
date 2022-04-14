@@ -1,12 +1,12 @@
 <template>
-	<div v-if="form.hasErrors" class="alert alert-danger alert-dismissible" role="alert">
+	<div v-if="success" class="alert alert-success alert-dismissible" role="alert">
 		<button type="button" class="close" data-dismiss="alert" aria-hidden="true" aria-label="Close">×</button>
-		<template v-if="numberFormErrors == 1">Есть ошибка формы.</template>
-		<template v-else>Есть ошибки формы.</template>
+		{{ success }}
 	</div>
-	<div v-if="form.wasSuccessful" class="alert alert-success alert-dismissible" role="alert">
+	<div v-if="numberErrors > 0" class="alert alert-danger alert-dismissible" role="alert">
 		<button type="button" class="close" data-dismiss="alert" aria-hidden="true" aria-label="Close">×</button>
-		{{ form.successfulMessage }}
+		<template v-if="numberErrors == 1">Есть ошибка формы.</template>
+		<template v-else>Есть ошибки формы.</template>
 	</div>
 </template>
 
@@ -14,15 +14,15 @@
 
     export default {
 
-		props: {
-		    form: Object,
-		},
+        computed: {
 
-		computed: {
-
-            numberFormErrors() {
-                return Object.keys(this.form.errors).length;
+            success() {
+                return this.$page.props.flash.success;
             },
-		},
+
+            numberErrors() {
+                return Object.keys(this.$page.props.errors).length;
+			}
+        }
     }
 </script>

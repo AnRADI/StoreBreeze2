@@ -43,15 +43,11 @@ class HandleInertiaRequests extends Middleware
 
         return array_merge(parent::share($request), [
 
-            'auth' => [
-                'user' => fn() => Auth::user(),
+            'auth' => fn() => [
+                'user' => Auth::user(),
             ],
 
-
-			'flash' => [
-				'message' => fn() => session()->get('success'),
-				'message419' => fn() => session()->get('message419'),
-			],
+			'flash' => fn() => $request->session()->only(['success', 'message419']),
 
 			'cartCollection' => fn() => Cart::get(),
 

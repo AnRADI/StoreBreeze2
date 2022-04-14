@@ -21,7 +21,7 @@ class CartController extends Controller
 
 	// ---------- /cart -----------
 
-	public function index()
+	public function cart()
 	{
 		$cartCollection = Cart::get();
 
@@ -29,7 +29,7 @@ class CartController extends Controller
 	}
 
 
-	public function update($categorySlug, $productCode, Request $request)
+	public function addToCart($categorySlug, $productCode, Request $request)
 	{
 
 		$product = Cache::rememberForever($request->path(), fn() =>

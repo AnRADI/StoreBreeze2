@@ -1,4 +1,5 @@
-import {createStore} from "vuex";
+
+import { createStore } from "vuex";
 
 
 export const store = createStore({
@@ -6,25 +7,31 @@ export const store = createStore({
     state () {
         return {
 
-            // Cart
+            // ------- Cart ---------
 
             cartCollectionS: {},
+            cartS: false,
             addToCartS: {}
         }
     },
 
     mutations: {
 
-        // Cart
+        // ------- Cart ---------
 
         cartCollectionM(state, value) {
 
             state.cartCollectionS = value;
         },
 
-        addToCartM(state, value) {
+        cartM(state) {
 
-            state.addToCartS = value;
+            state.cartS = !state.cartS;
+        },
+
+        addToCartM(state, params) {
+
+            state.addToCartS = params;
         }
     }
 });

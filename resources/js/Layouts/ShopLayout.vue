@@ -33,7 +33,7 @@
 						<cart></cart>
 					</li>
 					<li v-if="can('logout')"> <!-- user -->
-						<a @click.prevent="logOutForm.post(route('logout'))" href="#" class="ml-4 text-muted">
+						<a @click.prevent="logOutForm.post(route('logout.store'))" href="#" class="ml-4 text-muted">
 							Log Out
 						</a>
 <!--						<form @submit.prevent="logOutForm.post(route('logout'))" class="ml-4">-->
@@ -42,12 +42,12 @@
 					</li>
 					<template v-if="can('login and register')"> <!-- guest -->
 						<li>
-							<inertia-link :href="route('login')" class="ml-4 text-muted">
+							<inertia-link :href="route('login.create')" class="ml-4 text-muted">
 								Log in
 							</inertia-link>
 						</li>
 						<li>
-							<inertia-link :href="route('register')" class="ml-4 text-muted">
+							<inertia-link :href="route('register.create')" class="ml-4 text-muted">
 								Register
 							</inertia-link>
 						</li>
@@ -71,11 +71,10 @@
             Cart
 		},
 
-
-        props: {
-            currentRouteName: String,
-            cartCollection: [Array, Object],
-
+		computed: {
+            currentRouteName() {
+                return this.$page.props.currentRouteName;
+			}
 		},
 
         data() {
@@ -85,25 +84,11 @@
             }
         },
 
-
-        mounted() {
-
-            this.getCart();
-        },
-
 		methods: {
-
-            getCart() {
-
-                if(Object.keys(this.cartCollection).length == 0 || Object.keys(this.cartCollectionS).length == 0) {
-
-                    this.cartCollectionM(this.cartCollection);
-                }
-			},
 
 			cart() {
 
-                document.getElementById('cart').click();
+                this.cartM();
 			},
 
 			language(e) {

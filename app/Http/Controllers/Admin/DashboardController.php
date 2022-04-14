@@ -14,15 +14,15 @@ class DashboardController extends Controller
 
 	// ---------- /dashboard -----------
 
-	public function dashboard(Request $request) {
+	public function index(Request $request) {
 
 		$categoriesCount = Category::get()->count();
 
 
 
 		return Inertia::render('Admin/Dashboard', [
-			'canLogin' => Route::has('login'),
-			'canRegister' => Route::has('register'),
+			'canLogin' => Route::has('login.create'),
+			'canRegister' => Route::has('register.create'),
 			'categoriesCount' => $categoriesCount,
 		]);
 	}

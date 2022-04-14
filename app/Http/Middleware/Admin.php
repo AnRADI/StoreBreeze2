@@ -40,10 +40,7 @@ class Admin
 
 					$request->session()->flash('message419', 'Сессия истекла');
 
-					if (App::environment('local'))
-						return Inertia::location('http://praktiww.beget.tech.local:3000/login');
-					else
-						return Inertia::location('http://praktiww.beget.tech.local/login');
+					return Inertia::location(route('login'));
 				}
 				else
 					return redirect()->route('login');

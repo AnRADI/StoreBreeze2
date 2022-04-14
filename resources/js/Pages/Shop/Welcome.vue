@@ -1,29 +1,25 @@
 <template>
-	<shop-layout>
 
-		<head>
-			<title> Главная </title>
-		</head>
+	<head>
+		<title> Главная </title>
+	</head>
 
-<!--		<form class="welcome cart-form">-->
-<!--			<button class="cart-button-minus" type="button">-</button>-->
-<!--			<input type="number" v-model.number="form.top" min="1" max="9000">-->
-<!--			<button class="cart-button-plus" type="button">+</button>-->
-<!--		</form>-->
-		<div class="welcome container">
-
-			<h1>Все товары</h1>
-			<div class="row">
-				<product-card
-					v-for="product in products"
-					:product="product"
-					:category-slug="product.categories[0].slug"
-					:key="product.id"
-				/>
-			</div>
+	<div class="welcome container">
+		<h1>Все товары</h1>
+		<div class="row">
+			<product-card
+				v-for="product in products"
+				:product="product"
+				:category-slug="product.categories[0].slug"
+				:key="product.id"
+			/>
 		</div>
+	</div>
+	<div class="d-flex justify-content-end">
+		<p id="rr">Радость</p>
+		<button @click="reverse">клик</button>
+	</div>
 
-	</shop-layout>
 </template>
 
 <script>
@@ -31,37 +27,31 @@
     import Script from "@/Components/Script";
     import ShopLayout from "@/Layouts/ShopLayout";
 
-
-
     export default {
 
+        layout: ShopLayout,
+
         components: {
-            ShopLayout,
             ProductCard,
             Script
         },
 
-
-        data() {
-            return {
-				// form: this.$inertia.form({
-				// 	top: 1
-				// })
+		methods: {
+            reverse() {
+                let el = document.getElementById('rr');
+                el.innerText = el.innerText.split('').reverse().join('');
 			}
 		},
 
-
-
         props: {
-            products: Array,
-			//auth: Object
-            //top: Number,
-
+            products: [Object, Array],
         },
+
     }
 </script>
 
 <style lang="scss">
+
 
 	.welcome {
 

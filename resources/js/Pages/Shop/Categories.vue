@@ -1,26 +1,21 @@
 <template>
-	<shop-layout>
+	<head>
+		<title> Категории </title>
+	</head>
 
-		<head>
-			<title> Категории </title>
-		</head>
-
-
-		<div class="container">
-			<div class="starter-template">
-				<div v-for="category in categories" :key="category.id" class="panel">
-					<inertia-link :href="route('category_slug', category.slug)">
-						<img src="http://internet-shop.tmweb.ru/storage/categories/mobile.jpg">
-						<h2>{{ category.name }}</h2>
-					</inertia-link>
-					<p>
-						{{ category.description }}
-					</p>
-				</div>
+	<div class="container">
+		<div class="starter-template">
+			<div v-for="category in categories" :key="category.id" class="panel">
+				<inertia-link :href="route('category_slug', category.slug)">
+					<img src="http://internet-shop.tmweb.ru/storage/categories/mobile.jpg">
+					<h2>{{ category.name }}</h2>
+				</inertia-link>
+				<p>
+					{{ category.description }}
+				</p>
 			</div>
 		</div>
-
-	</shop-layout>
+	</div>
 </template>
 
 <script>
@@ -30,9 +25,7 @@
 
     export default {
 
-        components: {
-            ShopLayout,
-		},
+        layout: ShopLayout,
 
         props: {
 		    categories: Array,

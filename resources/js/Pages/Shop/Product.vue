@@ -35,8 +35,11 @@
 <script>
 
     import ShopLayout from "@/Layouts/ShopLayout";
+    import {cartMixin} from "@/mixins";
 
     export default {
+
+        mixins: [cartMixin],
 
         components: {
             ShopLayout,
@@ -45,25 +48,5 @@
         props: {
             product: Object,
         },
-
-		methods: {
-
-            cart() {
-
-                document.getElementById('cart').click();
-            },
-
-            addToCart(categorySlug, productCode, cartForm = { quantity: 1 }) {
-
-                this.addToCartM({
-                    categorySlug: categorySlug,
-                    productCode: productCode,
-                    cartForm: cartForm
-                });
-
-                document.getElementById('addToCart').click();
-            }
-		}
-
     }
 </script>
