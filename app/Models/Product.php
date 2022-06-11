@@ -25,39 +25,32 @@ class Product extends Model
     	return $this->belongsToMany(Category::class);
 	}
 
-
+	public function labels()
+	{
+		return $this->belongsToMany(Label::class);
+	}
 
 
 	// =========== METHODS =============
 
 
-	public function getProductsCategoriesW() {
+	public function paginateProductsCategoriesAndLabelsW($productsQuery) {
 
 		$columnsProducts = [
 			'id',
 			'name',
 			'price',
-			'image',
 			'code',
+			'image'
 		];
 
 
-//		$categories = Category::whereIn('name', ['Мобильные телефоны', 'Портативная техника'])->get();
-//
-//
-//		$categories->each(function ($category) {
-//			$category->load(['products' => function($query) {
-//				$query->take(3);
-//			}]);
-//		});
-//		dd($categories);
-
-
-		$products = $this
+		$products = $productsQuery
 			->select($columnsProducts)
-			->with('categories:id,name,slug')
-			->take(12)
-			->get();
+			->orderBy('updated_at', 'desc')
+			->with(['categories:id,name,slug', 'labels:id,name,class'])
+			->paginate(6)
+			->withQueryString();
 
 
 		$products->each(function ($product) {
@@ -68,6 +61,27 @@ class Product extends Model
 		return $products;
 	}
 
+	public function paginateProductsCategoriesAndLabelsC($productsQuery) {
+
+		$columnsProducts = [
+			'id',
+			'name',
+			'price',
+			'code',
+			'image'
+		];
+
+
+		$products = $productsQuery
+			->select($columnsProducts)
+			->orderBy('updated_at', 'desc')
+			->with(['labels:id,name,class'])
+			->paginate(6)
+			->withQueryString();
+
+
+		return $products;
+	}
 
 	public function firstProductCategoriesCP($categorySlug, $productCode) {
 
@@ -77,7 +91,7 @@ class Product extends Model
 			'name',
 			'image',
 			'price',
-			'description'
+			'description',
 		];
 
 		$columnsCategories = [
@@ -133,7 +147,7 @@ class Product extends Model
 	}
 
 
-	public function getProductsCategoriesDP() {
+	public function paginateProductsCategoriesDP() {
 
 		$columnsProduct = [
 			'id',

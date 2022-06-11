@@ -46,7 +46,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => fn() => [
                 'user' => Auth::user(),
             ],
-
+			'zam' => fn() => 10,
 			'flash' => fn() => $request->session()->only(['success', 'message419']),
 
 			'cartCollection' => fn() => Cart::get(),

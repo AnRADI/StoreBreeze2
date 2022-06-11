@@ -27,7 +27,7 @@ class Category extends Model
 
 	// =========== METHODS =============
 
-	public function firstCategoryProductsC($categorySlug)
+	public function firstCategoryC($categorySlug)
 	{
 		$categoryColumns = [
 			'id',
@@ -39,9 +39,7 @@ class Category extends Model
 		$category = $this
 			->select($categoryColumns)
 			->where('slug', $categorySlug)
-			->with('products:id,name,image,code,price')
 			->first();
-
 
 		return $category;
 	}

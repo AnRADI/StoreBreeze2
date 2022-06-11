@@ -1,12 +1,13 @@
 <template>
 	<admin-layout>
 
-		<head>
+		<Head>
 			<title> Dashboard </title>
-		</head>
+		</Head>
 
 		<div class="dashboard content-wrapper">
 			<!-- Content Header (Page header) -->
+
 			<div class="content-header">
 				<div class="container-fluid">
 					<div class="row mb-2">
@@ -98,12 +99,16 @@
 
 <script>
     import AdminLayout from "@/Layouts/AdminLayout";
+    import Input from '@/Components/Input';
+    import Checkbox from '@/Components/Checkbox';
 
     export default {
 
         components: {
-            AdminLayout
-        },
+            AdminLayout,
+			Input,
+			Checkbox
+		},
 
         props: {
             categoriesCount: Number,
@@ -111,10 +116,22 @@
 
         data() {
           	return {
-
+                names: [],
           	    logOutForm: this.$inertia.form(),
 			}
 		},
+
+		computed: {
+            // proxyKkk: {
+            //     get() {
+            //         return this.kkk;
+            //     },
+            //     set(newValue) {
+            //         this.kkk = newValue;
+			// 	}
+			// }
+
+		}
 
     }
 </script>

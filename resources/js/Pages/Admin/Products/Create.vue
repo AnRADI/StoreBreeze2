@@ -1,9 +1,9 @@
 <template>
 	<admin-layout>
 
-		<head>
+		<Head>
 			<title> Добавить продукт </title>
-		</head>
+		</Head>
 
 		<div class="add-product content-wrapper">
 			<!-- Content Header (Page header) -->
@@ -44,15 +44,20 @@
 <!--												<option value="8">Ошибочная категория</option>-->
 											<option v-for="category in categories" :value="category.id" :key="category.id">{{ category.name }}</option>
 										</select>
-										<div class="errors" v-if="form.errors.categories_id">{{ form.errors.categories_id }}</div>
+										<div class="errors" v-if="form.errors.category_ids">{{ form.errors.category_ids }}</div>
 									</div>
 									<div class="form-group">
-										<label>Цена</label>
-										<input v-model="form.price" type="number" class="price form-control" step="0.01" min="1" max="1000000000">
-										<div class="errors" v-if="form.errors.price">{{ form.errors.price }}</div>
+										<text-input type="number" v-model="form.price" v-bind="textInput1" :error="form.errors.price" step="0.01" />
+									</div>
+									<div class="form-group">
+										<p class="labels">Метки</p>
+										<checkbox-input v-for="(label, index) in labels" :key="label.id"
+												  :value="label.name" v-model="form.label_names"
+												  :checkbox-input="checkboxInputs[index]"
+										/>
+										<div class="errors" v-if="form.errors.label_names">{{ form.errors.label_names }}</div>
 									</div>
 								</div>
-
 								<div class="card-footer">
 									<button type="submit" class="btn btn-primary">Добавить</button>
 								</div>
@@ -90,16 +95,22 @@
 <script>
     import AdminLayout from "@/Layouts/AdminLayout";
     import SuccessOrFailed from "@/Components/SuccessOrFailed";
+    import CheckboxInput from '@/Components/Checkbox';
+    import TextInput from "@/Components/Input";
 
     export default {
 
+
         components: {
+            TextInput,
             SuccessOrFailed,
-            AdminLayout,
+			AdminLayout,
+			CheckboxInput
         },
 
 		props: {
             categories: Array,
+			labels: Array,
             flash: Object,
 		},
 
@@ -108,16 +119,34 @@
 				form: this.$inertia.form({
 					name: '',
 					description: null,
-					categories_id: [],
+					category_ids: [],
 					price: null,
+					label_names: [],
 					image: {},
 				}),
                 imageState: 'empty',
                 imageSrc: '',
+                textInput1: {
+                    label: {
+                        text: 'Цена'
+                    },
+					input: {
+                        class: 'price'
+					}
+                },
+				checkboxInputs: [
+				    ...this.labels.map((v, i) => ({
+							label: {
+								name: this.labels[i].name,
+								nameLocation: 'right',
+							}
+					}))
+                ]
 			}
 		},
 
 		mounted() {
+
             this.selectCategories();
         },
 
@@ -126,7 +155,7 @@
             selectClass() {
 
                 return $('.add-product .categories');
-			}
+			},
 		},
 
 		methods: {
@@ -147,6 +176,7 @@
                 };
 
                 reader.readAsDataURL(this.form.image);
+                event.target.value = '';
             },
 
             submitAddProduct() {
@@ -167,14 +197,14 @@
 
                 this.selectClass.on('select2:select', (e) => {
 
-                    this.form.categories_id.push(e.params.data.id);
+                    this.form.category_ids.push(e.params.data.id);
                 });
 
                 this.selectClass.on('select2:unselect', (e) => {
 
-                    let index = this.form.categories_id.indexOf(e.params.data.id);
+                    let index = this.form.category_ids.indexOf(e.params.data.id);
 
-                    this.form.categories_id.splice(index, 1);
+                    this.form.category_ids.splice(index, 1);
                 });
 			}
 		}
@@ -202,6 +232,11 @@
 
 		.price {
 			width: auto;
+		}
+
+		.labels {
+			font-weight: 700;
+			margin-bottom: .5rem;
 		}
 
 		.errors {

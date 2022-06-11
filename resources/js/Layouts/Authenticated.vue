@@ -4,9 +4,9 @@
 			<div class="container">
 				<!-- Logo -->
 				<a class="navbar-brand" href="/">
-					<inertia-link :href="route('dashboard')">
+					<Link :href="route('dashboard')">
 						<breeze-application-logo width="36" />
-					</inertia-link>
+					</Link>
 				</a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
 					<span class="navbar-toggler-icon"></span>
@@ -37,7 +37,7 @@
 <!--								<breeze-dropdown-link :href="route('logout')" method="post">-->
 <!--									Log Out-->
 <!--								</breeze-dropdown-link>-->
-								<inertia-link class="dropdown-item px-4" :href="route('logout')" method="post" as="button" type="submit">Log Out</inertia-link>
+								<Link class="dropdown-item px-4" :href="route('logout')" method="post" as="button" type="submit">Log Out</Link>
 							</template>
 						</breeze-dropdown>
 					</ul>

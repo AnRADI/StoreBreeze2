@@ -3,7 +3,7 @@
 		<div class="d-flex">
 			<template v-for="(link, key) in links">
 				<div v-if="link.url === null" class="pg-arrow" :key="key" v-html="link.label"></div>
-				<inertia-link v-else class="pg-link" :class="{ 'active': link.active }" :key="`link-${key}`" :href="link.url" v-html="link.label"></inertia-link>
+				<Link v-else class="pg-link" :class="{ 'active': link.active }" :key="`link-${key}`" :href="link.url" v-html="link.label"></Link>
 			</template>
 		</div>
 	</div>
@@ -22,7 +22,6 @@
 <style lang="scss">
 
 	.pg {
-		margin-top: 1.5rem;
 
 		.pg-link, .pg-arrow {
 			padding: .75rem 1rem;

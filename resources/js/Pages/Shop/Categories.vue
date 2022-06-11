@@ -1,27 +1,30 @@
 <template>
-	<head>
-		<title> Категории </title>
-	</head>
+	<div>
 
-	<div class="container">
-		<div class="starter-template">
-			<div v-for="category in categories" :key="category.id" class="panel">
-				<inertia-link :href="route('category_slug', category.slug)">
-					<img src="http://internet-shop.tmweb.ru/storage/categories/mobile.jpg">
-					<h2>{{ category.name }}</h2>
-				</inertia-link>
-				<p>
-					{{ category.description }}
-				</p>
+		<Head>
+			<title> Категории </title>
+		</Head>
+
+		<div class="container">
+			<div class="starter-template">
+				<div v-for="category in categories" :key="category.id" class="panel">
+					<Link :href="route('category_slug', category.slug)">
+						<!--					<img src="http://internet-shop.tmweb.ru/storage/categories/mobile.jpg">-->
+						<h2>{{ category.name }}</h2>
+					</Link>
+					<p>
+						{{ category.description }}
+					</p>
+				</div>
 			</div>
 		</div>
+
 	</div>
 </template>
 
 <script>
 
     import ShopLayout from "@/Layouts/ShopLayout";
-
 
     export default {
 

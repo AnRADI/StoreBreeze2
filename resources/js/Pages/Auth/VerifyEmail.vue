@@ -15,7 +15,7 @@
           Resend Verification Email
         </breeze-button>
 
-        <inertia-link :href="route('logout')" method="post" as="button" class="btn btn-link">Log out</inertia-link>
+        <Link :href="route('logout')" method="post" as="button" class="btn btn-link">Log out</Link>
       </div>
     </form>
   </div>

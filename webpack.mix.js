@@ -17,9 +17,9 @@ mix.setPublicPath('public_html/');
 
 mix.js('resources/js/app.js', 'public_html/js').vue()
     .copy('resources/images', 'public_html/images')
-    .sass('resources/sass/app.scss', 'public_html/css').options({
-        processCssUrls: false
-    })
+    // .sass('resources/sass/app.scss', 'public_html/css').options({
+    //     processCssUrls: false
+    // })
     .webpackConfig(require('./webpack.config'))
     .sourceMaps(!production, 'source-map')
     .disableNotifications()

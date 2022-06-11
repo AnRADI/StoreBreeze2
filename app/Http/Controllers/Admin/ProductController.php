@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ProductRequest;
+use App\Models\Label;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Support\Facades\Cache;
@@ -12,12 +13,16 @@ use Inertia\Inertia;
 
 class ProductController extends Controller
 {
-    public $product;
-    public $category;
+
+    public $product,
+		$label,
+		$category;
+
 
     public function __construct() {
 
     	$this->product = new Product();
+    	$this->label = new Label();
 		$this->category = new Category();
 	}
 
@@ -28,7 +33,7 @@ class ProductController extends Controller
 	public function index() {
 
 		$products = $this->product
-			->getProductsCategoriesDP();
+			->paginateProductsCategoriesDP();
 
 		return Inertia::render('Admin/Products/Index', [
 			'products' => $products,
@@ -41,9 +46,13 @@ class ProductController extends Controller
     	$categories = $this->category
 			->getCategoriesDPC();
 
+		$labels = $this->label
+			->getLabelsDPC();
+
 
 		return Inertia::render('Admin/Products/Create', [
 			'categories' => $categories,
+			'labels' => $labels
 		]);
 	}
 
@@ -53,16 +62,27 @@ class ProductController extends Controller
 		$form = $request->validated();
 
 
-		// ------ Validation categories -------
+		// ------ Label validation -------
 
-		$isValidCategories =
-			$request->validationCategories($form['categories_id']);
+		$labelIds = [];
 
-		if($isValidCategories) {
-			unset($form['categories_id']);
+		if(isset($form['label_names'])) {
+
+			$labelIds =
+				$request->labelValidation($form['label_names']);
+
+			if(empty($labelIds))
+				return back()->withErrors(['label_names' => __("There is no such label or labels.")]);
 		}
-		else
-			return back()->withErrors(['categories_id' => __("There is no such category or categories.")]);
+
+
+		// ------ Category validation -------
+
+		$categoryIds =
+			$request->categoryValidation($form['category_ids']);
+
+		if(empty($categoryIds))
+			return back()->withErrors(['category_ids' => __("There is no such category or categories.")]);
 
 
 		// ------ Upload image -------
@@ -80,7 +100,11 @@ class ProductController extends Controller
     	$product = $this->product
 			->create($form);
 
-    	$product->categories()->attach($request->categories_id);
+
+    	$product->categories()->attach($categoryIds);
+
+    	if(isset($labelIds))
+    		$product->labels()->attach($labelIds);
 
 
 		// ------ Cache -------
@@ -104,13 +128,22 @@ class ProductController extends Controller
 		$product = $this->product
 			->firstProductDPCE($productCode);
 
-		$product->categories_id = $product->categories()
+		$product->category_ids = $product->categories()
 			->pluck('id')
 			->map(fn($item) => strval($item));
 
 
+		$labels = $this->label
+			->getLabelsDPCE();
+
+		$product->label_names = $product->labels()
+			->pluck('name')
+			->toArray();
+
+
 		return Inertia::render('Admin/Products/Edit', [
 			'categories' => $categories,
+			'labels' => $labels,
 			'product' => $product
 		]);
 	}
@@ -121,22 +154,36 @@ class ProductController extends Controller
 		$form = $request->validated();
 
 
+		// ------ Label validation -------
+
+		$labelIds = [];
+
+		if(isset($form['label_names'])) {
+
+			$labelIds =
+				$request->labelValidation($form['label_names']);
+
+			if(empty($labelIds))
+				return back()->withErrors(['label_names' => __("There is no such label or labels.")]);
+		}
+
+
 		// ------ Validation categories -------
 
-		$isValidCategories =
-			$request->validationCategories($form['categories_id']);
+		$categoryIds =
+			$request->categoryValidation($form['category_ids']);
 
-		if($isValidCategories) {
-			unset($form['categories_id']);
-		}
-		else
-			return back()->withErrors(['categories_id' => __("There is no such category or categories.")]);
+		if(empty($categoryIds))
+			return back()->withErrors(['category_ids' => __("There is no such category or categories.")]);
 
 
 		// ------ Upload image -------
 
 		if(isset($form['image'])) {
 			$form['image'] = $request->saveImage();
+		}
+		else {
+			unset($form['image']);
 		}
 
 
@@ -146,10 +193,18 @@ class ProductController extends Controller
 			->where('code', $productCode)
 			->first();
 
+		$form['updated_at'] = date("Y-m-d H:i:s");
+
 		$product->update($form);
 
+
 		$product->categories()->detach();
-		$product->categories()->attach($request->categories_id);
+		$product->categories()->attach($categoryIds);
+
+
+		$product->labels()->detach();
+		if(isset($labelIds))
+			$product->labels()->attach($labelIds);
 
 
 		// ------ Cache -------

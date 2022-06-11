@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Cart;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use Inertia\Inertia;
 
 
 class CartController extends Controller
@@ -31,7 +32,6 @@ class CartController extends Controller
 
 	public function addToCart($categorySlug, $productCode, Request $request)
 	{
-
 		$product = Cache::rememberForever($request->path(), fn() =>
 			$this->product
 				->firstProductCategoriesCTP($categorySlug, $productCode)
@@ -44,7 +44,7 @@ class CartController extends Controller
 		Cart::add($product, $request);
 
 
-		return redirect()->route('cart');
+		return redirect(url()->previous());
 	}
 
 

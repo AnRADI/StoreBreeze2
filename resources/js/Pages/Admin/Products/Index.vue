@@ -1,9 +1,10 @@
 <template>
 	<admin-layout>
 
-		<head>
+		<Head>
 			<title> Products </title>
-		</head>
+		</Head>
+
 		<div class="all-products content-wrapper">
 			<div class="content-header">
 				<div class="container-fluid">
@@ -61,11 +62,11 @@
 											<img class="img-size" :src="product.image">
 										</td>
 										<td class="project-actions text-right">
-											<inertia-link class="btn btn-info btn-sm" :href="route('dashboard.products.product_code.edit', product.code)">
+											<Link class="btn btn-info btn-sm" :href="route('dashboard.products.product_code.edit', product.code)">
 												<i class="fas fa-pencil-alt">
 												</i>
 												Редактировать
-											</inertia-link>
+											</Link>
 											<a class="btn btn-danger btn-sm" href="#">
 												<i class="fas fa-trash">
 												</i>
@@ -77,7 +78,7 @@
 							</table>
 						</div>
 					</div>
-					<pagination :links="products.links"></pagination>
+					<pagination class="pg-style" :links="products.links"></pagination>
 				</div>
 			</div>
 		</div>
@@ -92,10 +93,12 @@
 
     export default {
 
+
+
         components: {
-            AdminLayout,
 			Pagination,
-			SuccessOrFailed
+			SuccessOrFailed,
+			AdminLayout
         },
 
 		props: {
@@ -107,13 +110,20 @@
 
 <style lang="scss">
 
-	.project-actions a+a {
-		margin-left: 5px;
-	}
+	.all-products {
 
-	.img-size {
-		width: 100px;
-		height: 100px;
+		.project-actions a+a {
+			margin-left: 5px;
+		}
+
+		.img-size {
+			width: 100px;
+			height: 100px;
+		}
+
+		.pg-style {
+			margin-top: 1.5rem;
+		}
 	}
 
 </style>

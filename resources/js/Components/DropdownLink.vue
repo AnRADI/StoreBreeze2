@@ -3,9 +3,9 @@
 		<slot></slot>
 	</button>
 
-	<inertia-link :href="href" class="dropdown-item px-4" v-else>
+	<Link :href="href" class="dropdown-item px-4" v-else>
 		<slot></slot>
-	</inertia-link>
+	</Link>
 </template>
 
 <script>

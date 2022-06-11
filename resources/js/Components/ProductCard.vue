@@ -1,23 +1,30 @@
 <template>
-	<div class="col-sm-6 col-md-4">
+	<div class="product-card col-sm-6 col-md-4">
 		<div class="thumbnail">
+			<div class="labels">
+				<div v-for="label in product.labels"
+					 :key="label.id"
+					 :class="[label.class, 'badge']">
+					{{ label.name }}
+				</div>
+			</div>
 			<img class="img-fluid" :src="product.image">
 			<div class="caption">
 				<h3>
-					<inertia-link :href="route('category_slug.product_code', [categorySlug, product.code])">
+					<Link :href="route('category_slug.product_code', [categorySlug, product.code])">
 						{{ product.name }}
-					</inertia-link>
+					</Link>
 				</h3>
 <!--				<h4 v-if="product.categories">-->
-<!--					<inertia-link :href="route('category_slug', product.categories[0].slug)">-->
+<!--					<Link :href="route('category_slug', product.categories[0].slug)">-->
 <!--						{{ product.categories[0].name }}-->
-<!--					</inertia-link>-->
+<!--					</Link>-->
 <!--				</h4>-->
 				<div style="margin-bottom: 5px">
 					{{ product.price }} руб.
 				</div>
 				<h5>
-					<form v-if="cartCollectionS[product.code]" @submit.prevent="cart">
+					<form v-if="cartCollection[product.code]" @submit.prevent="cart">
 						<button type="submit" class="btn btn-primary" role="button">В корзинe</button>
 					</form>
 					<form v-else @submit.prevent="addToCart(categorySlug, product.code)">
@@ -46,8 +53,7 @@
 		},
 
 
-
-		methods: {
+        methods: {
             // getCartForm(event) {
             //     return new FormData(event.currentTarget);
             // }
@@ -55,6 +61,32 @@
     }
 </script>
 
-<style>
+<style lang="scss">
+
+	.product-card {
+
+		.labels {
+			position: absolute;
+		}
+
+		.labels .badge {
+			display: block;
+		}
+
+		.badge.badge-success {
+			color: #fff;
+			background-color: #28a745;
+		}
+
+		.badge.badge-warning {
+			color: #fff;
+			background-color: #dc3545;
+		}
+
+		.badge.badge-danger {
+			color: #212529;
+			background-color: #ffc107;
+		}
+	}
 
 </style>

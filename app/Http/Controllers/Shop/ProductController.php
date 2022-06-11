@@ -26,11 +26,10 @@ class ProductController extends Controller
 
 	public function index($categorySlug, $productCode)
 	{
-
-		$product = Cache::rememberForever(request()->path(), fn() =>
-			$this->product
-				->firstProductCategoriesCP($categorySlug, $productCode)
-		);
+//		$product = Cache::rememberForever(request()->path(), fn() =>
+		$product =	$this->product
+				->firstProductCategoriesCP($categorySlug, $productCode);
+//		);
 
 
 		if(empty($product && $product->categories->count() != 0)) abort(404);

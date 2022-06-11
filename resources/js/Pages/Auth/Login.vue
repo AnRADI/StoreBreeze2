@@ -1,13 +1,13 @@
 <template>
-	<shop-layout>
+	<div>
 
 		<div class="container">
 			<div class="row justify-content-center my-5">
 				<div class="col-sm-12 col-md-8 col-lg-5 my-5">
 					<div class="d-flex justify-content-center mb-3">
-						<inertia-link href="/">
+						<Link href="/">
 							<breeze-application-logo width="82" />
-						</inertia-link>
+						</Link>
 					</div>
 					<div class="card shadow-sm px-3">
 						<div class="card-body">
@@ -22,30 +22,21 @@
 
 							<form @submit.prevent="submit">
 								<div class="form-group">
-									<breeze-label for="email" value="Email" />
-									<breeze-input id="email" type="email" v-model="form.email" required autofocus />
-									<div >{{form.errors}}</div>
+									<text-input type="email" v-model="form.email" v-bind="textInput1" required autofocus />
+								</div>
+								<div class="form-group">
+									<text-input type="password" v-model="form.password" v-bind="textInput2" required autocomplete="current-password" />
 								</div>
 
 								<div class="form-group">
-									<breeze-label for="password" value="Password" />
-									<breeze-input id="password" type="password" v-model="form.password" required autocomplete="current-password" />
-								</div>
-
-								<div class="form-group">
-									<div class="custom-control custom-checkbox">
-										<breeze-checkbox id="remember_me" v-model:checked="form.remember" />
-										<label class="custom-control-label" for="remember_me">
-											Remember Me
-										</label>
-									</div>
+									<breeze-checkbox v-model:checked="form.remember" :checkbox-input="checkboxInput" />
 								</div>
 
 								<div class="mb-0">
 									<div class="d-flex justify-content-end align-items-baseline">
-<!--										<inertia-link :href="route('password.request')" class="text-muted mr-3">-->
+<!--										<Link :href="route('password.request')" class="text-muted mr-3">-->
 <!--											Forgot your password?-->
-<!--										</inertia-link>-->
+<!--										</Link>-->
 
 										<breeze-button class="ml-4" :class="{ 'text-white-50': form.processing }" :disabled="form.processing">
 											Log in
@@ -59,14 +50,14 @@
 			</div>
 		</div>
 
-	</shop-layout>
+	</div>
 </template>
 
 
 <script>
     import BreezeButton from '@/Components/Button'
     import ShopLayout from "@/Layouts/ShopLayout"
-    import BreezeInput from '@/Components/Input'
+    import TextInput from '@/Components/Input'
     import BreezeCheckbox from '@/Components/Checkbox'
     import BreezeLabel from '@/Components/Label'
     import BreezeValidationErrors from '@/Components/ValidationErrors'
@@ -75,11 +66,12 @@
 
     export default {
 
+        layout: ShopLayout,
 
         components: {
             ShopLayout,
             BreezeButton,
-            BreezeInput,
+            TextInput,
             BreezeCheckbox,
             BreezeLabel,
             BreezeValidationErrors,
@@ -91,14 +83,32 @@
 			flash: Object,
         },
 
+
         data() {
             return {
-
                 form: this.$inertia.form({
                     email: '',
                     password: '',
-                    remember: false
-                })
+                    remember: false,
+                }),
+
+                checkboxInput: {
+                    label: {
+                        name: 'Remember me',
+                        nameLocation: 'right',
+                    }
+				},
+
+                textInput1: {
+                    label: {
+                        text: 'Email'
+                    },
+                },
+                textInput2: {
+                    label: {
+                        text: 'Password'
+                    },
+                },
             }
         },
 

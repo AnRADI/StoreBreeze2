@@ -2,11 +2,16 @@
 
 import { mapMutations, mapState } from "vuex";
 import { store } from './store';
+import { Link, Head } from '@inertiajs/inertia-vue3';
 
 
 // ------- App mixin --------
 
 export const appMixin = {
+
+    components: {
+        Link, Head
+    },
 
     computed: {
         ...mapState(Object.keys(store._state.data)),
@@ -56,11 +61,6 @@ export const appMixin = {
 
 export const cartMixin = {
 
-    mounted() {
-
-        this.getCart();
-    },
-
     computed: {
 
         cartCollection() {
@@ -69,15 +69,6 @@ export const cartMixin = {
     },
 
     methods: {
-
-        getCart() {
-
-            if(Object.keys(this.cartCollection).length != 0)
-                if(Object.keys(this.cartCollectionS).length == 0) {
-
-                    this.cartCollectionM(this.cartCollection);
-                }
-        },
 
         cart() {
 

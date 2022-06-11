@@ -36,9 +36,9 @@
 
 			<div class="mb-0">
 				<div class="d-flex justify-content-end align-items-baseline">
-					<inertia-link :href="route('login.create')" class="text-muted mr-3 text-decoration-none">
+					<Link :href="route('login.create')" class="text-muted mr-3 text-decoration-none">
 						Already registered?
-					</inertia-link>
+					</Link>
 
 					<breeze-button class="ml-4" :class="{ 'text-white-50': form.processing }" :disabled="form.processing">
 						Register

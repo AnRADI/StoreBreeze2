@@ -24,14 +24,14 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr v-for="product in cartCollectionS" :key="product.code">
+								<tr v-for="product in cartCollection" :key="product.code">
 									<td>
-										<inertia-link @click.stop="hideCartModal" :href="route('category_slug.product_code', [product.categories[0].slug, product.code])">
+										<Link @click.stop="hideCartModal" :href="route('category_slug.product_code', [product.categories[0].slug, product.code])">
 
 											<img style="height: 56px" :src="product.image">
 											{{ product.name }}
 
-										</inertia-link>
+										</Link>
 									</td>
 									<td>
 <!--										<span class="badge">{{ product.quantity }}</span>-->
@@ -66,13 +66,12 @@
 <!--											</form>-->
 										</div>
 									</td>
-
 									<td>{{ product.price }}</td>
 									<td>{{ getProductCost(product) }}</td>
 								</tr>
 								<tr>
 									<td colspan="3">Общая стоимость: {{ getCartTotalCost() }}</td>
-									<td></td>
+<!--									<td>{{cartForm.errors.zz}}</td>-->
 								</tr>
 							</tbody>
 						</table>
@@ -99,6 +98,7 @@
         data() {
             return {
                 categorySlug: '',
+				cartForm: this.$inertia.form()
 			}
 		},
 
@@ -108,9 +108,13 @@
                 return $('#cartId');
             },
 
+            cartCollection() {
+                return this.$page.props.cartCollection;
+            },
+
             isCartData() {
 
-                return Object.keys(this.cartCollectionS).length;
+                return Object.keys(this.cartCollection).length;
             }
         },
 
@@ -131,18 +135,11 @@
 
             async cart() {
 
-				await axios.get(route('cart'));
-
                 this.cartId.modal('show');
             },
 
 
             async addToCart(categorySlug, productCode, cartForm = { quantity: 1 }) {
-
-                if(cartForm instanceof FormData)
-                	cartForm.append('_method', 'patch');
-                else
-                    cartForm._method = 'patch';
 
 
                 if(cartForm.quantity != '') {
@@ -152,15 +149,25 @@
                         cartForm.quantity = 1;
 					}
 
-                    let cartResponse =
-                        await axios.post(route('cart.category_slug.product_code.update', [categorySlug, productCode]), cartForm);
+                    cartForm._method = 'patch';
 
 
-                    this.cartCollectionM(cartResponse.data);
+                    this.cartForm = this.cartForm.transform((data) => ({
+                        ...data,
+                        ...cartForm
+                    }));
 
 
-                    if(!this.cartId.hasClass('show'))
-                        this.cartId.modal('show');
+                    this.cartForm.post(route('cart.category_slug.product_code.update', [categorySlug, productCode]), {
+
+						preserveScroll: true,
+
+                        onFinish: () => {
+                            if(!this.cartId.hasClass('show'))
+                                this.cartId.modal('show');
+                        }
+					});
+
 				}
             },
 
@@ -195,7 +202,7 @@
             getCartTotalCost() {
 
                 let cartTotalCost = 0;
-                let cartCollection = this.cartCollectionS;
+                let cartCollection = this.cartCollection;
 
                 for(let productCode in cartCollection) {
 

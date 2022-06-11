@@ -1,18 +1,19 @@
 <template>
-	<shop-layout>
+	<div>
 
-		<head>
+		<Head>
 			<title> Продукт </title>
-		</head>
+		</Head>
 
 		<div class="container">
+
 			<div class="starter-template">
 				<h1>{{ product.name }}</h1>
 				<p>Цена: <b>{{ product.price }}.</b></p>
 				<h4>
-					<inertia-link :href="route('category_slug', product.categories[0].slug)">
+					<Link :href="route('category_slug', product.categories[0].slug)">
 						{{ product.categories[0].name }}
-					</inertia-link>
+					</Link>
 				</h4>
 				<div class="row">
 					<div class="col-md-8">
@@ -20,7 +21,7 @@
 					</div>
 				</div>
 				<p>{{ product.description }}</p>
-				<form v-if="cartCollectionS[product.code]" @submit.prevent="cart">
+				<form v-if="cartCollection[product.code]" @submit.prevent="cart">
 					<button type="submit" class="btn btn-primary" role="button">Уже в корзинe</button>
 				</form>
 				<form v-else @submit.prevent="addToCart(product.categories[0].slug, product.code)">
@@ -29,21 +30,19 @@
 			</div>
 		</div>
 
-	</shop-layout>
+	</div>
 </template>
 
 <script>
 
-    import ShopLayout from "@/Layouts/ShopLayout";
     import {cartMixin} from "@/mixins";
+    import ShopLayout from "@/Layouts/ShopLayout";
 
     export default {
 
-        mixins: [cartMixin],
+        layout: ShopLayout,
 
-        components: {
-            ShopLayout,
-        },
+        mixins: [cartMixin],
 
         props: {
             product: Object,

@@ -9,7 +9,6 @@ export const store = createStore({
 
             // ------- Cart ---------
 
-            cartCollectionS: {},
             cartS: false,
             addToCartS: {}
         }
@@ -18,11 +17,6 @@ export const store = createStore({
     mutations: {
 
         // ------- Cart ---------
-
-        cartCollectionM(state, value) {
-
-            state.cartCollectionS = value;
-        },
 
         cartM(state) {
 

@@ -1,17 +1,20 @@
 <template>
 	<div>
+		<Head>
+			<link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+		</Head>
 		<div v-if="currentRouteName != 'login'" class="shop-layout container pt-4">
 			<div class="d-flex justify-content-end">
 				<ul class="d-flex" style="list-style: none">
 					<li>
-						<inertia-link :href="route('welcome')" class="ml-4 text-muted">
+						<Link :href="route('welcome')" class="ml-4 text-muted">
 							Главная
-						</inertia-link>
+						</Link>
 					</li>
 					<li>
-						<inertia-link :href="route('categories')" class="ml-4 text-muted">
+						<Link :href="route('categories')" class="ml-4 text-muted">
 							Категории
-						</inertia-link>
+						</Link>
 					</li>
 <!--					<li class="dropdown">-->
 
@@ -42,14 +45,14 @@
 					</li>
 					<template v-if="can('login and register')"> <!-- guest -->
 						<li>
-							<inertia-link :href="route('login.create')" class="ml-4 text-muted">
+							<Link :href="route('login.create')" class="ml-4 text-muted">
 								Log in
-							</inertia-link>
+							</Link>
 						</li>
 						<li>
-							<inertia-link :href="route('register.create')" class="ml-4 text-muted">
+							<Link :href="route('register.create')" class="ml-4 text-muted">
 								Register
-							</inertia-link>
+							</Link>
 						</li>
 					</template>
 				</ul>
@@ -61,6 +64,8 @@
 
 <script>
 
+    require('bootstrap');
+
     import Cart from "@/Pages/Shop/Cart";
     import Script from "@/Components/Script";
 
@@ -71,7 +76,8 @@
             Cart
 		},
 
-		computed: {
+        computed: {
+
             currentRouteName() {
                 return this.$page.props.currentRouteName;
 			}
@@ -84,7 +90,7 @@
             }
         },
 
-		methods: {
+        methods: {
 
 			cart() {
 
@@ -105,6 +111,8 @@
 <style lang="scss">
 
 	@import '~bootstrap/scss/bootstrap';
+
+	@import "resources/sass/Plugins/reset";
 
 
 	.shop-layout {

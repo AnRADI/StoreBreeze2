@@ -1,9 +1,9 @@
 <template>
 	<div>
-		<head>
+		<Head>
 			<meta charset="utf-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1">
-		</head>
+		</Head>
 
 
 		<div class="admin-layout hold-transition sidebar-mini layout-fixed">
@@ -36,74 +36,34 @@
 
 						<!-- Sidebar Menu -->
 						<nav class="sidebar-menu mt-2">
-							<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-								<!-- Add icons to the links using the .nav-icon class
-									 with font-awesome or any other icon font library -->
-								<li class="nav-item">
-									<inertia-link :href="route('dashboard')" class="nav-link">
-										<i class="nav-icon fas fa-tachometer-alt"></i>
-										<p>
-											Главная
-										</p>
-									</inertia-link>
-								</li>
-								<li class="nav-item">
-									<a href="#" class="nav-link">
-										<i class="nav-icon fas fa-newspaper"></i>
-										<p>
-											Блог
-											<i class="right fas fa-angle-left"></i>
-										</p>
-									</a>
-									<ul class="nav nav-treeview">
-										<li class="nav-item">
-											<a href="./index.html" class="nav-link">
-												<p>Все статьи</p>
-											</a>
+							<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
+
+								<li
+									v-for="(navLink, index) in navLinks" :key="index"
+									:class="[{'menu-open': active && navLink.innerNavLinks}, 'nav-item']">
+
+									<nav-link :nav-link="navLink"></nav-link>
+
+									<ul v-if="navLink.innerNavLinks" class="nav nav-treeview">
+
+										<li v-for="(navLink, index) in navLink.innerNavLinks" :key="index" class="nav-item">
+											<nav-link @active="active=$event" :nav-link="navLink"></nav-link>
 										</li>
-										<li class="nav-item">
-											<a href="./index.html" class="nav-link">
-												<p>Добавить статью</p>
-											</a>
-										</li>
+
 									</ul>
+
 								</li>
-								<li class="nav-item">
-									<a href="#" class="nav-link">
-										<i class="nav-icon fas fa-align-left"></i>
-										<p>
-											Продукты
-											<i class="right fas fa-angle-left"></i>
-										</p>
-									</a>
-									<ul class="nav nav-treeview">
-										<li class="nav-item">
-											<inertia-link :href="route('dashboard.products')" class="nav-link">
-												<p>Все продукты</p>
-											</inertia-link>
-										</li>
-										<li class="nav-item">
-											<inertia-link :href="route('dashboard.products.create')" class="nav-link">
-												<p>Добавить продукт</p>
-											</inertia-link>
-										</li>
-									</ul>
-								</li>
+
 								<li class="nav-item">
 									<a @click.prevent="form.post(route('logout.store'))" href="#" class="nav-link">
 										<i class="nav-icon fas fa-align-left"></i>
 										Log Out
 									</a>
-<!--									<form @submit.prevent="form.post(route('logout'))">-->
-<!--										<button class="nav-link log-out-button" type="submit">-->
-<!--											<i class="nav-icon fas fa-align-left"></i>-->
-<!--											Log Out-->
-<!--										</button>-->
-<!--									</form>-->
 								</li>
+
 							</ul>
 						</nav>
-						<!-- /.sidebar-menu -->
+
 					</div>
 					<!-- /.sidebar -->
 				</aside>
@@ -131,71 +91,48 @@
     require('@/Plugins/fontawesome.js');
     require('~/admin-lte/plugins/select2/js/select2.full.min.js');
 
+	import NavLink from "@/Components/NavLink";
 
     export default {
 
         components: {
-
+			NavLink
 		},
 
         mounted() {
-			$('[data-widget="treeview"]').Treeview('init');
 
-            this.activeLink();
-
-            // let menuOpens = document.querySelectorAll('[data-widget="treeview"] > .nav-item');
-			//
-			// for(let menuOpen of menuOpens) {
-			//
-            //     menuOpen.onclick = (e) => {
-			//
-            //         e.currentTarget.classList.toggle('menu-open');
-            //         console.log(e.currentTarget);
-            //     };
-            // }
         },
 
 		data() {
             return {
 
-                form: this.$inertia.form(),
-            }
-		},
-
-        methods: {
-
-            activeLink() {
-
-                let url = window.location.protocol + '//' + window.location.host + window.location.pathname;
-                let navLink, navTreeview, navTreeviewItem;
-
-                let navItems = document.querySelectorAll('.sidebar-menu .nav-item');
-
-
-                for(let navItem of navItems) {
-
-
-                    navLink = navItem.querySelector('.nav-link');
-
-                    if(navLink.href == url) {
-
-                        navLink.classList.add('active');
-
-                        navTreeview = navLink.closest('.nav-treeview');
-
-                        while(navTreeview) {
-
-                            navTreeviewItem = navTreeview.closest('.nav-item');
-                            navTreeviewItem.classList.add('menu-is-opening', 'menu-open');
-
-                            navTreeview = navTreeviewItem.closest('.nav-treeview');
-                        }
-
-                        break;
+                navLinks: [
+                    {
+                        name: 'Главная',
+                        url: this.route('dashboard'),
+                        leftIcon: 'nav-icon fas fa-tachometer-alt'
+                    },
+                    {
+                        name: 'Продукты',
+                        leftIcon: 'nav-icon fas fa-align-left',
+                        rightIcon: 'right fas fa-angle-left',
+                        innerNavLinks: [
+                            {
+                                name: 'Все продукты',
+                                url: this.route('dashboard.products'),
+                            },
+                            {
+                                name: 'Добавить продукт',
+                                url: this.route('dashboard.products.create'),
+                            }
+                        ]
                     }
-                }
-            },
-        }
+                ],
+                active: false,
+                form: this.$inertia.form(),
+
+			}
+		},
     }
 </script>
 
@@ -206,14 +143,11 @@
 	@import "resources/sass/Plugins/select2-bootstrap4";
 	@import "resources/sass/Plugins/select2";
 	@import "~admin-lte/build/scss/adminlte";
-
+	@import "resources/sass/Plugins/reset";
 
 
 	.admin-layout {
 
-		.nav-inner-menu {
-			display: none;
-		}
 
 		.wrapper {
 			height: 100vh !important;
@@ -235,11 +169,6 @@
 
 		.main-sidebar {
 			position: fixed !important;
-		}
-
-		.menu-open > .nav-link {
-			background-color: rgba(255, 255, 255, 0.1) !important;
-			color: #fff !important;
 		}
 	}
 

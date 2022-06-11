@@ -1,52 +1,54 @@
 <template>
+	<div>
 
-	<head>
-		<title> Главная </title>
-	</head>
+		<Head>
+			<title> Главная </title>
+		</Head>
 
-	<div class="welcome container">
-		<h1>Все товары</h1>
-		<div class="row">
-			<product-card
-				v-for="product in products"
-				:product="product"
-				:category-slug="product.categories[0].slug"
-				:key="product.id"
-			/>
+		<div class="welcome container">
+
+			<h1>Все товары</h1>
+
+			<Filter :url="route('welcome')"
+					:labels="labels"
+					:filter-request="filterRequest">
+			</Filter>
+
+			<div class="row">
+				<product-card
+					v-for="product in products.data" :key="product.id"
+					:product="product" :category-slug="product.categories[0].slug"
+				/>
+			</div>
+
+			<pagination class="pg-style" :links="products.links"></pagination>
 		</div>
-	</div>
-	<div class="d-flex justify-content-end">
-		<p id="rr">Радость</p>
-		<button @click="reverse">клик</button>
-	</div>
 
+	</div>
 </template>
 
 <script>
-    import ProductCard from '@/Components/ProductCard'
-    import Script from "@/Components/Script";
+
+    import ProductCard from '@/Components/ProductCard';
     import ShopLayout from "@/Layouts/ShopLayout";
+    import Pagination from "@/Components/Pagination";
+    import Filter from "@/Components/Filter";
 
     export default {
 
         layout: ShopLayout,
 
         components: {
+            Filter,
+            Pagination,
             ProductCard,
-            Script
         },
-
-		methods: {
-            reverse() {
-                let el = document.getElementById('rr');
-                el.innerText = el.innerText.split('').reverse().join('');
-			}
-		},
 
         props: {
             products: [Object, Array],
+			labels: Array,
+			filterRequest: Object,
         },
-
     }
 </script>
 
@@ -55,60 +57,13 @@
 
 	.welcome {
 
-		.cart-form {
-			display: inline-block;
-			position: relative;
-			width: 100px;
-		}
+		// Pagination
 
-		.cart-form input[type="number"],
-		.cart-form input[type="number"]:hover,
-		.cart-form input[type="number"]:focus {
-			display: block;
-			height: 32px;
-			line-height: 32px;
-			width: 100%;
-			padding: 0;
-			margin: 0;
-			box-sizing: border-box;
-			text-align: center;
-			-moz-appearance: textfield;
-			-webkit-appearance: textfield;
-			appearance: none;
+		.pg-style {
+			display: flex;
+			justify-content: center;
+			margin-bottom: 1.5rem;
 		}
-		.cart-form input[type="number"]::-webkit-outer-spin-button,
-		.cart-form input[type="number"]::-webkit-inner-spin-button {
-			-webkit-appearance: none;
-		}
-		.cart-button-minus {
-			position: absolute;
-			top: 1px;
-			left: 1px;
-			bottom: 1px;
-			width: 20px;
-			padding: 0;
-			display: block;
-			text-align: center;
-			border: none;
-			border-right: 1px solid #ddd;
-			font-size: 16px;
-			font-weight: 600;
-		}
-		.cart-button-plus {
-			position: absolute;
-			top: 1px;
-			right: 1px;
-			bottom: 1px;
-			width: 20px;
-			padding: 0;
-			display: block;
-			text-align: center;
-			border: none;
-			border-left: 1px solid #ddd;
-			font-size: 16px;
-			font-weight: 600;
-		}
-
 	}
 
 </style>

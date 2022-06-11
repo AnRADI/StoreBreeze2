@@ -1,9 +1,9 @@
 <template>
 	<admin-layout>
 
-		<head>
+		<Head>
 			<title> Редактировать продукт </title>
-		</head>
+		</Head>
 
 		<div class="edit-product content-wrapper">
 			<!-- Content Header (Page header) -->
@@ -48,8 +48,15 @@
 										<input v-model="form.price" type="number" class="price form-control" step="0.01" min="1" max="1000000000">
 										<div class="errors" v-if="form.errors.price">{{ form.errors.price }}</div>
 									</div>
+									<div class="form-group">
+										<p class="labels">Метки</p>
+										<checkbox-input v-for="(label, index) in labels" :key="label.id"
+												  :value="label.name" v-model="form.label_names"
+												  :checkbox-input="checkboxInputs[index]"
+										/>
+										<div class="errors" v-if="form.errors.label_names">{{ form.errors.label_names }}</div>
+									</div>
 								</div>
-
 								<div class="card-footer">
 									<button type="submit" class="btn btn-primary">Обновить</button>
 								</div>
@@ -84,18 +91,21 @@
 <script>
     import AdminLayout from "@/Layouts/AdminLayout";
     import SuccessOrFailed from "@/Components/SuccessOrFailed";
+    import CheckboxInput from '@/Components/Checkbox';
 
     export default {
 
         components: {
             SuccessOrFailed,
-            AdminLayout,
+			AdminLayout,
+			CheckboxInput
         },
 
 		props: {
             categories: Array,
             flash: Object,
 			product: Object,
+            labels: Array
 		},
 
 		data() {
@@ -105,11 +115,20 @@
 					id: this.product.id,
 					name: this.product.name,
 					description: this.product.description,
-					categories_id: [],
+					category_ids: [],
 					price: this.product.price,
+                    label_names: this.product.label_names,
 					image: null
 				}),
                 imageSrc: this.product.image,
+                checkboxInputs: [
+                    ...this.labels.map((v, i) => ({
+                        label: {
+                            name: this.labels[i].name,
+                            nameLocation: 'right',
+                        }
+                    }))
+                ]
 			}
 		},
 
@@ -149,16 +168,13 @@
 
             submitEditProduct() {
 
-				if(this.form.image == null)
-				    delete this.form.image;
-
                 this.form.post(route('dashboard.products.product_code.update', this.product.code));
 			},
 
 			selectedCategories() {
 
-                this.form.categories_id = this.product.categories_id;
-                this.selectClass.val(this.product.categories_id).trigger('change');
+                this.form.category_ids = this.product.category_ids;
+                this.selectClass.val(this.product.category_ids).trigger('change');
 			},
 
             selectCategories() {
@@ -167,14 +183,14 @@
 
                 this.selectClass.on('select2:select', (e) => {
 
-                    this.form.categories_id.push(e.params.data.id);
+                    this.form.category_ids.push(e.params.data.id);
                 });
 
                 this.selectClass.on('select2:unselect', (e) => {
 
-                    let index = this.form.categories_id.indexOf(e.params.data.id);
+                    let index = this.form.category_ids.indexOf(e.params.data.id);
 
-                    this.form.categories_id.splice(index, 1);
+                    this.form.category_ids.splice(index, 1);
                 });
 			}
 		}
@@ -202,6 +218,11 @@
 
 		.price {
 			width: auto;
+		}
+
+		.labels {
+			font-weight: 700;
+			margin-bottom: .5rem;
 		}
 
 		.errors {
