@@ -22,14 +22,14 @@
 
 							<form @submit.prevent="submit">
 								<div class="form-group">
-									<text-input type="email" v-model="form.email" v-bind="textInput1" required autofocus />
+									<text-input type="email" v-model="form.email" :label="{ text: 'Email' }" required autofocus />
 								</div>
 								<div class="form-group">
-									<text-input type="password" v-model="form.password" v-bind="textInput2" required autocomplete="current-password" />
+									<text-input type="password" v-model="form.password" :label="{ text: 'Password' }" required autocomplete="current-password" />
 								</div>
 
 								<div class="form-group">
-									<breeze-checkbox v-model:checked="form.remember" :checkbox-input="checkboxInput" />
+									<breeze-checkbox v-model:checked="form.remember" :label="{ name: 'Remember me', nameLocation: 'right'}" />
 								</div>
 
 								<div class="mb-0">
@@ -97,18 +97,7 @@
                         name: 'Remember me',
                         nameLocation: 'right',
                     }
-				},
-
-                textInput1: {
-                    label: {
-                        text: 'Email'
-                    },
-                },
-                textInput2: {
-                    label: {
-                        text: 'Password'
-                    },
-                },
+				}
             }
         },
 

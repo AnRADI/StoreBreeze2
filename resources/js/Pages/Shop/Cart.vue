@@ -26,7 +26,7 @@
 							<tbody>
 								<tr v-for="product in cartCollection" :key="product.code">
 									<td>
-										<Link @click.stop="hideCartModal" :href="route('category_slug.product_code', [product.categories[0].slug, product.code])">
+										<Link @click.stop="hideCartModal" :href="route('products.category.product.show', [product.categories[0].slug, product.id])">
 
 											<img style="height: 56px" :src="product.image">
 											{{ product.name }}
@@ -127,7 +127,7 @@
 
             addToCartS(params) {
 
-                this.addToCart(params.categorySlug, params.productCode, params.cartForm)
+                this.addToCart(params.categorySlug, params.productId, params.cartForm)
 			}
 		},
 
@@ -139,7 +139,7 @@
             },
 
 
-            async addToCart(categorySlug, productCode, cartForm = { quantity: 1 }) {
+            async addToCart(categorySlug, productId, cartForm = { quantity: 1 }) {
 
 
                 if(cartForm.quantity != '') {
@@ -158,7 +158,7 @@
                     }));
 
 
-                    this.cartForm.post(route('cart.category_slug.product_code.update', [categorySlug, productCode]), {
+                    this.cartForm.post(route('cart.category.product.update', [categorySlug, productId]), {
 
 						preserveScroll: true,
 
@@ -171,9 +171,9 @@
 				}
             },
 
-            // async removeProductCart(productCode, cartForm = { quantity: 1, _method: 'delete' }) {
+            // async removeProductCart(productId, cartForm = { quantity: 1, _method: 'delete' }) {
 			//
-            //     let cartResponse = await axios.post(route('remove.product.cart', productCode), cartForm);
+            //     let cartResponse = await axios.post(route('remove.product.cart', productId), cartForm);
 			//
             //     this.cartCollectionM(cartResponse.data);
             // },
@@ -204,9 +204,9 @@
                 let cartTotalCost = 0;
                 let cartCollection = this.cartCollection;
 
-                for(let productCode in cartCollection) {
+                for(let productId in cartCollection) {
 
-                    cartTotalCost += cartCollection[productCode].cost;
+                    cartTotalCost += cartCollection[productId].cost;
                 }
 
                 return cartTotalCost;

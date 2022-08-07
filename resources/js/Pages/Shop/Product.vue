@@ -11,7 +11,7 @@
 				<h1>{{ product.name }}</h1>
 				<p>Цена: <b>{{ product.price }}.</b></p>
 				<h4>
-					<Link :href="route('category_slug', product.categories[0].slug)">
+					<Link :href="route('categories.category.show', product.categories[0].slug)">
 						{{ product.categories[0].name }}
 					</Link>
 				</h4>
@@ -21,10 +21,10 @@
 					</div>
 				</div>
 				<p>{{ product.description }}</p>
-				<form v-if="cartCollection[product.code]" @submit.prevent="cart">
+				<form v-if="cartCollection[product.id]" @submit.prevent="cart">
 					<button type="submit" class="btn btn-primary" role="button">Уже в корзинe</button>
 				</form>
-				<form v-else @submit.prevent="addToCart(product.categories[0].slug, product.code)">
+				<form v-else @submit.prevent="addToCart(product.categories[0].slug, product.id)">
 					<button type="submit" class="btn btn-success">Добавить в корзину</button>
 				</form>
 			</div>
@@ -35,7 +35,7 @@
 
 <script>
 
-    import {cartMixin} from "@/mixins";
+    import {cartMixin} from "@/Mixins/cart-mixin";
     import ShopLayout from "@/Layouts/ShopLayout";
 
     export default {

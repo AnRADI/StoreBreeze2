@@ -12,8 +12,8 @@
 			   :checked="checked" @change="$emit('update:checked', $event.target.checked)">
 		<!--	---------------   -->
 
-		<label :class="checkboxInput.label.nameLocation" :for="id">
-			{{ checkboxInput.label.name }}
+		<label :class="label.nameLocation" :for="id">
+			{{ label.name }}
 		</label>
 
 		<div class="errors" v-if="error">{{ error }}</div>
@@ -33,8 +33,8 @@
             modelValue: Array,
             value: [Number, String],
             checked: [Number, Boolean],
-			checkboxInput: Object,
-			error: String
+			label: Object,
+			error: String,
         },
 
         data() {
@@ -45,7 +45,7 @@
 			}
 		},
 
-		computed: {
+        computed: {
 
 			// Array checkbox
             proxyModelValue: {

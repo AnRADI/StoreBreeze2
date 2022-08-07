@@ -44,18 +44,23 @@
 <!--												<option value="8">Ошибочная категория</option>-->
 											<option v-for="category in categories" :value="category.id" :key="category.id">{{ category.name }}</option>
 										</select>
-										<div class="errors" v-if="form.errors.category_ids">{{ form.errors.category_ids }}</div>
+										<array-errors class="array-errors errors" array-name="category_ids" :errors="form.errors" />
+
 									</div>
 									<div class="form-group">
-										<text-input type="number" v-model="form.price" v-bind="textInput1" :error="form.errors.price" step="0.01" />
+										<text-input class="text-input" type="number"
+													v-model="form.price" :label="{ text: 'Цена' }" :input="{ class: 'price' }"
+													:error="form.errors.price" step="0.01" />
 									</div>
 									<div class="form-group">
 										<p class="labels">Метки</p>
-										<checkbox-input v-for="(label, index) in labels" :key="label.id"
-												  :value="label.name" v-model="form.label_names"
-												  :checkbox-input="checkboxInputs[index]"
+										<checkbox-input v-for="(label, i) in labels" :key="label.id"
+												  :value="label.id" v-model="form.label_ids"
+												  :label="{ name: this.labels[i].name, nameLocation: 'right'}"
 										/>
-										<div class="errors" v-if="form.errors.label_names">{{ form.errors.label_names }}</div>
+										<array-errors class="array-errors errors" array-name="label_ids" :errors="form.errors" />
+
+<!--										<div class="errors" v-if="form.errors['label_ids.0']">{{ form.errors['label_ids.0'] }}</div>-->
 									</div>
 								</div>
 								<div class="card-footer">
@@ -97,6 +102,7 @@
     import SuccessOrFailed from "@/Components/SuccessOrFailed";
     import CheckboxInput from '@/Components/Checkbox';
     import TextInput from "@/Components/Input";
+    import ArrayErrors from "@/Components/ArrayErrors";
 
     export default {
 
@@ -105,7 +111,8 @@
             TextInput,
             SuccessOrFailed,
 			AdminLayout,
-			CheckboxInput
+			CheckboxInput,
+            ArrayErrors
         },
 
 		props: {
@@ -114,39 +121,24 @@
             flash: Object,
 		},
 
-		data() {
+        data() {
             return {
 				form: this.$inertia.form({
 					name: '',
 					description: null,
 					category_ids: [],
 					price: null,
-					label_names: [],
+					label_ids: [],
 					image: {},
 				}),
                 imageState: 'empty',
-                imageSrc: '',
-                textInput1: {
-                    label: {
-                        text: 'Цена'
-                    },
-					input: {
-                        class: 'price'
-					}
-                },
-				checkboxInputs: [
-				    ...this.labels.map((v, i) => ({
-							label: {
-								name: this.labels[i].name,
-								nameLocation: 'right',
-							}
-					}))
-                ]
+                imageSrc: ''
 			}
 		},
 
-		mounted() {
 
+
+		mounted() {
             this.selectCategories();
         },
 
@@ -244,7 +236,6 @@
 			font-size: .875em;
 			color: #dc3545;
 		}
-
 	}
 
 </style>

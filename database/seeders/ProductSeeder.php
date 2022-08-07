@@ -87,11 +87,9 @@ class ProductSeeder extends Seeder
 
 
 		$count = count($data);
-		$code = 1000001;
 
 		for($i = 0; $i < $count; $i++)
 		{
-			$data[$i]['code'] = $code++;
 			$data[$i]['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
 			$data[$i]['updated_at'] = $data[$i]['created_at'];
 //			$data[$i]['image'] = 'http://internet-shop.tmweb.ru/storage/products/iphone_x.jpg';

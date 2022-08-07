@@ -11,23 +11,18 @@
 			<img class="img-fluid" :src="product.image">
 			<div class="caption">
 				<h3>
-					<Link :href="route('category_slug.product_code', [categorySlug, product.code])">
+					<Link :href="route('products.category.product.show', [categorySlug, product.id])">
 						{{ product.name }}
 					</Link>
 				</h3>
-<!--				<h4 v-if="product.categories">-->
-<!--					<Link :href="route('category_slug', product.categories[0].slug)">-->
-<!--						{{ product.categories[0].name }}-->
-<!--					</Link>-->
-<!--				</h4>-->
 				<div style="margin-bottom: 5px">
 					{{ product.price }} руб.
 				</div>
 				<h5>
-					<form v-if="cartCollection[product.code]" @submit.prevent="cart">
+					<form v-if="cartCollection[product.id]" @submit.prevent="cart">
 						<button type="submit" class="btn btn-primary" role="button">В корзинe</button>
 					</form>
-					<form v-else @submit.prevent="addToCart(categorySlug, product.code)">
+					<form v-else @submit.prevent="addToCart(categorySlug, product.id)">
 <!--						<input type="number" name="quantity" value="1" min="1" max="9000">-->
 						<button type="submit" class="btn btn-success" role="button">В корзинy</button>
 					</form>
@@ -41,7 +36,7 @@
 
 <script>
 
-    import {cartMixin} from "@/mixins";
+    import {cartMixin} from "@/Mixins/cart-mixin";
 
     export default {
 
@@ -52,12 +47,6 @@
 			categorySlug: String,
 		},
 
-
-        methods: {
-            // getCartForm(event) {
-            //     return new FormData(event.currentTarget);
-            // }
-		},
     }
 </script>
 

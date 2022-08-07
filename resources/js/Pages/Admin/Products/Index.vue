@@ -24,7 +24,7 @@
 								<thead>
 									<tr>
 										<th>
-											Код
+											Id
 										</th>
 										<th style="width: 15%">
 											Название
@@ -45,7 +45,7 @@
 								<tbody>
 									<tr v-for="product in products.data" :key="product.id">
 										<td>
-											{{ product.code }}
+											{{ product.id }}
 										</td>
 										<td>
 											{{ product.name }}
@@ -62,7 +62,7 @@
 											<img class="img-size" :src="product.image">
 										</td>
 										<td class="project-actions text-right">
-											<Link class="btn btn-info btn-sm" :href="route('dashboard.products.product_code.edit', product.code)">
+											<Link class="btn btn-info btn-sm" :href="route('dashboard.products.product.edit', product.id)">
 												<i class="fas fa-pencil-alt">
 												</i>
 												Редактировать
@@ -78,7 +78,7 @@
 							</table>
 						</div>
 					</div>
-					<pagination class="pg-style" :links="products.links"></pagination>
+					<pagination class="pagination" :products="products"></pagination>
 				</div>
 			</div>
 		</div>
@@ -121,7 +121,7 @@
 			height: 100px;
 		}
 
-		.pg-style {
+		.pagination {
 			margin-top: 1.5rem;
 		}
 	}

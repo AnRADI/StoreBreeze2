@@ -36,14 +36,14 @@ class Admin
 			}
             if ($authGuardUser->hasRole('guest')) {
 
+				$request->session()->flash('message419', 'Сессия истекла');
+
 				if ($request->inertia()) {
 
-					$request->session()->flash('message419', 'Сессия истекла');
-
-					return Inertia::location(route('login'));
+					return Inertia::location(route('login.create'));
 				}
 				else
-					return redirect()->route('login');
+					return redirect()->route('login.create');
             }
         }
 

@@ -12,7 +12,7 @@ import { createApp, h } from 'vue';
 import { App as InertiaApp, plugin as InertiaPlugin } from '@inertiajs/inertia-vue3';
 import { setLogLevel } from 'webpack/hot/log';
 import { store } from './store';
-import { appMixin } from "@/mixins";
+import { appMixin } from "@/Mixins/app-mixin";
 
 
 // ------- Clear console --------

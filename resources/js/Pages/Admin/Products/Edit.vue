@@ -41,20 +41,20 @@
 										<select id="selectCategories" multiple="multiple" class="custom-select categories" style="width: 100%;">
 											<option v-for="category in categories" :value="category.id" :key="category.id">{{ category.name }}</option>
 										</select>
-										<div class="errors" v-if="form.errors.categories_id">{{ form.errors.categories_id }}</div>
+										<div class="errors" v-if="form.errors.category_ids">{{ form.errors.category_ids }}</div>
 									</div>
 									<div class="form-group">
-										<label>Цена</label>
-										<input v-model="form.price" type="number" class="price form-control" step="0.01" min="1" max="1000000000">
-										<div class="errors" v-if="form.errors.price">{{ form.errors.price }}</div>
+										<text-input class="text-input" type="number"
+													v-model="form.price" :label="{ text: 'Цена' }" :input="{ class: 'price' }"
+													:error="form.errors.price" step="0.01" />
 									</div>
 									<div class="form-group">
 										<p class="labels">Метки</p>
-										<checkbox-input v-for="(label, index) in labels" :key="label.id"
-												  :value="label.name" v-model="form.label_names"
-												  :checkbox-input="checkboxInputs[index]"
+										<checkbox-input v-for="(label, i) in labels" :key="label.id"
+														:value="label.id" v-model="form.label_ids"
+														:label="{ name: this.labels[i].name, nameLocation: 'right'}"
 										/>
-										<div class="errors" v-if="form.errors.label_names">{{ form.errors.label_names }}</div>
+										<array-errors class="array-errors" array-name="label_ids" :errors="form.errors" />
 									</div>
 								</div>
 								<div class="card-footer">
@@ -92,20 +92,24 @@
     import AdminLayout from "@/Layouts/AdminLayout";
     import SuccessOrFailed from "@/Components/SuccessOrFailed";
     import CheckboxInput from '@/Components/Checkbox';
+    import ArrayErrors from "@/Components/ArrayErrors";
+    import TextInput from "@/Components/Input";
 
     export default {
 
         components: {
             SuccessOrFailed,
 			AdminLayout,
-			CheckboxInput
+			CheckboxInput,
+			ArrayErrors,
+			TextInput
         },
 
 		props: {
             categories: Array,
             flash: Object,
 			product: Object,
-            labels: Array
+            labels: Array,
 		},
 
 		data() {
@@ -115,26 +119,18 @@
 					id: this.product.id,
 					name: this.product.name,
 					description: this.product.description,
-					category_ids: [],
+					category_ids: this.product.category_ids,
+                    label_ids: this.product.label_ids,
 					price: this.product.price,
-                    label_names: this.product.label_names,
-					image: null
+					image: undefined,
 				}),
                 imageSrc: this.product.image,
-                checkboxInputs: [
-                    ...this.labels.map((v, i) => ({
-                        label: {
-                            name: this.labels[i].name,
-                            nameLocation: 'right',
-                        }
-                    }))
-                ]
 			}
 		},
 
-		mounted() {
 
-            this.selectedCategories();
+        mounted() {
+
             this.selectCategories();
         },
 
@@ -167,19 +163,15 @@
             },
 
             submitEditProduct() {
-
-                this.form.post(route('dashboard.products.product_code.update', this.product.code));
-			},
-
-			selectedCategories() {
-
-                this.form.category_ids = this.product.category_ids;
-                this.selectClass.val(this.product.category_ids).trigger('change');
+                this.form.post(route('dashboard.products.product.update', this.product.id));
 			},
 
             selectCategories() {
 
                 this.selectClass.select2();
+
+                this.selectClass.val(this.product.category_ids).trigger('change');
+
 
                 this.selectClass.on('select2:select', (e) => {
 

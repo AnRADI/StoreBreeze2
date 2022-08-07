@@ -11,10 +11,7 @@
 				<h1> {{ category.name }} </h1>
 				<p> {{ category.description }} </p>
 
-				<Filter :url="route('category_slug', category.slug)"
-						:labels="labels"
-						:filter-request="filterRequest">
-				</Filter>
+				<Filter :url="route('categories.category.show', category.slug)" :labels="labels"></Filter>
 
 				<div class="row">
 					<product-card
@@ -24,7 +21,7 @@
 				</div>
 			</div>
 
-			<pagination class="pg-style" :links="category.products.links"></pagination>
+			<pagination class="pagination" :products="category.products"></pagination>
 		</div>
 
 	</div>
@@ -50,7 +47,6 @@
         props: {
             category: Object,
             labels: Array,
-            filterRequest: Object,
         },
 
     }
@@ -63,8 +59,7 @@
 
 		// Pagination
 
-		.pg-style {
-			display: flex;
+		.pagination {
 			justify-content: center;
 			margin-bottom: 1.5rem;
 		}

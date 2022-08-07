@@ -4,12 +4,8 @@ namespace App\Http\Controllers\Shop;
 
 use App\Models\Category;
 use App\Models\Product;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Controller;
-use Cart;
 
 
 class ProductController extends Controller
@@ -22,17 +18,17 @@ class ProductController extends Controller
 	}
 
 
-	// ---------- /{category_slug}/{product_slug} -----------
+	// ---------- /products/{category_slug}/{product} -----------
 
-	public function index($categorySlug, $productCode)
-	{
-//		$product = Cache::rememberForever(request()->path(), fn() =>
+	public function show($category, $product) {
+
+
+		// ------ Find product->categories -------
+
 		$product =	$this->product
-				->firstProductCategoriesCP($categorySlug, $productCode);
-//		);
+				->firstProductCategoriesCP($category, $product);
 
-
-		if(empty($product && $product->categories->count() != 0)) abort(404);
+		if(empty($product && $product->categories->count())) abort(404);
 
 
 		return Inertia::render('Shop/Product', [

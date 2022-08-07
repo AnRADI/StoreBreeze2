@@ -22,21 +22,23 @@ class CartController extends Controller
 
 	// ---------- /cart -----------
 
-	public function cart()
-	{
-		$cartCollection = Cart::get();
+//	public function cart() {
+//
+//
+//		$cartCollection = Cart::get();
+//
+//
+//		return $cartCollection;
+//	}
 
-		return $cartCollection;
-	}
+
+	public function addToCart(Request $request, $category, $product) {
 
 
-	public function addToCart($categorySlug, $productCode, Request $request)
-	{
-		$product = Cache::rememberForever($request->path(), fn() =>
-			$this->product
-				->firstProductCategoriesCTP($categorySlug, $productCode)
-		);
+		// ------ Find product->categories -------
 
+		$product = $this->product
+				->firstProductCategoriesCTP($category, $product);
 
 		if(empty($product)) abort(404);
 
@@ -48,10 +50,12 @@ class CartController extends Controller
 	}
 
 
-	public function removeProductCart($productCode, Request $request)
-	{
-		Cart::remove($productCode, $request);
-
-		return redirect()->route('cart');
-	}
+//	public function removeProductCart($productCode, Request $request) {
+//
+//
+//		Cart::remove($productCode, $request);
+//
+//
+//		return redirect()->route('cart');
+//	}
 }

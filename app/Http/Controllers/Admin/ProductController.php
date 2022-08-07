@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\ProductRequest;
 use App\Models\Label;
 use App\Models\Product;
 use App\Models\Category;
+use App\Services\Uploader\ImageUploader;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 
@@ -15,8 +16,8 @@ class ProductController extends Controller
 {
 
     public $product,
-		$label,
-		$category;
+		   $label,
+		   $category;
 
 
     public function __construct() {
@@ -32,8 +33,12 @@ class ProductController extends Controller
 
 	public function index() {
 
+
+		// ------ Paginate products->categories -------
+
 		$products = $this->product
 			->paginateProductsCategoriesDP();
+
 
 		return Inertia::render('Admin/Products/Index', [
 			'products' => $products,
@@ -43,8 +48,14 @@ class ProductController extends Controller
 
 	public function create() {
 
+
+		// ------ Get categories -------
+
     	$categories = $this->category
 			->getCategoriesDPC();
+
+
+		// ------ Get labels -------
 
 		$labels = $this->label
 			->getLabelsDPC();
@@ -57,88 +68,58 @@ class ProductController extends Controller
 	}
 
 
-	public function store(ProductRequest $request) {
+	public function store(ProductRequest $productRequest) {
 
-		$form = $request->validated();
-
-
-		// ------ Label validation -------
-
-		$labelIds = [];
-
-		if(isset($form['label_names'])) {
-
-			$labelIds =
-				$request->labelValidation($form['label_names']);
-
-			if(empty($labelIds))
-				return back()->withErrors(['label_names' => __("There is no such label or labels.")]);
-		}
+		$form = collect($productRequest->validated());
 
 
-		// ------ Category validation -------
+		// ------ Image Upload -------
 
-		$categoryIds =
-			$request->categoryValidation($form['category_ids']);
+		$imageUploader = new ImageUploader();
 
-		if(empty($categoryIds))
-			return back()->withErrors(['category_ids' => __("There is no such category or categories.")]);
-
-
-		// ------ Upload image -------
-
-		$form['image'] = $request->saveImage();
-
-
-		// ------ Add code product -------
-
-		$form['code'] = $request->newCodeProduct();
+		$form['image'] =
+			$imageUploader->upload($form['image']);
 
 
 		// ------ Create product -------
 
     	$product = $this->product
-			->create($form);
+			->create($form->except(['category_ids', 'label_ids'])->toArray());
 
-
-    	$product->categories()->attach($categoryIds);
-
-    	if(isset($labelIds))
-    		$product->labels()->attach($labelIds);
-
-
-		// ------ Cache -------
-
-		Cache::forget('/');
-
-		foreach ($product->categories as $category) {
-			Cache::forget($category->slug);
-		}
+		$product->categories()->attach($productRequest->category_ids);
+		$product->labels()->attach($productRequest->label_ids);
 
 
     	return back()->with('success', __("Product added"));
 	}
 
 
-	public function edit($productCode) {
+	public function edit($product) {
+
+
+		// ------ Get categories -------
 
 		$categories = $this->category
 			->getCategoriesDPCE();
 
-		$product = $this->product
-			->firstProductDPCE($productCode);
 
-		$product->category_ids = $product->categories()
+		// ------ First product -------
+
+		$product = $this->product
+			->firstProductDPCE($product);
+
+		$product->category_ids = $product->categories() // product->category_ids(pluck, map)
 			->pluck('id')
 			->map(fn($item) => strval($item));
 
+		$product->label_ids = $product->labels() // product->label_ids(pluck)
+				->pluck('id');
+
+
+		// ------ Get labels -------
 
 		$labels = $this->label
 			->getLabelsDPCE();
-
-		$product->label_names = $product->labels()
-			->pluck('name')
-			->toArray();
 
 
 		return Inertia::render('Admin/Products/Edit', [
@@ -149,71 +130,31 @@ class ProductController extends Controller
 	}
 
 
-	public function update($productCode, ProductRequest $request) {
+	public function update(ProductRequest $productRequest, Product $product) {
 
-		$form = $request->validated();
-
-
-		// ------ Label validation -------
-
-		$labelIds = [];
-
-		if(isset($form['label_names'])) {
-
-			$labelIds =
-				$request->labelValidation($form['label_names']);
-
-			if(empty($labelIds))
-				return back()->withErrors(['label_names' => __("There is no such label or labels.")]);
-		}
+		$form = collect($productRequest->validated());
 
 
-		// ------ Validation categories -------
-
-		$categoryIds =
-			$request->categoryValidation($form['category_ids']);
-
-		if(empty($categoryIds))
-			return back()->withErrors(['category_ids' => __("There is no such category or categories.")]);
-
-
-		// ------ Upload image -------
+		// ------ Image Upload -------
 
 		if(isset($form['image'])) {
-			$form['image'] = $request->saveImage();
+
+			$imageUploader = new ImageUploader();
+			$form['image'] = $imageUploader->upload($form['image']);
 		}
-		else {
-			unset($form['image']);
-		}
+
+
+		// ------ Update updated_at -------
+
+		$form['updated_at'] = date("Y-m-d H:i:s");
 
 
 		// ------ Update product -------
 
-		$product = $this->product
-			->where('code', $productCode)
-			->first();
+		$product->update($form->except(['category_ids', 'label_ids'])->toArray());
 
-		$form['updated_at'] = date("Y-m-d H:i:s");
-
-		$product->update($form);
-
-
-		$product->categories()->detach();
-		$product->categories()->attach($categoryIds);
-
-
-		$product->labels()->detach();
-		if(isset($labelIds))
-			$product->labels()->attach($labelIds);
-
-
-		// ------ Cache -------
-
-		Cache::forget('/');
-
-		foreach ($product->categories as $category) {
-			Cache::forget($category->slug);
-		}
+		$product->categories()->sync($productRequest->category_ids);
+		$product->labels()->sync($productRequest->label_ids);
 
 
 		return redirect()->route('dashboard.products')->with('success', 'product updated');

@@ -2,17 +2,17 @@
 	<form class="filter row">
 
 		<div class="form-group">
-			<text-input class="text-input" v-model="price.price_from" v-bind="textInput1" />
-			<text-input class="text-input" v-model="price.price_to" v-bind="textInput2" />
+			<text-input class="text-input" v-model="price.price_from" :label="{ text: 'Цена от' }" :input="{ class: 'input' }" :error="filterForm.errors.price_from" />
+			<text-input class="text-input" v-model="price.price_to" :label="{ text: 'до' }" :input="{ class: 'input' }" />
 			<button @click.prevent="storeFilter" class="btn btn-primary button-ok">OK</button>
 		</div>
 		<div class="form-group">
-			<checkbox-input v-for="(label, index) in labels" :key="label.id"
-							:value="label.name" v-model="filterForm.label_names"
-							:checkbox-input="checkboxInputs[index]"
+			<checkbox-input v-for="(label, i) in labels" :key="label.id"
+							:value="label.id" v-model="filterForm.label_ids"
+							:label="{ name: this.labels[i].name, nameLocation: 'right'}"
 							class="checkbox-input"
 			/>
-			<div class="errors" v-if="filterForm.errors.label_names">{{ filterForm.errors.label_names }}</div>
+			<array-errors class="array-errors errors" array-name="label_ids" :errors="filterForm.errors" />
 		</div>
 
 	</form>
@@ -22,18 +22,19 @@
 
     import CheckboxInput from '@/Components/Checkbox';
     import TextInput from "@/Components/Input";
+    import ArrayErrors from "@/Components/ArrayErrors";
 
     export default {
 
         components: {
             CheckboxInput,
-            TextInput
+            TextInput,
+			ArrayErrors
         },
 
         props: {
             url: String,
             labels: Array,
-            filterRequest: Object,
         },
 
         data() {
@@ -41,50 +42,15 @@
 
                 // form data
                 filterForm: this.$inertia.form({
-                    label_names: this.filterRequest.label_names ?? [],
+                    label_ids: [],
                 }),
 
                 price: {
-                    price_from: this.filterRequest.price_from,
-                    price_to: this.filterRequest.price_to
+                    price_from: undefined,
+                    price_to: undefined
                 },
                 // ---------
-
-
-				textInput1: {
-					label: {
-						text: 'Цена от'
-					},
-                    input: {
-                        class: 'input'
-                    }
-				},
-
-                textInput2: {
-                    label: {
-                        text: 'до'
-                    },
-                    input: {
-                        class: 'input'
-                    }
-                },
-
-
-                checkboxInputs: [
-                    ...this.labels.map((v, i) => ({
-                        label: {
-                            name: this.labels[i].name,
-                            nameLocation: 'right',
-                        }
-                    }))
-                ]
             }
-        },
-
-        mounted() {
-
-            // errors(for method get)
-            this.filterForm.errors = this.$page.props.errors;
         },
 
         methods: {
@@ -98,19 +64,15 @@
 
                 this.filterForm.get(this.url, {
 
+					preserveState: true,
                     preserveScroll: true,
                 });
             },
         },
 
-        computed: {
-            watchFilterForm() {
-                return this.filterForm.data();
-            },
-        },
 
         watch: {
-            watchFilterForm: {
+            'filterForm.label_ids': {
                 handler: 'storeFilter',
                 deep: true
             },
@@ -157,6 +119,12 @@
 			width: 100px;
 			margin-left: 0.5rem;
 			height: 2rem;
+		}
+
+		.errors {
+			margin-top: .25rem;
+			font-size: .875em;
+			color: #dc3545;
 		}
 	}
 </style>

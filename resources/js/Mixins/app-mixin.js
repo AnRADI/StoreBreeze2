@@ -1,13 +1,14 @@
 
 
 import { mapMutations, mapState } from "vuex";
-import { store } from './store';
+import { store } from '@/store';
 import { Link, Head } from '@inertiajs/inertia-vue3';
 
 
 // ------- App mixin --------
 
 export const appMixin = {
+
 
     components: {
         Link, Head
@@ -54,35 +55,4 @@ export const appMixin = {
 
         route
     },
-};
-
-
-// ------- Cart mixin --------
-
-export const cartMixin = {
-
-    computed: {
-
-        cartCollection() {
-            return this.$page.props.cartCollection;
-        }
-    },
-
-    methods: {
-
-        cart() {
-
-            this.cartM();
-        },
-
-        addToCart(categorySlug, productCode, cartForm = { quantity: 1 }) {
-
-            this.addToCartM({
-                categorySlug: categorySlug,
-                productCode: productCode,
-                cartForm: cartForm
-            });
-        }
-    }
-
 };

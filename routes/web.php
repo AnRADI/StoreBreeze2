@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Shop\WelcomeController;
 use App\Http\Controllers\Shop\CategoryController;
-use App\Http\Controllers\Shop\CategoriesController;
 use App\Http\Controllers\Shop\ProductController;
 use App\Http\Controllers\Shop\CartController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -31,11 +30,11 @@ Route::middleware(['admin'])->group(function () {
 	Route::get('/dashboard/products/create', [AdminProductController::class, 'create'])
 			->name('dashboard.products.create');
 
-	Route::get('/dashboard/products/{product_code}/edit', [AdminProductController::class, 'edit'])
-		->name('dashboard.products.product_code.edit');
+	Route::get('/dashboard/products/{product}/edit', [AdminProductController::class, 'edit'])
+		->name('dashboard.products.product.edit');
 
-	Route::patch('/dashboard/products/{product_code}', [AdminProductController::class, 'update'])
-		->name('dashboard.products.product_code.update');
+	Route::patch('/dashboard/products/{product}', [AdminProductController::class, 'update'])
+		->name('dashboard.products.product.update');
 
 	Route::post('/dashboard/products', [AdminProductController::class, 'store'])
 		->name('dashboard.products.store');
@@ -56,6 +55,7 @@ Route::middleware(['guest'])->group(function () {
 
 	Route::post('/register', [RegisteredUserController::class, 'store'])
 		->name('register.store');
+
 
 	// -------- /login ----------
 
@@ -88,43 +88,34 @@ Route::middleware(['guest_or_user'])->group(function () {
 	Route::get('/', [WelcomeController::class, 'index'])
 		->name('welcome');
 
-//	Route::get('/zippo', function () {
-//		return Inertia::render('Shop/Zippo');
-//	});
+
+
 //	Route::patch('/language/{language_locale}', [WelcomeController::class, 'language'])
 //		->name('language.language_locale');
 
 
 	// --------/cart ----------
 
-	Route::get('/cart', [CartController::class, 'cart'])
-		->name('cart');
+//	Route::get('/cart', [CartController::class, 'cart'])
+//		->name('cart');
 
-
-	Route::patch('/cart/{category_slug}/{product_code}', [CartController::class, 'addToCart'])
-		->name('cart.category_slug.product_code.update');
-
-
-//	Route::delete('/remove/{product}/cart', [CartController::class, 'removeProductCart'])
-//		->name('remove.product.cart');
+	Route::patch('/cart/{category_slug}/{product}', [CartController::class, 'addToCart'])
+		->name('cart.category.product.update');
 
 
 	// -------- /categories ----------
 
-	Route::get('/categories', [CategoriesController::class, 'index'])
+	Route::get('/categories', [CategoryController::class, 'index'])
 		->name('categories');
 
-
-	// -------- /{category_slug} ----------
-
-	Route::get('/{category_slug}', [CategoryController::class, 'index'])
-		->name('category_slug');
+	Route::get('/categories/{category_slug}', [CategoryController::class, 'show'])
+		->name('categories.category.show');
 
 
-	// -------- /{category_slug}/{product_code} ----------
+	// -------- /products/{category_slug}/{product} ----------
 
-	Route::get('/{category_slug}/{product_code}', [ProductController::class, 'index'])
-		->name('category_slug.product_code');
+	Route::get('products/{category_slug}/{product}', [ProductController::class, 'show'])
+		->name('products.category.product.show');
 });
 
 

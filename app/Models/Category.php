@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\Filterer\Filterer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,6 +17,7 @@ class Category extends Model
 		'_token',
 	];
 
+	protected $hidden = ['pivot'];
 
 	// ========== RELATIONSHIPS ============
 
@@ -26,24 +28,6 @@ class Category extends Model
 
 
 	// =========== METHODS =============
-
-	public function firstCategoryC($categorySlug)
-	{
-		$categoryColumns = [
-			'id',
-			'name',
-			'slug',
-			'description'
-		];
-
-		$category = $this
-			->select($categoryColumns)
-			->where('slug', $categorySlug)
-			->first();
-
-		return $category;
-	}
-
 
 	public function getCategoriesC()
 	{
@@ -59,6 +43,40 @@ class Category extends Model
 			->get();
 
 		return $categories;
+	}
+
+
+	public function firstCategoryProductsLabelsC(Filterer $filterer, $category) {
+
+		$category = $this
+			->select([
+				'id',
+				'name',
+				'slug',
+				'description'
+			])
+			->where('slug', $category)
+			->first();
+
+
+		if($category == null) return;
+
+
+		$category->setRelation('products', $category->products()
+			->filters($filterer)
+			->select([
+				'id',
+				'name',
+				'price',
+				'image'
+			])
+			->orderBy('updated_at', 'desc')
+			->with(['labels:id,name,class'])
+			->paginate(6)
+			->withQueryString());
+
+
+		return $category;
 	}
 
 

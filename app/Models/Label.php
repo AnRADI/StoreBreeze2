@@ -14,6 +14,7 @@ class Label extends Model
 		'_token',
 	];
 
+	protected $hidden = ['pivot'];
 
 	// =========== METHODS =============
 

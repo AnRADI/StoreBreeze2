@@ -2,20 +2,17 @@
 
 namespace App\Http\Controllers\Shop;
 
-
-use App\Http\Requests\Shop\WelcomeRequest;
+use App\Http\Requests\Shop\ProductRequest;
 use App\Models\Label;
 use App\Models\Product;
-use Illuminate\Support\Facades\Cache;
+use App\Services\Filterer\ProductFilterer;
 use Inertia\Inertia;
 use App\Http\Controllers\Controller;
 
 
-
-
-
 class WelcomeController extends Controller
 {
+
 	public $product, $label;
 
 	public function __construct() {
@@ -27,46 +24,28 @@ class WelcomeController extends Controller
 
 	// ---------- / -----------
 
-	public function index(WelcomeRequest $request) {
+	public function index(ProductRequest $productRequest) {
 
-		$filterRequest = $request->validated();
 
-//		Cache::flush();
-//		session()->flush();
+		// ------ Get labels -------
 
-		//$products = Cache::rememberForever(request()->path(), fn() =>
-//		$this->product
-//				->getProductsCategoriesAndLabelsW();
-		//);
 		$labels = $this->label->getLabelsW();
 
 
-		$productsQuery = $this->product->query();
+		// ------ Product filter -------
 
-		if(isset($filterRequest['price_from']))
-			$productsQuery->where('price', '>=', $filterRequest['price_from']);
-
-		if(isset($filterRequest['price_to']))
-			$productsQuery->where('price', '<=', $filterRequest['price_to']);
-
-		if(isset($filterRequest['label_names'])) {
-
-			$hasValidationLabels =
-				$request->labelsValidation($labels, $filterRequest['label_names'], $productsQuery);
-
-			if(empty($hasValidationLabels))
-				return back()->withErrors(['label_names' => 'Фильтр сломан']);
-		}
+		$productFilterer = new ProductFilterer($productRequest);
 
 
-		$products =	$this->product
-			->paginateProductsCategoriesAndLabelsW($productsQuery);
+		// ------ Paginate products(filter)->categories(take) -------
+		// ------ Paginate products(filter)->labels -------
+
+		$products = $this->product->paginateProductsCategoriesAndLabelsW($productFilterer);
 
 
 		return Inertia::render('Shop/Welcome', [
 			'products' => $products,
 			'labels' => $labels,
-			'filterRequest' => $filterRequest
 		]);
 	}
 

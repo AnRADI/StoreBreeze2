@@ -6,7 +6,7 @@
 		</label>
 
 		<input :id="id" class="form-control"
-			   v-bind="{ ...$attrs, class: null, ...input }"
+			   v-bind="{ ...$attrs, class: input.class }"
 			   :value="modelValue" @input="$emit('update:modelValue', proxyValue($event))">
 
 		<div class="errors" v-if="error">{{ error }}</div>
@@ -23,7 +23,10 @@
 
         props: {
             modelValue: [String,Number],
-			input: Object,
+			input: {
+                type: Object,
+				default: {}
+			},
 			label: Object,
 			error: String
 		},
@@ -52,6 +55,7 @@
 <style lang="scss">
 
 	.text-input {
+
 
 		.errors {
 			margin-top: .25rem;

@@ -29,15 +29,15 @@ class CartCollection
 		if(empty($cartCollection)) $cartCollection = new CollectionEloquent;
 
 
-		if(empty($cartCollection[$product->code])) {
+		if(empty($cartCollection[$product->id])) {
 
-			$cartCollection[$product->code] = $product;
+			$cartCollection[$product->id] = $product;
 
-			$cartCollection[$product->code]->quantity = $request->quantity;
+			$cartCollection[$product->id]->quantity = $request->quantity;
 		}
 		else {
 
-			$cartCollection[$product->code]->quantity = $request->quantity;
+			$cartCollection[$product->id]->quantity = $request->quantity;
 		}
 
 

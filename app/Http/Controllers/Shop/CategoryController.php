@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Shop;
 
-use App\Http\Requests\Shop\WelcomeRequest;
+use App\Http\Requests\Shop\ProductRequest;
+use App\Models\Cat;
 use App\Models\Category;
 use App\Models\Label;
 use App\Models\Product;
-use Illuminate\Support\Facades\Cache;
+use App\Services\Filterer\ProductFilterer;
 use Inertia\Inertia;
 use App\Http\Controllers\Controller;
 
@@ -24,56 +25,52 @@ class CategoryController extends Controller
 	}
 
 
-	// ---------- /{category_slug} -----------
+	// ---------- /categories -----------
 
-	public function index($categorySlug, WelcomeRequest $request) {
+	public function index() {
 
-		$filterRequest = $request->validated();
 
+		// ------ Get categories -------
+
+		$categories = $this->category
+			->getCategoriesC();
+
+
+		$cats = Cat::paginate(4);
+
+
+		return Inertia::render('Shop/Categories', [
+			'categories' => $categories,
+			'cats' => $cats
+		]);
+	}
+
+
+	public function show(ProductRequest $productRequest, $category) {
+
+
+		// ------ Get labels -------
 
 		$labels = $this->label->getLabelsC();
 
-		$category = $this->category
-			->firstCategoryC($categorySlug);
 
-		$productsQuery = $this->product->query();
+		// ------ Product filter -------
 
-
-		if(isset($filterRequest['price_from']))
-			$productsQuery->where('price', '>=', $filterRequest['price_from']);
-
-		if(isset($filterRequest['price_to']))
-			$productsQuery->where('price', '<=', $filterRequest['price_to']);
+		$productFilterer = new ProductFilterer($productRequest);
 
 
-		if(isset($filterRequest['label_names'])) {
+		// ------ First category->products(filter,paginate)->labels -------
 
-			$hasValidationLabels =
-				$request->labelsValidation($labels, $filterRequest['label_names'], $productsQuery);
-
-			if(empty($hasValidationLabels))
-				return back()->withErrors(['label_names' => 'Фильтр сломан']);
-		}
-
-
-		$products =	$this->product
-			->paginateProductsCategoriesAndLabelsC($productsQuery);
-
-		$category->setRelation('products', $products);
-
-
-//		$category = Cache::rememberForever(request()->path(), fn() =>
-
-//		);
-
+		$category =	$this->category
+			->firstCategoryProductsLabelsC($productFilterer, $category);
 
 		if(empty($category)) abort(404);
+
 
 
 		return Inertia::render('Shop/Category', [
 			'category' => $category,
 			'labels' => $labels,
-			'filterRequest' => $filterRequest
 		]);
 	}
 }

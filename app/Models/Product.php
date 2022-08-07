@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Services\Filterer\Filterer;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,6 +18,8 @@ class Product extends Model
 		'_token',
 	];
 
+
+	protected $hidden = ['pivot'];
 
 
 	// ========== RELATIONSHIPS ============
@@ -34,23 +38,28 @@ class Product extends Model
 	// =========== METHODS =============
 
 
-	public function paginateProductsCategoriesAndLabelsW($productsQuery) {
+	public function scopeFilters(Builder $builder, Filterer $filterer) {
+
+    	return $filterer->filters($builder);
+	}
+
+
+	public function paginateProductsCategoriesAndLabelsW(Filterer $filterer) {
 
 		$columnsProducts = [
 			'id',
 			'name',
 			'price',
-			'code',
-			'image'
+			'image',
 		];
 
 
-		$products = $productsQuery
+		$products = $this
+			->filters($filterer)
 			->select($columnsProducts)
 			->orderBy('updated_at', 'desc')
 			->with(['categories:id,name,slug', 'labels:id,name,class'])
-			->paginate(6)
-			->withQueryString();
+			->paginate(6)->withQueryString();
 
 
 		$products->each(function ($product) {
@@ -61,33 +70,11 @@ class Product extends Model
 		return $products;
 	}
 
-	public function paginateProductsCategoriesAndLabelsC($productsQuery) {
 
-		$columnsProducts = [
-			'id',
-			'name',
-			'price',
-			'code',
-			'image'
-		];
-
-
-		$products = $productsQuery
-			->select($columnsProducts)
-			->orderBy('updated_at', 'desc')
-			->with(['labels:id,name,class'])
-			->paginate(6)
-			->withQueryString();
-
-
-		return $products;
-	}
-
-	public function firstProductCategoriesCP($categorySlug, $productCode) {
+	public function firstProductCategoriesCP($category, $product) {
 
 		$columnsProduct = [
 			'id',
-			'code',
 			'name',
 			'image',
 			'price',
@@ -102,27 +89,28 @@ class Product extends Model
 
 		$product = $this
 			->select($columnsProduct)
-			->where('code', $productCode)
-			->with(['categories' => function($query) use($categorySlug, $columnsCategories) {
+			->with(['categories' => function($query) use($category, $columnsCategories) {
 				$query
 					->select($columnsCategories)
-					->where('slug', $categorySlug);
+					->where('slug', $category);
 			}])
-			->first();
+			->find($product);
 
 
 		return $product;
 	}
 
 
-	public function firstProductCategoriesCTP($categorySlug, $productCode) {
+
+
+
+	public function firstProductCategoriesCTP($category, $product) {
 
 		$columnsProduct = [
 			'id',
 			'name',
 			'price',
 			'image',
-			'code'
 		];
 
 		$columnsCategories = [
@@ -134,13 +122,12 @@ class Product extends Model
 
 		$product = $this
 			->select($columnsProduct)
-			->where('code', $productCode)
-			->with(['categories' => function($query) use($categorySlug, $columnsCategories) {
+			->with(['categories' => function($query) use($category, $columnsCategories) {
 				$query
 					->select($columnsCategories)
-					->where('slug', $categorySlug);
+					->where('slug', $category);
 			}])
-			->first();
+			->find($product);
 
 
 		return $product;
@@ -154,7 +141,6 @@ class Product extends Model
 			'name',
 			'price',
 			'image',
-			'code'
 		];
 
     	$products = $this
@@ -167,12 +153,11 @@ class Product extends Model
 	}
 
 
-	public function firstProductDPCE($productCode) {
+	public function firstProductDPCE($product) {
 
 		$columnsProduct = [
 			'id',
 			'name',
-			'code',
 			'description',
 			'price',
 			'image',
@@ -180,8 +165,7 @@ class Product extends Model
 
 		$product = $this
 			->select($columnsProduct)
-			->where('code', $productCode)
-			->first();
+			->find($product);
 
 
 		return $product;

@@ -9,10 +9,7 @@
 
 			<h1>Все товары</h1>
 
-			<Filter :url="route('welcome')"
-					:labels="labels"
-					:filter-request="filterRequest">
-			</Filter>
+			<Filter :url="route('welcome')" :labels="labels"></Filter>
 
 			<div class="row">
 				<product-card
@@ -21,7 +18,7 @@
 				/>
 			</div>
 
-			<pagination class="pg-style" :links="products.links"></pagination>
+			<pagination class="pagination" :products="products"></pagination>
 		</div>
 
 	</div>
@@ -44,10 +41,19 @@
             ProductCard,
         },
 
+		mounted() {
+
+
+
+			//let ll = ['dobi', 'koBi', 'milo'];
+            // ll.filter((e) => /bi/i.test(e))
+			//console.log("my@gmail.com @ prackikanrad@gmail.com.ua".match(/([-\w]+\.)+(com)/g));
+        },
+
         props: {
             products: [Object, Array],
 			labels: Array,
-			filterRequest: Object,
+            requestItems: Object,
         },
     }
 </script>
@@ -59,8 +65,7 @@
 
 		// Pagination
 
-		.pg-style {
-			display: flex;
+		.pagination {
 			justify-content: center;
 			margin-bottom: 1.5rem;
 		}
