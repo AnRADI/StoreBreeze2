@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
+use Spatie\Permission\PermissionRegistrar;
 
 class PermissionSeeder extends Seeder
 {
@@ -19,21 +20,18 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-		$guestRole = Role::create(['name' => 'guest']);
+		app()[PermissionRegistrar::class]->forgetCachedPermissions();
+
 		$userRole = Role::create(['name' => 'user']);
 		$adminRole = Role::create(['name' => 'admin']);
 
-		Permission::create(['name' => 'login and register']);
+
 		Permission::create(['name' => 'logout']);
 
-		$guestRole->givePermissionTo('login and register');
+
 		$userRole->givePermissionTo('logout');
+		$adminRole->givePermissionTo('logout');
 
-
-		$guest = User::factory()
-			->create([
-				'name' => 'guest',
-			]);
 
 		$user = User::factory()
 			->create([
@@ -50,8 +48,6 @@ class PermissionSeeder extends Seeder
 			]);
 
 
-//		$zero = User::factory(2)->create(['name' => 'Pis']);
-		$guest->assignRole($guestRole);
 		$user->assignRole($userRole);
 		$admin->assignRole($adminRole);
 

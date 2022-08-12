@@ -2,41 +2,29 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\User;
-use App\Providers\RouteServiceProvider;
+use App\Traits\RoleException;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
+
 
 class Guest
 {
+	use RoleException;
     /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
-     * @param  string|null  ...$guards
      * @return mixed
      */
-    public function handle(Request $request, Closure $next, ...$guards)
+    public function handle(Request $request, Closure $next)
     {
 
-		$guards = empty($guards) ? [null] : $guards;
+		if (Auth::check()) {
 
-        foreach ($guards as $guard) {
-
-        	$authGuardUser = Auth::guard($guard)->user();
-
-			if ($authGuardUser->hasRole('user')) {
-
-				return redirect()->route(RouteServiceProvider::SHOP_HOME);
-			}
-            if ($authGuardUser->hasRole('admin')) {
-
-                return redirect()->route(RouteServiceProvider::ADMIN_HOME);
-            }
-        }
+			return $this->redirectRoles($request);
+		}
 
         return $next($request);
     }

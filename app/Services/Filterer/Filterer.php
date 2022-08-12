@@ -2,9 +2,9 @@
 
 namespace App\Services\Filterer;
 
-
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+
 
 abstract class Filterer {
 

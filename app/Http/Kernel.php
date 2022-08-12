@@ -36,8 +36,6 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-			\App\Http\Middleware\GuestLogin::class,
-			\App\Http\Middleware\LanguageLocale::class,
             \App\Http\Middleware\HandleInertiaRequests::class,
         ],
 
@@ -55,11 +53,8 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-		'admin' => \App\Http\Middleware\Admin::class,
-		'user_or_admin' => \App\Http\Middleware\UserOrAdmin::class,
 		'guest' => \App\Http\Middleware\Guest::class,
-		'guest_or_user' => \App\Http\Middleware\GuestOrUser::class,
-        //'auth' => \App\Http\Middleware\Authenticate::class,
+        'auth' => \App\Http\Middleware\Authenticate::class,
 		'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
 		'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
 		'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,

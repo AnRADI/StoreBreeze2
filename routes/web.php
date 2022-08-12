@@ -11,9 +11,45 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 
 
+// -------- / ----------
+
+Route::get('/', [WelcomeController::class, 'index'])
+	->name('welcome');
 
 
-Route::middleware(['admin'])->group(function () {
+// -------- /categories ----------
+
+Route::get('/categories', [CategoryController::class, 'index'])
+	->name('categories');
+
+Route::get('/categories/{category_slug}', [CategoryController::class, 'show'])
+	->name('categories.category.show');
+
+
+// -------- /products/{category_slug}/{product} ----------
+
+Route::get('products/{category_slug}/{product}', [ProductController::class, 'show'])
+	->name('products.category.product.show');
+
+
+// --------/cart ----------
+
+Route::patch('/cart/{category_slug}/{product}', [CartController::class, 'addToCart'])
+	->name('cart.category.product.update');
+
+
+Route::middleware(['auth', 'role:user|admin'])->group(function () {
+
+
+	// -------- /logout ----------
+
+	Route::post('/logout', [AuthenticatedSessionController::class, 'logout'])
+		->name('logout.store');
+
+});
+
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
 
 
 	// -------- /dashboard ----------
@@ -67,56 +103,6 @@ Route::middleware(['guest'])->group(function () {
 
 });
 
-
-Route::middleware(['user_or_admin'])->group(function () {
-
-
-	// -------- /logout ----------
-
-	Route::post('/logout', [AuthenticatedSessionController::class, 'logout'])
-		->name('logout.store');
-	//require __DIR__.'/auth.php';
-
-});
-
-
-Route::middleware(['guest_or_user'])->group(function () {
-
-
-	// -------- /welcome ----------
-
-	Route::get('/', [WelcomeController::class, 'index'])
-		->name('welcome');
-
-
-
-//	Route::patch('/language/{language_locale}', [WelcomeController::class, 'language'])
-//		->name('language.language_locale');
-
-
-	// --------/cart ----------
-
-//	Route::get('/cart', [CartController::class, 'cart'])
-//		->name('cart');
-
-	Route::patch('/cart/{category_slug}/{product}', [CartController::class, 'addToCart'])
-		->name('cart.category.product.update');
-
-
-	// -------- /categories ----------
-
-	Route::get('/categories', [CategoryController::class, 'index'])
-		->name('categories');
-
-	Route::get('/categories/{category_slug}', [CategoryController::class, 'show'])
-		->name('categories.category.show');
-
-
-	// -------- /products/{category_slug}/{product} ----------
-
-	Route::get('products/{category_slug}/{product}', [ProductController::class, 'show'])
-		->name('products.category.product.show');
-});
 
 
 

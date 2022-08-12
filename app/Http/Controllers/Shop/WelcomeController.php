@@ -48,16 +48,4 @@ class WelcomeController extends Controller
 			'labels' => $labels,
 		]);
 	}
-
-//	public function language($languageLocale) {
-//
-//		if(empty(in_array($languageLocale, ['en', 'es', 'ru']))) abort(404);
-//
-//		Cache::put('locale', $languageLocale);
-//
-//
-//		return back();
-//	}
-
-
 }

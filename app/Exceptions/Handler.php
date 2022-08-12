@@ -2,14 +2,15 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Auth\AuthenticationException;
+
+use App\Traits\RoleException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Support\Facades\App;
-use Inertia\Inertia;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 use Throwable;
 
 class Handler extends ExceptionHandler
 {
+	use RoleException;
     /**
      * A list of the exception types that are not reported.
      *
@@ -43,23 +44,14 @@ class Handler extends ExceptionHandler
     }
 
 
+	public function render($request, Throwable $exception) {
 
-	public function render($request, Throwable $e) {
+		if($exception instanceof UnauthorizedException) {
 
-    	$response = parent::render($request, $e);
-
-
-    	if($response->status() == 419) {
-
-    		$request->session()->flash('message419', 'Сессия истекла');
-
-			if (App::environment('local'))
-				return Inertia::location('http://praktiww.beget.tech.local:3000/login');
-			else
-				return Inertia::location('http://praktiww.beget.tech.local/login');
+			return $this->redirectRoles($request);
 		}
 
 
-		return $response;
+		return false;
 	}
 }

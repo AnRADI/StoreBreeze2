@@ -16,34 +16,16 @@
 							Категории
 						</Link>
 					</li>
-<!--					<li class="dropdown">-->
-
-<!--						<a class="dropdown-toggle ml-4 text-muted" href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
-<!--							Переключить язык-->
-<!--						</a>-->
-<!--						<div @click.prevent="language" class="dropdown-menu" aria-labelledby="dropdownMenuLink">-->
-<!--							<a class="dropdown-item text-muted" href="#">en</a>-->
-<!--							<a class="dropdown-item text-muted" href="#">ru</a>-->
-<!--						</div>-->
-<!--&lt;!&ndash;						<form @submit.prevent="languageForm.patch(route('language.languageLocale', 'ru'))">&ndash;&gt;-->
-<!--&lt;!&ndash;							<input ref="languageLocale" type="submit">&ndash;&gt;-->
-<!--&lt;!&ndash;						</form>&ndash;&gt;-->
-<!--					</li>-->
-<!--					<li>{{ __('Product added') }}</li>-->
-
 					<li>
 						<a href="#" @click.prevent="cart" class="ml-4 text-muted">Корзина</a>
 						<cart></cart>
 					</li>
-					<li v-if="can('logout')"> <!-- user -->
+					<li v-if="can('logout')">
 						<a @click.prevent="logOutForm.post(route('logout.store'))" href="#" class="ml-4 text-muted">
 							Log Out
 						</a>
-<!--						<form @submit.prevent="logOutForm.post(route('logout'))" class="ml-4">-->
-<!--							<button class="submit-log-out text-muted" type="submit">Log Out</button>-->
-<!--						</form>-->
 					</li>
-					<template v-if="can('login and register')"> <!-- guest -->
+					<template v-if="guest">
 						<li>
 							<Link :href="route('login.create')" class="ml-4 text-muted">
 								Log in
@@ -78,6 +60,10 @@
 
         computed: {
 
+            guest() {
+                return this.$page.props.guest;
+			},
+
             currentRouteName() {
                 return this.$page.props.currentRouteName;
 			}
@@ -86,7 +72,6 @@
         data() {
             return {
                 logOutForm: this.$inertia.form(),
-                languageForm: this.$inertia.form(),
             }
         },
 
@@ -95,11 +80,6 @@
 			cart() {
 
                 this.cartM();
-			},
-
-			language(e) {
-
-                this.languageForm.patch(route('language.language_locale', e.target.innerText));
 			},
 
 		}
