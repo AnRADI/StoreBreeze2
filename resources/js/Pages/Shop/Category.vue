@@ -6,7 +6,6 @@
 		</Head>
 
 		<div class="category container">
-
 			<div>
 				<h1> {{ category.name }} </h1>
 				<p> {{ category.description }} </p>

@@ -13,11 +13,11 @@ const mix = require('laravel-mix');
  */
 let production = mix.inProduction();
 
-mix.setPublicPath('public_html/');
+mix.setPublicPath('public/');
 
-mix.js('resources/js/app.js', 'public_html/js').vue()
-    .copy('resources/images', 'public_html/images')
-    // .sass('resources/sass/app.scss', 'public_html/css').options({
+mix.js('resources/js/app.js', 'public/js').vue()
+    .copy('resources/images', 'public/images')
+    // .sass('resources/sass/app.scss', 'public/css').options({
     //     processCssUrls: false
     // })
     .webpackConfig(require('./webpack.config'))
@@ -31,7 +31,7 @@ mix.js('resources/js/app.js', 'public_html/js').vue()
 
 
 if (production) {
-    mix.version(['public_html/images']);
+    mix.version(['public/images']);
     //mix.version(['public/images', 'public/Admin/**/*.{js,css,png,jpg,gif,svg}']);
 }
 

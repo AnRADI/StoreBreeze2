@@ -36,12 +36,8 @@ class CategoryController extends Controller
 			->getCategoriesC();
 
 
-		$cats = Cat::paginate(4);
-
-
 		return Inertia::render('Shop/Categories', [
 			'categories' => $categories,
-			'cats' => $cats
 		]);
 	}
 

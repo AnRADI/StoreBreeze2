@@ -6,6 +6,7 @@ use App\Http\Requests\Shop\ProductRequest;
 use App\Models\Label;
 use App\Models\Product;
 use App\Services\Filterer\ProductFilterer;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use App\Http\Controllers\Controller;
 

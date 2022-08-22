@@ -1,20 +1,10 @@
 <template>
-	<div style="text-align: right" @click="revertStr">{{line}}</div>
+	<img src="images/AllProducts/iphone_x.jpg" alt="">
 </template>
 
 <script>
     export default {
-        data() {
-            return {
-                line: 'stroka'
-			}
-		},
 
-		methods: {
-            revertStr() {
-                this.line = this.line.split('').reverse().join('');
-			}
-		}
     }
 </script>
 

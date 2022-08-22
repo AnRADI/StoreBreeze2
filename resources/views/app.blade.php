@@ -11,14 +11,7 @@
     </head>
 
     <body class="bg-light">
-        <div class="d-flex justify-content-end"><input id="input" type="text"><div id="result"></div></div>
-        <script>
-            let input = document.getElementById('input');
-            let result = document.getElementById('result');
-            input.oninput = function (e) {
-                result.innerText = input.value;
-            }
-        </script>
+
         @inertia
 
         @if (app()->isLocal())

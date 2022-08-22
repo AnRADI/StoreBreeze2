@@ -6,6 +6,7 @@ namespace App\Exceptions;
 use App\Traits\RoleException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Spatie\Permission\Exceptions\UnauthorizedException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -52,6 +53,6 @@ class Handler extends ExceptionHandler
 		}
 
 
-		return false;
+		return parent::render($request, $exception);
 	}
 }

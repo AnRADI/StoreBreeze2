@@ -4,6 +4,7 @@ namespace App\Services\Uploader;
 
 use App\Contracts\Uploader;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 
 class ImageUploader implements Uploader {
@@ -15,13 +16,13 @@ class ImageUploader implements Uploader {
 
 		$imageName = $item->getClientOriginalName();
 
-		$item->storeAs('uploads', $imageName, 'public');
+		$item->storeAs('images/products', $imageName, 'public');
 
 
 		//  ------ Image path ------
 
 		$fileHash = substr(md5_file($item->getRealPath()), -20);
 
-		return '/storage/uploads/' . $imageName . '?id=' . $fileHash;
+		return '/storage/images/products/' . $imageName . '?id=' . $fileHash;
 	}
 }
