@@ -13,7 +13,6 @@ use App\Http\Controllers\Controller;
 
 class WelcomeController extends Controller
 {
-
 	public $product, $label;
 
 	public function __construct() {
