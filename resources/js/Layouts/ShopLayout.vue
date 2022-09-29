@@ -58,6 +58,7 @@
             Cart
 		},
 
+
         computed: {
 
             guest() {

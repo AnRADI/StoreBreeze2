@@ -10,7 +10,7 @@
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<success-or-failed></success-or-failed>
+							<messages></messages>
 							<h1 class="m-0">Все продукты</h1>
 						</div><!-- /.col -->
 					</div><!-- /.row -->
@@ -67,7 +67,7 @@
 												</i>
 												Редактировать
 											</Link>
-											<a class="btn btn-danger btn-sm" href="#">
+											<a class="btn btn-danger btn-sm" @click.prevent="productRemovalForm.post(route('dashboard.products.product.destroy', product.id))" href="#">
 												<i class="fas fa-trash">
 												</i>
 												Удалить
@@ -89,15 +89,22 @@
 
     import AdminLayout from "@/Layouts/AdminLayout";
     import Pagination from "@/Components/Pagination";
-    import SuccessOrFailed from "@/Components/SuccessOrFailed";
+    import Messages from "@/Components/Messages";
 
     export default {
 
 
+		data() {
+            return {
+                productRemovalForm: this.$inertia.form({
+					_method: 'delete'
+				})
+			}
+		},
 
         components: {
+            Messages,
 			Pagination,
-			SuccessOrFailed,
 			AdminLayout
         },
 

@@ -18,7 +18,7 @@ class ProductController extends Controller
 	}
 
 
-	// ---------- /products/{category_slug}/{product} -----------
+	// ---------- /products -----------
 
 	public function show($category, $product) {
 

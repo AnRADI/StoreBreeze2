@@ -8,9 +8,9 @@ class ProductFilterer extends Filterer {
 
 	public function label_ids($requestItems) {
 
-		$this->builder->whereHas('labels', fn($query) =>
-			$query->whereIn('id', $requestItems)
-		);
+		$this->builder->whereHas('labels', function($query) use($requestItems) {
+			$query->whereIn('id', $requestItems);
+		});
 	}
 
 

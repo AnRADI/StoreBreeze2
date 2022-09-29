@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Http\Requests\Shop\ProductRequest;
+use App\Models\Cart;
+use App\Models\Category;
 use App\Models\Label;
 use App\Models\Product;
 use App\Services\Filterer\ProductFilterer;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use App\Http\Controllers\Controller;
 
@@ -37,7 +38,7 @@ class WelcomeController extends Controller
 		$productFilterer = new ProductFilterer($productRequest);
 
 
-		// ------ Paginate products(filter)->categories(take) -------
+		// ------ Paginate products(filter)->take categories -------
 		// ------ Paginate products(filter)->labels -------
 
 		$products = $this->product->paginateProductsCategoriesAndLabelsW($productFilterer);

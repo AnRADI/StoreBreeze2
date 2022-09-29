@@ -42,7 +42,7 @@
 
         mixins: [cartMixin],
 
-		props: {
+        props: {
 		    product: Object,
 			categorySlug: String,
 		},

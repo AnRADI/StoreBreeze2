@@ -49,13 +49,13 @@ class HandleInertiaRequests extends Middleware
 
 			'guest' => fn() => $user == null,
 
-			'flash' => fn() => $request->session()->only(['success', 'message419']),
+			'flash' => fn() => $request->session()->only(['success', 'message419', 'updateProduct', 'deleteProduct']),
 
-			'cartCollection' => fn() => Cart::get(),
+			'cartCollection' => fn() => Cart::get()->getDictionary(),
 
 			'currentRouteName' => fn() => \Route::currentRouteName(),
 
-			'permissions' => fn() => $user ? $request->user()->getAllPermissions() : [],
+			'permissions' => fn() => $user ? $user->getAllPermissions() : [],
 
 			'translations' => fn() =>
 				translations(

@@ -99,10 +99,6 @@
 			NavLink
 		},
 
-        mounted() {
-
-        },
-
 		data() {
             return {
 
@@ -130,7 +126,6 @@
                 ],
                 active: false,
                 form: this.$inertia.form(),
-
 			}
 		},
     }

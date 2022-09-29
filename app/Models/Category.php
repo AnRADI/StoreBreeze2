@@ -72,8 +72,7 @@ class Category extends Model
 			])
 			->orderBy('updated_at', 'desc')
 			->with(['labels:id,name,class'])
-			->paginate(6)
-			->withQueryString());
+			->paginate(6)->withQueryString());
 
 
 		return $category;

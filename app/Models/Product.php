@@ -19,7 +19,7 @@ class Product extends Model
 	];
 
 
-	protected $hidden = ['pivot'];
+//	protected $hidden = ['pivot'];
 
 
 	// ========== RELATIONSHIPS ============

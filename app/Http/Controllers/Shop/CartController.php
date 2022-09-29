@@ -40,7 +40,8 @@ class CartController extends Controller
 		$product = $this->product
 				->firstProductCategoriesCTP($category, $product);
 
-		if(empty($product)) abort(404);
+
+		if(empty($product && $product->categories->count())) abort(404);
 
 
 		Cart::add($product, $request);

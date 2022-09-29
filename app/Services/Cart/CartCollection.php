@@ -2,7 +2,10 @@
 
 
 namespace App\Services\Cart;
-use CollectionEloquent;
+use App\Models\Cart;
+use App\Models\Product;
+use EloquentCollection;
+use Illuminate\Http\Request;
 
 
 class CartCollection
@@ -10,54 +13,164 @@ class CartCollection
 
 	public function get()
 	{
-		$cartCollection = session()->get('cartCollection');
+
+		// ------ Get user cart -------
+
+		if(auth()->check()) {
+
+			$user = auth()->user();
 
 
-		if(empty($cartCollection)) $cartCollection = new CollectionEloquent;
+			if($user->cart) {
 
+				// ------ Get cart -------
+
+				$user->cart->load(['products' => function($query) {
+					$query
+						->select(['id', 'name', 'price', 'image'])
+
+						->with(['categories' => function($query) {
+							$query->select(['id', 'name', 'slug']);
+						}]);
+				}]);
+
+				$cartCollection = $user->cart->products;
+
+
+				// ------ Get cart categories -------
+
+				$slugPluck = $cartCollection->pluck('pivot.slug');
+
+				foreach($cartCollection as $index => $product)
+					$product->setRelation('categories', $product->categories->where('slug', $slugPluck[$index]));
+			}
+			else
+				$cartCollection = new EloquentCollection();
+
+		}
+
+
+		// ------ Get guest cart -------
+
+		else {
+			$cartCollection = session()->get('cartCollection');
+
+			if(empty($cartCollection)) $cartCollection = new EloquentCollection();
+		}
 
 
 		return $cartCollection;
 	}
 
 
-	public function add($product, $request)
+	public function add(Product $product, Request $request)
 	{
-		$cartCollection = session()->get('cartCollection');
+
+		// ------ Cart for the user(database) -------
+
+		if(auth()->check()) {
+
+			$user = auth()->user();
 
 
-		if(empty($cartCollection)) $cartCollection = new CollectionEloquent;
+			// ------ Add cart -------
+
+			if(!$user->cart)
+				$user->setRelation('cart', Cart::create(['user_id' => $user->id]));
 
 
-		if(empty($cartCollection[$product->id])) {
+			// ------ Add product to cart -------
 
-			$cartCollection[$product->id] = $product;
-
-			$cartCollection[$product->id]->quantity = $request->quantity;
+			$user->cart->products()->sync([$product->id =>
+				[
+					'quantity' => $request->quantity,
+					'slug' => $product->categories[0]->slug
+				]
+			], false);
 		}
+
+
+		// ------ Cart for the guest(session) -------
+
 		else {
 
-			$cartCollection[$product->id]->quantity = $request->quantity;
+			$cartCollection = session()->get('cartCollection');
+
+
+			if(empty($cartCollection)) $cartCollection = new EloquentCollection();
+
+
+			// ------ Add product to cart -------
+
+			if(empty($cartCollection[$product->id])) {
+
+				$cartCollection[$product->id] = $product;
+
+				$cartCollection[$product->id]->pivot = new \stdClass();
+
+				$cartCollection[$product->id]->pivot->slug = $cartCollection[$product->id]->categories[0]->slug;
+				$cartCollection[$product->id]->pivot->quantity = $request->quantity;
+			}
+
+
+			// ------ Update the quantity of the product in the cart -------
+
+			else {
+
+				$cartCollection[$product->id]->pivot->quantity = $request->quantity;
+			}
+
+
+			session()->put('cartCollection', $cartCollection);
 		}
 
-
-		session()->put('cartCollection', $cartCollection);
 	}
 
 
-	public function remove($productCode, $request)
-	{
-		$cartCollection = session()->get('cartCollection');
+	public function mergeCarts() {
+
+		// ------ Merge carts (db and session) -------
+
+		if(session()->has('cartCollection')) {
+
+			$user = auth()->user();
+
+			if(!$user->cart)
+				$user->setRelation('cart', Cart::create(['user_id' => $user->id]));
+
+			$cartCollection = session()->get('cartCollection');
 
 
-		if($request->boolean('delete')) {
+			$syncData = [];
 
-			unset($cartCollection[$productCode]);
+			foreach ($cartCollection as $product)
+				$syncData[$product->id] = [
+					'quantity' => $product->pivot->quantity,
+					'slug' => $product->pivot->slug
+				];
+
+			$user->cart->products()->sync($syncData, false);
+
+
+			session()->forget('cartCollection');
 		}
 
-
-		session()->put('cartCollection', $cartCollection);
 	}
+
+
+	//	public function remove($productCode, $request)
+	//	{
+	//		$cartCollection = session()->get('cartCollection');
+	//
+	//
+	//		if($request->boolean('delete')) {
+	//
+	//			unset($cartCollection[$productCode]);
+	//		}
+	//
+	//
+	//		session()->put('cartCollection', $cartCollection);
+	//	}
 
 
 //	public function remove($productCode, $request)

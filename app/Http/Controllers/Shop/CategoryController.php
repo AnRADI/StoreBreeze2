@@ -55,7 +55,7 @@ class CategoryController extends Controller
 		$productFilterer = new ProductFilterer($productRequest);
 
 
-		// ------ First category->products(filter,paginate)->labels -------
+		// ------ First category->paginate products(filter)->labels -------
 
 		$category =	$this->category
 			->firstCategoryProductsLabelsC($productFilterer, $category);

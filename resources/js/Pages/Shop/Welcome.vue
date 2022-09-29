@@ -42,9 +42,6 @@
         },
 
 		mounted() {
-
-
-
 			//let ll = ['dobi', 'koBi', 'milo'];
             // ll.filter((e) => /bi/i.test(e))
 			//console.log("my@gmail.com @ prackikanrad@gmail.com.ua".match(/([-\w]+\.)+(com)/g));

@@ -48,15 +48,15 @@
 <!--											</form>-->
 											<form class="cart-form">
 
-												<button @click="addToCart(product.categories[0].slug, product.id, {quantity: --product.quantity})" class="btn btn-danger cart-button-minus" type="button">
+												<button :disabled="product.pivot.quantity <= 1" @click="addToCart(product.categories[0].slug, product.id, {quantity: --product.pivot.quantity})" class="btn btn-danger cart-button-minus" type="button">
 													<span class="glyphicon glyphicon-minus" aria-hidden="true">-</span>
 												</button>
-
+												<span class="cart-quantity">{{product.pivot.quantity}}</span>
 <!--												<input type="number"-->
 <!--													   @input="addProductCart(product.code, {quantity: product.quantity})"-->
 <!--													   v-model.number="product.quantity">-->
 
-												<button @click="addToCart(product.categories[0].slug, product.id, {quantity: ++product.quantity})" class="btn btn-success cart-button-plus" type="button">
+												<button @click="addToCart(product.categories[0].slug, product.id, {quantity: ++product.pivot.quantity})" class="btn btn-success cart-button-plus" type="button">
 													<span class="glyphicon glyphicon-plus" aria-hidden="true">+</span>
 												</button>
 											</form>
@@ -102,6 +102,7 @@
 			}
 		},
 
+
         computed: {
 
             cartId() {
@@ -130,6 +131,7 @@
                 this.addToCart(params.categorySlug, params.productId, params.cartForm)
 			}
 		},
+
 
         methods: {
 
@@ -194,7 +196,7 @@
 
             getProductCost(product) {
 
-                product.cost = product.quantity * product.price;
+                product.cost = product.pivot.quantity * product.price;
 
                 return product.cost;
             },
@@ -288,5 +290,10 @@
 		top: 1px;
 		right: 1px;
 		bottom: 1px;
+	}
+
+	.cart-quantity {
+		display: flex;
+		justify-content: center;
 	}
 </style>

@@ -203,7 +203,7 @@ return [
         'Cache' => Illuminate\Support\Facades\Cache::class,
         'Config' => Illuminate\Support\Facades\Config::class,
         'Cookie' => Illuminate\Support\Facades\Cookie::class,
-		'CollectionEloquent' => Illuminate\Database\Eloquent\Collection::class,
+		'EloquentCollection' => Illuminate\Database\Eloquent\Collection::class,
         'Crypt' => Illuminate\Support\Facades\Crypt::class,
         'Date' => Illuminate\Support\Facades\Date::class,
         'DB' => Illuminate\Support\Facades\DB::class,

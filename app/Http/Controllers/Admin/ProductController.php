@@ -68,14 +68,12 @@ class ProductController extends Controller
 	}
 
 
-	public function store(ProductRequest $productRequest) {
+	public function store(ProductRequest $productRequest, ImageUploader $imageUploader) {
 
 		$form = collect($productRequest->validated());
 
 
 		// ------ Image Upload -------
-
-		$imageUploader = new ImageUploader();
 
 		$form['image'] =
 			$imageUploader->upload($form['image']);
@@ -108,12 +106,18 @@ class ProductController extends Controller
 		$product = $this->product
 			->firstProductDPCE($product);
 
-		$product->category_ids = $product->categories() // product->category_ids(pluck, map)
-			->pluck('id')
-			->map(fn($item) => strval($item));
 
-		$product->label_ids = $product->labels() // product->label_ids(pluck)
-				->pluck('id');
+			// ------ product->category_ids(pluck, map) -------
+
+			$product->category_ids = $product->categories()
+				->pluck('id')
+				->map(fn($item) => strval($item));
+
+
+			// ------ product->label_ids(pluck) -------
+
+			$product->label_ids = $product->labels()
+					->pluck('id');
 
 
 		// ------ Get labels -------
@@ -157,6 +161,13 @@ class ProductController extends Controller
 		$product->labels()->sync($productRequest->label_ids);
 
 
-		return redirect()->route('dashboard.products')->with('success', 'product updated');
+		return redirect()->route('dashboard.products')->with('updateProduct', 'product updated');
+	}
+
+	public function destroy(Product $product) {
+
+    	$product->delete();
+
+    	return redirect()->route('dashboard.products')->with(['deleteProduct' => 'product deleted']);
 	}
 }

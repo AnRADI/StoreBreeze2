@@ -33,9 +33,8 @@ class User extends Authenticatable
 
 	// ========== RELATIONSHIPS ============
 
-	public function orders()
+	public function cart()
 	{
-		return $this->belongsToMany(Order::class)
-			->withTimestamps();
+		return $this->hasOne(Cart::class);
 	}
 }

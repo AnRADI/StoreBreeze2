@@ -26,7 +26,7 @@
 							<div class="card card-primary">
 
 								<div class="card-body">
-									<success-or-failed></success-or-failed>
+									<validation-errors></validation-errors>
 									<div class="form-group">
 										<label for="exampleInputname">Имя</label>
 										<input type="text" v-model="form.name" class="form-control" id="exampleInputname" placeholder="Введите имя продукта">
@@ -99,7 +99,7 @@
 
 <script>
     import AdminLayout from "@/Layouts/AdminLayout";
-    import SuccessOrFailed from "@/Components/SuccessOrFailed";
+    import ValidationErrors from "@/Components/ValidationErrors";
     import CheckboxInput from '@/Components/Checkbox';
     import TextInput from "@/Components/Input";
     import ArrayErrors from "@/Components/ArrayErrors";
@@ -109,7 +109,7 @@
 
         components: {
             TextInput,
-            SuccessOrFailed,
+            ValidationErrors,
 			AdminLayout,
 			CheckboxInput,
             ArrayErrors

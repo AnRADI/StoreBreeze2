@@ -8,7 +8,7 @@ use App\Http\Controllers\Shop\CartController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\ProductController as DashboardProductController;
 
 
 // -------- / ----------
@@ -26,7 +26,7 @@ Route::get('/categories/{category_slug}', [CategoryController::class, 'show'])
 	->name('categories.category.show');
 
 
-// -------- /products/{category_slug}/{product} ----------
+// -------- /products ----------
 
 Route::get('products/{category_slug}/{product}', [ProductController::class, 'show'])
 	->name('products.category.product.show');
@@ -60,22 +60,23 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 	// -------- /dashboard/products ----------
 
-	Route::get('/dashboard/products', [AdminProductController::class, 'index'])
+	Route::get('/dashboard/products', [DashboardProductController::class, 'index'])
 		->name('dashboard.products');
 
-	Route::get('/dashboard/products/create', [AdminProductController::class, 'create'])
+	Route::get('/dashboard/products/create', [DashboardProductController::class, 'create'])
 			->name('dashboard.products.create');
 
-	Route::get('/dashboard/products/{product}/edit', [AdminProductController::class, 'edit'])
+	Route::get('/dashboard/products/{product}/edit', [DashboardProductController::class, 'edit'])
 		->name('dashboard.products.product.edit');
 
-	Route::patch('/dashboard/products/{product}', [AdminProductController::class, 'update'])
+	Route::patch('/dashboard/products/{product}', [DashboardProductController::class, 'update'])
 		->name('dashboard.products.product.update');
 
-	Route::post('/dashboard/products', [AdminProductController::class, 'store'])
+	Route::post('/dashboard/products', [DashboardProductController::class, 'store'])
 		->name('dashboard.products.store');
 
-
+	Route::delete('/dashboard/products/{product}', [DashboardProductController::class, 'destroy'])
+		->name('dashboard.products.product.destroy');
 });
 
 
