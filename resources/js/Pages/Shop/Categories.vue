@@ -34,6 +34,7 @@
 		    categories: Array,
 		},
 
+
     }
 </script>
 

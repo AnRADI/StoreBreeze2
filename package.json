@@ -45,6 +45,8 @@
         "webpack-open-browser-plugin": "^1.0.7"
     },
     "dependencies": {
+        "primeicons": "^6.0.1",
+        "primevue": "^3.19.0",
         "vuex": "^4.0.2"
     }
 }

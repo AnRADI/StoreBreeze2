@@ -9,6 +9,8 @@
 
 			<h1>Все товары</h1>
 
+            <Button label="Submit" />
+
 			<Filter :url="route('welcome')" :labels="labels"></Filter>
 
 			<div class="row">
@@ -30,6 +32,7 @@
     import ShopLayout from "@/Layouts/ShopLayout";
     import Pagination from "@/Components/Pagination";
     import Filter from "@/Components/Filter";
+    import Button from 'primevue/button';
 
     export default {
 
@@ -39,9 +42,14 @@
             Filter,
             Pagination,
             ProductCard,
+            Button
         },
 
-		mounted() {
+
+        mounted() {
+
+            //document.documentElement.setAttribute('data-theme', 'light');
+            //this.gg.bb = 7;
 			//let ll = ['dobi', 'koBi', 'milo'];
             // ll.filter((e) => /bi/i.test(e))
 			//console.log("my@gmail.com @ prackikanrad@gmail.com.ua".match(/([-\w]+\.)+(com)/g));

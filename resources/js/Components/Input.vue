@@ -31,7 +31,6 @@
 			error: String
 		},
 
-
 		methods: {
 
             proxyValue(e) {

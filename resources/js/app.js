@@ -15,15 +15,13 @@ import { store } from './store';
 import { appMixin } from "@/Mixins/app-mixin";
 
 
-// ------- Clear console --------
+// ------- Prime Vue --------
 
-console.clear();
-setLogLevel('none');
+import PrimeVue from 'primevue/config';
 
-console.info = function () {
-    if (arguments[0].indexOf('[webpack-dev-server]') == -1)
-        return console.info.apply(console, arguments);
-};
+import 'primevue/resources/themes/lara-light-blue/theme.css';
+import 'primevue/resources/primevue.min.css';
+import 'primeicons/primeicons.css';
 
 
 // ------- Inertia --------
@@ -32,6 +30,24 @@ const el = document.getElementById('app');
 
 createApp({
 
+    created() {
+        this.clearConsole();
+    },
+
+    methods: {
+
+        clearConsole() {
+
+            console.clear();
+            setLogLevel('none');
+
+            console.info = function () {
+                if (arguments[0].indexOf('[webpack-dev-server]') == -1)
+                    return console.info.apply(console, arguments);
+            };
+
+        }
+    },
 
     render: () =>
         h(InertiaApp, {
@@ -41,6 +57,7 @@ createApp({
 })
     .mixin(appMixin)
     .use(InertiaPlugin)
+    .use(PrimeVue)
     .use(store)
     .mount(el);
 

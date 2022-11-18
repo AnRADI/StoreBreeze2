@@ -10,6 +10,7 @@ import { Link, Head } from '@inertiajs/inertia-vue3';
 export const appMixin = {
 
 
+
     components: {
         Link, Head
     },
