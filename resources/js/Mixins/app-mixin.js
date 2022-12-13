@@ -7,6 +7,7 @@ import { Link, Head } from '@inertiajs/inertia-vue3';
 
 // ------- App mixin --------
 
+
 export const appMixin = {
 
 

@@ -15,6 +15,7 @@ import { store } from './store';
 import { appMixin } from "@/Mixins/app-mixin";
 
 
+
 // ------- Prime Vue --------
 
 import PrimeVue from 'primevue/config';
@@ -28,7 +29,7 @@ import 'primeicons/primeicons.css';
 
 const el = document.getElementById('app');
 
-createApp({
+const app = createApp({
 
     created() {
         this.clearConsole();
@@ -59,6 +60,8 @@ createApp({
     .use(InertiaPlugin)
     .use(PrimeVue)
     .use(store)
-    .mount(el);
 
 
+app.config.unwrapInjectedRef = true;
+
+app.mount(el);

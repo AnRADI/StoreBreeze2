@@ -84,8 +84,8 @@ class ProductController extends Controller
     	$product = $this->product
 			->create($form->except(['category_ids', 'label_ids'])->toArray());
 
-		$product->categories()->attach($productRequest->category_ids);
-		$product->labels()->attach($productRequest->label_ids);
+		$product->categories()->attach($form['category_ids']);
+		$product->labels()->attach($form['label_ids']);
 
 
     	return back()->with('success', __("Product added"));

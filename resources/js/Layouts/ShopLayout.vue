@@ -6,19 +6,21 @@
 		<div v-if="currentRouteName != 'login'" class="shop-layout container pt-4">
 			<div class="d-flex justify-content-end">
 				<ul class="d-flex" style="list-style: none">
+
 					<li>
 						<Link :href="route('welcome')" class="ml-4 text-muted">
 							Главная
 						</Link>
 					</li>
+
 					<li>
 						<Link :href="route('categories')" class="ml-4 text-muted">
 							Категории
 						</Link>
 					</li>
 					<li>
-						<a href="#" @click.prevent="cart" class="ml-4 text-muted">Корзина</a>
-						<cart></cart>
+						<a href="#" @click.prevent="showCart" class="ml-4 text-muted">Корзина</a>
+						<cart-window></cart-window>
 					</li>
 					<li v-if="can('logout')">
 						<a @click.prevent="logOutForm.post(route('logout.store'))" href="#" class="ml-4 text-muted">
@@ -46,18 +48,30 @@
 
 <script>
 
+    import useCart from "@/Composables/useCart";
+
     require('bootstrap');
 
-    import Cart from "@/Pages/Shop/Cart";
+    import CartWindow from "@/Pages/Shop/CartWindow";
     import Script from "@/Components/Script";
+
 
     export default {
 
         components: {
             Script,
-            Cart
+            CartWindow,
 		},
 
+
+        setup() {
+
+            const { showCart } = useCart();
+
+            return {
+                showCart
+            }
+        },
 
 
         computed: {
@@ -71,20 +85,13 @@
 			}
 		},
 
+
         data() {
             return {
+
                 logOutForm: this.$inertia.form(),
             }
         },
-
-        methods: {
-
-			cart() {
-
-                this.cartM();
-			},
-
-		}
 
     }
 </script>

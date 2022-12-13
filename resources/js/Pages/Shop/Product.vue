@@ -21,7 +21,7 @@
 					</div>
 				</div>
 				<p>{{ product.description }}</p>
-				<form v-if="cartCollection[product.id]" @submit.prevent="cart">
+				<form v-if="cartCollection[product.id]" @submit.prevent="showCart">
 					<button type="submit" class="btn btn-primary" role="button">Уже в корзинe</button>
 				</form>
 				<form v-else @submit.prevent="addToCart(product.categories[0].slug, product.id)">
@@ -35,17 +35,27 @@
 
 <script>
 
-    import {cartMixin} from "@/Mixins/cart-mixin";
     import ShopLayout from "@/Layouts/ShopLayout";
+    import useCart from "@/Composables/useCart";
+
 
     export default {
 
         layout: ShopLayout,
 
-        mixins: [cartMixin],
-
         props: {
             product: Object,
+        },
+
+        setup() {
+
+            const { cartCollection, showCart, addToCart } = useCart();
+
+            return {
+                cartCollection,
+                showCart,
+                addToCart
+            }
         },
     }
 </script>

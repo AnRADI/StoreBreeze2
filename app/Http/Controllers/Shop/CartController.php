@@ -47,7 +47,7 @@ class CartController extends Controller
 		Cart::add($product, $request);
 
 
-		return redirect(url()->previous());
+		return redirect()->back();
 	}
 
 

@@ -1,6 +1,7 @@
 <template>
 	<div class="product-card col-sm-6 col-md-4">
 		<div class="thumbnail">
+
 			<div class="labels">
 				<div v-for="label in product.labels"
 					 :key="label.id"
@@ -18,12 +19,12 @@
 				<div style="margin-bottom: 5px">
 					{{ product.price }} руб.
 				</div>
+
 				<h5>
-					<form v-if="cartCollection[product.id]" @submit.prevent="cart">
+					<form v-if="cartCollection[product.id]" @submit.prevent="showCart">
 						<button type="submit" class="btn btn-primary" role="button">В корзинe</button>
 					</form>
 					<form v-else @submit.prevent="addToCart(categorySlug, product.id)">
-<!--						<input type="number" name="quantity" value="1" min="1" max="9000">-->
 						<button type="submit" class="btn btn-success" role="button">В корзинy</button>
 					</form>
 
@@ -36,16 +37,26 @@
 
 <script>
 
-    import {cartMixin} from "@/Mixins/cart-mixin";
+    import useCart from "@/Composables/useCart";
+
 
     export default {
 
-        mixins: [cartMixin],
-
         props: {
-		    product: Object,
-			categorySlug: String,
-		},
+            product: Object,
+            categorySlug: String,
+        },
+
+        setup() {
+
+            const { cartCollection, showCart, addToCart } = useCart();
+
+            return {
+                cartCollection,
+                showCart,
+                addToCart
+            }
+        },
 
     }
 </script>
