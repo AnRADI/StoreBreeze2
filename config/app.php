@@ -236,6 +236,8 @@ return [
 		 * My Aliases
 		 */
 		'Cart' => App\Facades\CartFacade::class,
+        'Lion' => App\Services\Animal\Lion::class,
+//        'Cat' => App\Services\Animal\Cat::class,
 
     ],
 

@@ -46,11 +46,6 @@
             products: [Object, Array],
             labels: Array,
             requestItems: Object,
-        },
-
-        mounted() {
-
-
         }
     }
 </script>

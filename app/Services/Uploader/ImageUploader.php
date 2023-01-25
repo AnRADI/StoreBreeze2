@@ -3,16 +3,15 @@
 namespace App\Services\Uploader;
 
 use App\Contracts\Uploader;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 
 class ImageUploader implements Uploader {
 
 
-	public function upload($item) {
 
-		// ------ Upload to disk: storage/app/public/uploads ------
+    public function upload($item) {
+
+		// ------ Upload to disk: storage/app/public/images/products ------
 
 		$imageName = $item->getClientOriginalName();
 

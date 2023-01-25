@@ -2,6 +2,12 @@
 
 namespace App\Providers;
 
+use App\Contracts\Uploader;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Shop\WelcomeController;
+use App\Services\Animal\Lion;
+use App\Services\Uploader\ImageUploader;
+use App\Services\Uploader\VideoUploader;
 use Illuminate\Support\ServiceProvider;
 
 
@@ -18,12 +24,19 @@ class AppServiceProvider extends ServiceProvider
 			return base_path().'/public';
 		});
 
+//        $this->app->singleton(Lion::class, function ($app) {
+//            return new Lion();
+//        });
+
 		//$this->app->tag([ImageDownloader::class, VideoUploader::class], 'reports');
 		//$this->app->bind(Downloader::class, ImageDownloader::class);
-		//$this->app->bind(Uploader::class, VideoUploader::class);
+//		$this->app->bind(Uploader::class, ImageUploader::class);
+//        $this->app->when(WelcomeController::class)
+//            ->needs(Uploader::class)
+//            ->give(ImageUploader::class);
 		//$this->app->bind(Downloader::class, ImageDownloader::class);
-//		$this->app->bind(ImageDownloader::class, function ($app) {
-//			return new ImageDownloader($app->make(ImageUploader::class), 5);
+//		$this->app->bind(ImageUploader::class, function ($app) {
+//			return new ImageUploader($app->make(VideoUploader::class), 66);
 //		});
 
 
@@ -42,9 +55,7 @@ class AppServiceProvider extends ServiceProvider
 //							new ImageUploader($app->make(ImageDownloader::class), $app->make(VideoDownloader::class))
 //						];
 //					});
-//		$this->app->when(WelcomeController::class)
-//			->needs(Uploader::class)
-//			->give(ImageUploader::class);
+
 //		$this->app->when(CategoriesController::class)
 //			->needs(Uploader::class)
 //			->give(VideoUploader::class);

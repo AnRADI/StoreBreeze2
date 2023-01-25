@@ -7,7 +7,9 @@ use App\Models\Cat;
 use App\Models\Category;
 use App\Models\Label;
 use App\Models\Product;
+use App\Services\Animal\Lion;
 use App\Services\Filterer\ProductFilterer;
+use Illuminate\Support\Facades\App;
 use Inertia\Inertia;
 use App\Http\Controllers\Controller;
 
@@ -42,7 +44,8 @@ class CategoryController extends Controller
 	}
 
 
-	public function show(ProductRequest $productRequest, $category) {
+
+    public function show(ProductRequest $productRequest, $category) {
 
 
 		// ------ Get labels -------

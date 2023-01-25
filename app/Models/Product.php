@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Services\Filterer\Filterer;
+use App\Services\Uploader\VideoUploader;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

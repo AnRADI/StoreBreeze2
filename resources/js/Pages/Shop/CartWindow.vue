@@ -79,7 +79,6 @@
 
     import useCart from "@/Composables/useCart";
 
-
     export default {
 
         setup() {
@@ -107,7 +106,9 @@
             }
         },
 
-	};
+	}
+
+
 
 </script>
 

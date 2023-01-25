@@ -125,11 +125,11 @@
             return {
 				form: this.$inertia.form({
 					name: '',
-					description: null,
+					description: '',
 					category_ids: [],
 					price: null,
 					label_ids: [],
-					image: {},
+					image: {}
 				}),
                 imageState: 'empty',
                 imageSrc: ''

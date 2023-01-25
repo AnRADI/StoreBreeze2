@@ -122,7 +122,7 @@
 					category_ids: this.product.category_ids,
                     label_ids: this.product.label_ids,
 					price: this.product.price,
-					image: undefined,
+					image: null
 				}),
                 imageSrc: this.product.image,
 			}

@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Contracts\Uploader;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ProductRequest;
 use App\Models\Label;
 use App\Models\Product;
 use App\Models\Category;
 use App\Services\Uploader\ImageUploader;
+use App\Services\Uploader\VideoUploader;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 
@@ -30,8 +32,7 @@ class ProductController extends Controller
 
 	// ---------- /dashboard/products -----------
 
-
-	public function index() {
+    public function index() {
 
 
 		// ------ Paginate products->categories -------
@@ -68,7 +69,8 @@ class ProductController extends Controller
 	}
 
 
-	public function store(ProductRequest $productRequest, ImageUploader $imageUploader) {
+
+    public function store(ProductRequest $productRequest, ImageUploader $imageUploader) {
 
 		$form = collect($productRequest->validated());
 
@@ -85,7 +87,7 @@ class ProductController extends Controller
 			->create($form->except(['category_ids', 'label_ids'])->toArray());
 
 		$product->categories()->attach($form['category_ids']);
-		$product->labels()->attach($form['label_ids']);
+		$product->labels()->attach($form['label_ids'] ?? null);
 
 
     	return back()->with('success', __("Product added"));
@@ -146,6 +148,7 @@ class ProductController extends Controller
 			$imageUploader = new ImageUploader();
 			$form['image'] = $imageUploader->upload($form['image']);
 		}
+		else unset($form['image']);
 
 
 		// ------ Update updated_at -------
@@ -157,8 +160,8 @@ class ProductController extends Controller
 
 		$product->update($form->except(['category_ids', 'label_ids'])->toArray());
 
-		$product->categories()->sync($productRequest->category_ids);
-		$product->labels()->sync($productRequest->label_ids);
+		$product->categories()->sync($form['category_ids']);
+		$product->labels()->sync($form['label_ids']);
 
 
 		return redirect()->route('dashboard.products')->with('updateProduct', 'product updated');

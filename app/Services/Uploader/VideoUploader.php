@@ -12,7 +12,7 @@ class VideoUploader implements Uploader {
 		dump('upload video');
 	}
 
-	public function upload() {
+	public function upload($item) {
 		// TODO: Implement upload() method.
 	}
 }

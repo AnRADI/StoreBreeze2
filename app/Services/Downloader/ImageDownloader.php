@@ -11,8 +11,10 @@ use App\Services\Uploader\VideoUploader;
 
 class ImageDownloader implements Downloader {
 
+
+
 	public function __construct() {
-		dump('download image');
+		//dump('download image');
 	}
 
 	public function download() {
