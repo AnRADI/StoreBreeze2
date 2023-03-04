@@ -11,8 +11,8 @@
 				<h1>{{ product.name }}</h1>
 				<p>Цена: <b>{{ product.price }}.</b></p>
 				<h4>
-					<Link :href="route('categories.category.show', product.categories[0].slug)">
-						{{ product.categories[0].name }}
+					<Link :href="route('categories.category.show', category.slug)">
+						{{ category.name }}
 					</Link>
 				</h4>
 				<div class="row">
@@ -24,7 +24,7 @@
 				<form v-if="cartCollection[product.id]" @submit.prevent="showCart">
 					<button type="submit" class="btn btn-primary" role="button">Уже в корзинe</button>
 				</form>
-				<form v-else @submit.prevent="addToCart(product.categories[0].slug, product.id)">
+				<form v-else @submit.prevent="addToCart(category.slug, product.id)">
 					<button type="submit" class="btn btn-success">Добавить в корзину</button>
 				</form>
 			</div>
@@ -44,6 +44,7 @@
         layout: ShopLayout,
 
         props: {
+            category: Object,
             product: Object,
         },
 

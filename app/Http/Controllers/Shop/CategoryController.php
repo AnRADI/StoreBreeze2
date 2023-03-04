@@ -29,6 +29,8 @@ class CategoryController extends Controller
 
 	// ---------- /categories -----------
 
+
+
 	public function index() {
 
 

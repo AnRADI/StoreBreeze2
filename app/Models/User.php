@@ -13,10 +13,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable, HasRoles;
 
 
-	protected $guarded = [
-		'_method',
-		'_token',
-	];
+	protected $guarded = [];
 
 
     protected $hidden = [

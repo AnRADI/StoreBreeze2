@@ -2,25 +2,27 @@
 
 namespace App\Models;
 
-use App\Services\Filterer\Filterer;
+use App\Services\Animal\Lion;
+use App\Traits\Filterer;
 use App\Services\Uploader\VideoUploader;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, \Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 
-	protected $guarded = [
-		'_method',
-		'_token',
-	];
+	protected $guarded = [];
 
 
-//	protected $hidden = ['pivot'];
+	protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
 
 
 	// ========== RELATIONSHIPS ============
@@ -39,36 +41,46 @@ class Product extends Model
 	// =========== METHODS =============
 
 
-	public function scopeFilters(Builder $builder, Filterer $filterer) {
+	public function scopeFilters(Builder $builder, Filterer $filterer): Builder {
 
-    	return $filterer->filters($builder);
+    	return $filterer->apply($builder);
 	}
 
+    public function scopePro(Builder $builder) {
 
-	public function paginateProductsCategoriesAndLabelsW(Filterer $filterer) {
+        $builder->where('id', 3);
+        return $builder;
+    }
 
-		$columnsProducts = [
-			'id',
-			'name',
-			'price',
-			'image',
-		];
+    public function scopeBro(Builder $builder) {
+
+        return $builder->orWhere('price', '>', 50000);
+    }
 
 
-		$products = $this
-			->filters($filterer)
-			->select($columnsProducts)
+    /**
+     * products->categories <br>
+     * products->labels
+     *
+     * @param Filterer $filterer
+     * @return LengthAwarePaginator
+     */
+	public function paginateProductsWithRelations(Builder $filtererBuilder): LengthAwarePaginator {
+
+		return $filtererBuilder
+
+			->select(['id', 'name', 'price', 'image'])
+
 			->orderBy('updated_at', 'desc')
-			->with(['categories:id,name,slug', 'labels:id,name,class'])
+
+			->with(['categories' => function($query) {
+                $query
+                    ->select(['id', 'name', 'slug'])
+                    ->take(1); // package eloquent-eager-limit
+
+            }, 'labels:id,name,class'])
+
 			->paginate(6)->withQueryString();
-
-
-		$products->each(function ($product) {
-			$product->setRelation('categories', $product->categories->take(1));
-		});
-
-
-		return $products;
 	}
 
 
@@ -103,29 +115,17 @@ class Product extends Model
 
 
 
-
-
 	public function firstProductCategoriesCTP($category, $product) {
-
-		$columnsProduct = [
-			'id',
-			'name',
-			'price',
-			'image',
-		];
-
-		$columnsCategories = [
-			'id',
-			'name',
-			'slug',
-		];
 
 
 		$product = $this
-			->select($columnsProduct)
-			->with(['categories' => function($query) use($category, $columnsCategories) {
+
+			->select(['id', 'name', 'price', 'image'])
+
+			->with(['categories' => function($query) use($category) {
 				$query
-					->select($columnsCategories)
+					->select(['id', 'name', 'slug'])
+
 					->where('slug', $category);
 			}])
 			->find($product);

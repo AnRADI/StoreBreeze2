@@ -20,18 +20,11 @@ class ProductController extends Controller
 
 	// ---------- /products -----------
 
-	public function show($category, $product) {
-
-
-		// ------ Find product->categories -------
-
-		$product =	$this->product
-				->firstProductCategoriesCP($category, $product);
-
-		if(empty($product && $product->categories->count())) abort(404);
+	public function show(Category $category, Product $product) {
 
 
 		return Inertia::render('Shop/Product', [
+            'category' => $category,
 			'product' => $product,
 		]);
 	}

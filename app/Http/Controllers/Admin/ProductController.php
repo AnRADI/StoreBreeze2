@@ -11,6 +11,7 @@ use App\Models\Category;
 use App\Services\Uploader\ImageUploader;
 use App\Services\Uploader\VideoUploader;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 
@@ -75,13 +76,9 @@ class ProductController extends Controller
 		$form = collect($productRequest->validated());
 
 
-		// ------ Image Upload -------
-
 		$form['image'] =
 			$imageUploader->upload($form['image']);
 
-
-		// ------ Create product -------
 
     	$product = $this->product
 			->create($form->except(['category_ids', 'label_ids'])->toArray());
@@ -166,6 +163,7 @@ class ProductController extends Controller
 
 		return redirect()->route('dashboard.products')->with('updateProduct', 'product updated');
 	}
+
 
 	public function destroy(Product $product) {
 

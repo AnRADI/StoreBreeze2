@@ -2,25 +2,30 @@
 
 namespace App\Services\Filterer;
 
+use App\Traits\Filterer;
+use Illuminate\Database\Eloquent\Builder;
 
-class ProductFilterer extends Filterer {
+
+class ProductFilterer {
+
+    use Filterer;
 
 
-	public function label_ids($requestItems) {
+	private function label_ids($requestItems) {
 
-		$this->builder->whereHas('labels', function($query) use($requestItems) {
+		$this->builder->whereHas('labels', function(Builder $query) use($requestItems) {
 			$query->whereIn('id', $requestItems);
 		});
 	}
 
 
-	public function price_from($requestItem) {
+    private function price_from($requestItem) {
 
 		$this->builder->where('price', '>=', $requestItem);
 	}
 
 
-	public function price_to($requestItem) {
+    private function price_to($requestItem) {
 
 		$this->builder->where('price', '<=', $requestItem);
 	}

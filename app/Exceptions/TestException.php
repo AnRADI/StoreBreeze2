@@ -17,7 +17,7 @@ class TestException extends Exception
     public function render($request)
     {
 
-		return response()->json($this->getMessage());
+		return response()->json(['error' => $this->getMessage()]);
 		//return response()->json([1 => 2, 'sfddfs' => 'fdf'])->header('Content-Type', 'application/json');
     }
 }

@@ -9,10 +9,7 @@ class Cart extends Model
 {
     use HasFactory;
 
-	protected $guarded = [
-		'_method',
-		'_token',
-	];
+	protected $guarded = [];
 
 	protected $table = 'carts';
 

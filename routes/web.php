@@ -28,7 +28,7 @@ Route::get('/categories/{category_slug}', [CategoryController::class, 'show'])
 
 // -------- /products ----------
 
-Route::get('products/{category_slug}/{product}', [ProductController::class, 'show'])
+Route::get('products/{category:slug}/{product:id}', [ProductController::class, 'show'])
 	->name('products.category.product.show');
 
 
